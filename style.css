@@ -1,8 +1,7 @@
 :root {
-    --site-background: white;
     --main-div-background: rgba(228, 228, 228, 0.75);
     --border-color: grey;
-    --main-text-background: rgb(217, 217, 217);
+    --main-text-background: rgba(228, 228, 228, 0.4);
     --shadow-color: #969696;
 }
 
@@ -70,6 +69,7 @@ p {
     margin: 0px;
     border: 2px solid var(--border-color);
     background-color: var(--main-text-background);
+    
     /* This max-width property sets the maximum width
        of the p tags in the <main> section. If we need
        to adjust the width of the svg or p tags individually,
