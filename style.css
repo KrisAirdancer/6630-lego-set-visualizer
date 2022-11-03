@@ -1,7 +1,8 @@
 :root {
     --site-background: white;
-    --vis-group-background: rgba(207, 207, 207, 0.75);
+    --main-div-background: rgba(228, 228, 228, 0.75);
     --border-color: grey;
+    --main-text-background: rgb(217, 217, 217);
 }
 
 /***** Top-Level Elemenmts *****/
@@ -37,22 +38,8 @@ svg {
 p {
     /* background-color: var(--vis-group-background); */
     flex-grow: 1;
-}
-
-/* Note: The #introduction p tag has
-   separate styling rules below that
-   remove the border-radius property.
- */
-main p {
-    border-radius: 10px;
-    padding: 10px;
+    padding: 0px;
     margin: 0px;
-    border: 2px solid var(--border-color);
-    /* This max-width property sets the maximum width
-       of the p tags in the <main> section. If we need
-       to adjust the width of the svg or p tags individually,
-       that can be done with thier individual IDs. */
-    max-width: 300px;
 }
 
 /* Thus far, the only div tags on the DOM are
@@ -61,21 +48,36 @@ main p {
    for the div tags in the <main> section to
    properly differentiate them.
  */
-div {
+.main-div {
     /* TODO: What looks better with the shadow? 5px or 10px? */
     margin: 10px 0px 10px 0px;
     padding: 0px;
     border-radius: 20px;
     padding: 10px;
     border: 2px solid var(--border-color);
-    background-color: var(--vis-group-background);
+    background-color: var(--main-div-background);
     /* TODO: Does it look better or worse with the shadow? */
     /* x-axis, y-axis, blur, spread, color https://developer.mozilla.org/en-US/docs/Learn/CSS/Howto/Add_a_shadow */
     box-shadow: 2px 2px 5px 2px #969696;
 }
 
-p strong {
+.main-text {
+    border-radius: 10px;
+    padding: 10px;
+    margin: 0px;
+    border: 2px solid var(--border-color);
+    background-color: var(--main-text-background);
+    /* This max-width property sets the maximum width
+       of the p tags in the <main> section. If we need
+       to adjust the width of the svg or p tags individually,
+       that can be done with thier individual IDs. */
+    max-width: 300px;
+}
+
+h3 {
     font-size: 18px;
+    /* margin: 0px 0px 10px 0px; */
+    margin: 0px 0px 5px 0px;
 }
 
 .leftVisElement {
@@ -93,16 +95,18 @@ p strong {
     flex-direction: row;
 }
 
-/***** <div> Tags *****/
+/***** Introduction <div> *****/
 
 #introduction {
     /* background-color: indigo; */
-    padding: 10px;
+    padding: 20px;
 }
 
 #introduction h2 {
-    margin: 0px 0px 0px 10px;
+    margin: 0px 0px 5px 0px;
 }
+
+/***** <div> Tags *****/
 
 #piecesLineChart {
     /* background-color: blue; */
@@ -148,14 +152,3 @@ p strong {
 
 /***** Other *****/
 
-#introduction p {
-    border-radius: 0px;
-    border: none;
-    max-width: none;
-    margin: 0px;
-    /* background-color: var(--vis-group-background); */
-}
-
-/* 
-TODO: Add shadows to the visGroup div tags.
- */
