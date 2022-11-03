@@ -3,6 +3,7 @@
     --main-div-background: rgba(228, 228, 228, 0.75);
     --border-color: grey;
     --main-text-background: rgb(217, 217, 217);
+    --shadow-color: #969696;
 }
 
 /***** Top-Level Elemenmts *****/
@@ -55,7 +56,7 @@ p {
     background-color: var(--main-div-background);
     /* TODO: Does it look better or worse with the shadow? */
     /* x-axis, y-axis, blur, spread, color https://developer.mozilla.org/en-US/docs/Learn/CSS/Howto/Add_a_shadow */
-    box-shadow: 2px 2px 5px 2px #969696;
+    box-shadow: 2px 2px 5px 2px var(--shadow-color);
 }
 
 .main-text {
