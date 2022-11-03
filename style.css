@@ -1,0 +1,96 @@
+/***** Top-Level Elemenmts *****/
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    background-color: violet;
+    padding: 10px;
+}
+
+/* Note: The svg elements are set to grow at a rate of 4
+   and the p elements are set to grow at a rate of 1.
+   This should yield a 75%-25% svg-p distribution.
+ */
+svg {
+    background-color: grey;
+    flex-grow: 4;
+    /* margin: 10px 5px 10px 5px; */
+}
+
+p {
+    all: unset; /* Clear p tag styling */
+    background-color: darkgray;
+    flex-grow: 1;
+    /* margin: 10px 5px 10px 5px; */
+}
+
+div {
+    margin: 5px 0px 5px 0px;
+    padding: 0px;
+}
+
+.leftVisElement {
+    margin-right: 5px;
+}
+
+.rightVisElement {
+    margin-left: 5px;
+}
+
+/***** Flexbox *****/
+
+.flex-container {
+    display: flex;
+    flex-direction: row;
+}
+
+/***** <div> Tags *****/
+
+#introduction {
+    background-color: indigo;
+}
+
+#piecesLineChart {
+    background-color: blue;
+}
+
+#themesLineChart {
+    background-color: green;
+}
+
+#heatmap {
+    background-color: yellow;
+}
+
+#theSquiggler {
+    background-color: orange;
+}
+
+#interactiveSquiggler {
+    background-color: red;
+}
+
+/***** SVGs *****/
+
+#svg_piecesLineChart {
+
+}
+
+#svg_themesLineChart {
+
+}
+
+#svg_heatmap {
+
+}
+
+#svg_theSquiggler {
+
+}
+
+#svg_interactiveSquiggler {
+
+}
