@@ -1,13 +1,27 @@
+:root {
+    --site-background: white;
+    --vis-group-background: rgba(207, 207, 207, 0.75);
+    --border-color: grey;
+}
+
 /***** Top-Level Elemenmts *****/
 
 body {
     display: flex;
     flex-direction: column;
+    /* TODO: The rainbow background is only there for testing. Try to replace it with an image of legos or something. */
+    /* background-image: linear-gradient(violet, indigo, blue, green, yellow, orange, red); */
+    background-image: white;
+    /* background-image: url("assets/lego-1.jpg"); */
 }
 
 header {
     background-color: violet;
     padding: 10px;
+}
+
+header h1 {
+    margin-top: 0;
 }
 
 /* Note: The svg elements are set to grow at a rate of 4
@@ -17,19 +31,51 @@ header {
 svg {
     background-color: grey;
     flex-grow: 4;
-    /* margin: 10px 5px 10px 5px; */
+    border-radius: 10px;
 }
 
 p {
-    all: unset; /* Clear p tag styling */
-    background-color: darkgray;
+    /* background-color: var(--vis-group-background); */
     flex-grow: 1;
-    /* margin: 10px 5px 10px 5px; */
 }
 
+/* Note: The #introduction p tag has
+   separate styling rules below that
+   remove the border-radius property.
+ */
+main p {
+    border-radius: 10px;
+    padding: 10px;
+    margin: 0px;
+    border: 2px solid var(--border-color);
+    /* This max-width property sets the maximum width
+       of the p tags in the <main> section. If we need
+       to adjust the width of the svg or p tags individually,
+       that can be done with thier individual IDs. */
+    max-width: 300px;
+}
+
+/* Thus far, the only div tags on the DOM are
+   the ones housing the <main> content. If more
+   are added, we'll need to make a separate class
+   for the div tags in the <main> section to
+   properly differentiate them.
+ */
 div {
-    margin: 5px 0px 5px 0px;
+    /* TODO: What looks better with the shadow? 5px or 10px? */
+    margin: 10px 0px 10px 0px;
     padding: 0px;
+    border-radius: 20px;
+    padding: 10px;
+    border: 2px solid var(--border-color);
+    background-color: var(--vis-group-background);
+    /* TODO: Does it look better or worse with the shadow? */
+    /* x-axis, y-axis, blur, spread, color https://developer.mozilla.org/en-US/docs/Learn/CSS/Howto/Add_a_shadow */
+    box-shadow: 2px 2px 5px 2px #969696;
+}
+
+p strong {
+    font-size: 18px;
 }
 
 .leftVisElement {
@@ -50,27 +96,32 @@ div {
 /***** <div> Tags *****/
 
 #introduction {
-    background-color: indigo;
+    /* background-color: indigo; */
+    padding: 10px;
+}
+
+#introduction h2 {
+    margin: 0px 0px 0px 10px;
 }
 
 #piecesLineChart {
-    background-color: blue;
+    /* background-color: blue; */
 }
 
 #themesLineChart {
-    background-color: green;
+    /* background-color: green; */
 }
 
 #heatmap {
-    background-color: yellow;
+    /* background-color: yellow; */
 }
 
 #theSquiggler {
-    background-color: orange;
+    /* background-color: orange; */
 }
 
 #interactiveSquiggler {
-    background-color: red;
+    /* background-color: red; */
 }
 
 /***** SVGs *****/
@@ -94,3 +145,17 @@ div {
 #svg_interactiveSquiggler {
 
 }
+
+/***** Other *****/
+
+#introduction p {
+    border-radius: 0px;
+    border: none;
+    max-width: none;
+    margin: 0px;
+    /* background-color: var(--vis-group-background); */
+}
+
+/* 
+TODO: Add shadows to the visGroup div tags.
+ */
