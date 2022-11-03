@@ -13,11 +13,16 @@ body {
     flex-direction: column;
     /* Font from fivethirtyeight.com */
     font-family: AtlasGrotesk, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    /* background-color still set as a fallback
+       in the event that the background-image
+       doesn't load. */
+    background-color: #FFCF04;
 
     /* TODO: The rainbow background is only there for testing. Try to replace it with an image of legos or something. */
     /* background-image: linear-gradient(violet, indigo, blue, green, yellow, orange, red); */
-    background-image: white;
-    /* background-image: url("assets/lego-1.jpg"); */
+
+    background-image: url("assets/lego_base.jpg");
+    background-size: 50%;
 }
 
 footer {
