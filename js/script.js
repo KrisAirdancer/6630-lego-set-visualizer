@@ -16,7 +16,9 @@ data_list = [
 
 Promise.all(data_list).then(data => 
     {
-        data = processData(data);
+        globalData.data = processData(data);
+        globalData.heat_map = new heat_map(globalData);
+
     }
 );
 
