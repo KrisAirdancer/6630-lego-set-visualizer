@@ -16,8 +16,9 @@ data_list = [
 
 Promise.all(data_list).then(data => 
     {
-        globalData.data = processData(data);
-        globalData.heat_map = new heat_map(globalData);
+        data = processData(data);
+        let heatmap_vis = new Heatmap(data);
+        let squiggler = new theSquiggler(data);
 
     }
 );
