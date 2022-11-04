@@ -119,17 +119,19 @@ h2 {
 }
 
 ::-webkit-scrollbar-track {
-    background-color: var(--lego-yellow);
+    background-color: #cca700;
     border: 2px solid var(--border-color);
 }
 
 ::-webkit-scrollbar-thumb {
     background-color: var(--lego-yellow);
-    background-image: url("assets/lego_brick.jpg");
-    background-size: 100%;
     box-shadow: 2px 2px 5px 1px var(--shadow-color);
     border-radius: 2px;
     border-left: 1px solid var(--shadow-color);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #e7bc00;
 }
 
 /***** <div> Tags *****/
