@@ -3,6 +3,7 @@
     --border-color: grey;
     --main-text-background: rgba(228, 228, 228, 0.4);
     --shadow-color: #969696;
+    --lego-yellow: #FFCF04;
 }
 
 /***** Top-Level Elemenmts *****/
@@ -15,7 +16,7 @@ body {
     /* background-color still set as a fallback
        in the event that the background-image
        doesn't load. */
-    background-color: #FFCF04;
+    background-color: var(--lego-yellow);
 
     /* TODO: The rainbow background is only there for testing. Try to replace it with an image of legos or something. */
     /* background-image: linear-gradient(violet, indigo, blue, green, yellow, orange, red); */
@@ -109,6 +110,26 @@ h2 {
 
 #introduction h1 {
     margin: 0px 0px 10px 0px;
+}
+
+/***** Scrollbar *****/
+
+::-webkit-scrollbar {
+    width: auto;
+}
+
+::-webkit-scrollbar-track {
+    background-color: var(--lego-yellow);
+    border: 2px solid var(--border-color);
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--lego-yellow);
+    background-image: url("assets/lego_brick.jpg");
+    background-size: 100%;
+    box-shadow: 2px 2px 5px 1px var(--shadow-color);
+    border-radius: 2px;
+    border-left: 1px solid var(--shadow-color);
 }
 
 /***** <div> Tags *****/
