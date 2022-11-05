@@ -7,6 +7,7 @@ class PiecesLineChart {
 
     constructor(data) {
         this.data = data;
+        // this.data = data.filter(d => d.num_parts > 1000);
         console.log(this.data);
 
         // Get SVG Data
@@ -34,13 +35,13 @@ class PiecesLineChart {
         this.xScale = d3.scaleLinear()
                        .domain([this.yearMin, this.yearMax]) // From
                        .range([45, this.svgWidth - 20]) // To
-                    //    .nice();
 
         // Y-Scale
+        // this.yScale = d3.scaleLog()
         this.yScale = d3.scaleLinear()
-                       .domain([this.num_partsMin, this.num_partsMax])
-                       .range([this.svgHeight - 20, 20])
-                    //    .nice();
+                       .domain([this.num_partsMin, Math.ceil(this.num_partsMax * 0.001) * 1000])
+                       .range([this.svgHeight - 25, 20])
+
     }
 
     drawLineChart() {
@@ -64,15 +65,13 @@ class PiecesLineChart {
                       .tickValues([1949, 1960, 1970, 1980, 1990, 2000, 2010, 2022])
 
         svg.append('g')
-           .attr('transform', `translate(${0}, ${this.svgHeight - 20})`)
+           .attr('transform', `translate(${0}, ${this.svgHeight - 25})`)
            .call(xAxis)
 
         // Draw yAxis
         let yAxis = d3.axisLeft()
                       .scale(this.yScale)
-                    //   .ticks(10)
-                    //   .tickFormat(d => `${d}`)
-                    //   .tickValues([1949, 1960, 1970, 1980, 1990, 2000, 2010, 2022])
+                      .tickValues([0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000])
 
         svg.append('g')
            .attr('transform', `translate(${45}, ${0})`)
@@ -81,6 +80,18 @@ class PiecesLineChart {
 
     drawDots() {
         console.log('AT: drawDots()');
+
+        let svg = d3.select('#svg_piecesLineChart')
+                    .append('g')
+
+        svg.selectAll('dot')
+           .data(this.data)
+           .enter()
+           .append('circle')
+           .attr('cx', d => this.xScale(d.year))
+           .attr('cy', d => this.yScale(d.num_parts))
+           .attr('r', '2px')
+           .style('fill', 'black')
 
         this.applyToolTip();
     }
