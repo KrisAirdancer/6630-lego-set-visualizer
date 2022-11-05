@@ -180,7 +180,7 @@ class Heatmap {
 
             d3.select("#tooltip")
                 .raise()
-                .style("opacity", "100%")
+                .style("opacity", "80%")
                 .attr("x", x + 30)
                 .attr("y", y + 10)
                 .attr("rx", 20)
@@ -213,7 +213,7 @@ class Heatmap {
      */
     mouseMoveEvent(e,d) {
         d3.select("#tooltip")
-            .style("opacity", "100%")
+            .style("opacity", "80%")
             .attr("rx", 20)
             .attr("ry", 20);
         
@@ -256,7 +256,7 @@ class Heatmap {
                 let data = this.switchDataSets();
                 let setName = [...d3.group(data, d=> d.yValue).keys()];
                 setName = setName.sort((a,b) => (a>b)?-1:1);
-                
+
                 this.createYAxis(setName, this.height);
                 this.createColorScale(data);  
                 this.drawRect(data, this.xScale, this.yScale, this.colorScale)
