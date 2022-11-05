@@ -18,7 +18,7 @@ Promise.all(data_list).then(data =>
     {
         data = processData(data);
         let heatmap_vis = new Heatmap(data);
-        let squiggler = new theSquiggler(data);
+        let squiggler = new TheSquiggler(data);
 
     }
 );

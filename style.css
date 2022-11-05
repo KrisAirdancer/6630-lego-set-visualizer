@@ -167,7 +167,7 @@ h2 {
 }
 
 #svg_heatmap {
-
+    background-color: white;
 }
 
 #svg_theSquiggler {
@@ -176,4 +176,10 @@ h2 {
 
 #svg_interactiveSquiggler {
 
+}
+
+.tool_tip {
+    height: 100;
+    width: 100;
+    fill: azure;
 }

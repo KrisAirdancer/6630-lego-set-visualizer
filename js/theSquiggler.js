@@ -5,7 +5,7 @@
  * to visualization the average number of color per set by 
  * the total number of themes per year
  */
-class theSquiggler {
+class TheSquiggler {
 
     /**
      * A constructor to create a squiggler object
