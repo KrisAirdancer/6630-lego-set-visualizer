@@ -14,11 +14,12 @@ data_list = [
             d3.csv('./data/sets.csv'), // used
             d3.csv('./data/themes.csv') ]; // used
 
-Promise.all(data_list).then(data => 
-    {
+Promise.all(data_list).then(data => {
         data = processData(data);
-    }
-);
+        data = data.filter(d => d.num_parts > 0);
+        let piecesLineChart = new PiecesLineChart(data);
+        piecesLineChart.drawLineChart();
+});
 
 
 /**
