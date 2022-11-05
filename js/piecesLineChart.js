@@ -105,14 +105,13 @@ class PiecesLineChart {
 
             if (e.target.checked) {
 
-                console.log('HERE')
-
                 // Change yScale
                 this.yScale = d3.scaleLog()
                                 .domain([this.num_partsMin, Math.ceil(this.num_partsMax * 0.001) * 1000])
                                 .range([this.svgHeight - 25, 20])
                 
-                this.yAxis.tickValues([0, 10, 100, 1000, 10000, 12000]);
+                this.yAxis.tickValues([0, 10, 100, 1000, 10000, 12000])
+                          .scale(this.yScale);
 
             } else {
 
@@ -121,14 +120,17 @@ class PiecesLineChart {
                                 .domain([this.num_partsMin, Math.ceil(this.num_partsMax * 0.001) * 1000])
                                 .range([this.svgHeight - 25, 20])
 
-                this.yAxis.tickValues([0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000]);
+                this.yAxis.tickValues([0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000])
+                          .scale(this.yScale);
 
             }
 
+            // TODO: This is throwing the following error when the log scale is activated: "Error: <g> attribute transform: Trailing garbage, "translate(0,NaN)""
             d3.select('#dots-group')
                 .selectAll('circle')
                 .transition()
                 .duration(1000)
+                .attr('cx', d => this.xScale(d.year))
                 .attr('cy', d => this.yScale(d.num_parts))
 
             d3.select('#y-axis')
@@ -146,7 +148,6 @@ class PiecesLineChart {
     // TODO: Tooltips are getting cut off by the the right side and bottom of the SVG. Need to add checks to keep them from getting cut off.
 
     applyToolTip() {
-        console.log('AT: applyToolTip()');
         this.createToolkit();
     }
 
