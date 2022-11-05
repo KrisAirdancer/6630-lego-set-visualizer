@@ -178,3 +178,27 @@ h2 {
 #svg_interactiveSquiggler {
 
 }
+
+/***** Other *****/
+
+#tooltip {
+    text-align: center;    
+    height: 80px;
+    width: 300px;
+    border-color: black;
+    border-width: 2px;
+    box-shadow: 3px 3px 3px 3px rgba(0, 0, 0, .2);
+    opacity: 60%;
+    fill: white;
+    stroke: black;
+}
+
+#toolText {
+    align-items: center;
+    font-size: 12px;
+    stroke: black;
+    fill: black;
+    height: 10px;
+    width: 90px;
+    z-index: auto;
+}

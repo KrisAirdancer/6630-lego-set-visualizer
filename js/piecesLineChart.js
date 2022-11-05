@@ -92,12 +92,93 @@ class PiecesLineChart {
            .attr('cy', d => this.yScale(d.num_parts))
            .attr('r', '2px')
            .style('fill', 'black')
+           .on("mouseover", (e,d) => this.mouseOverEvent(e,d))
+           .on("mousemove", (e,d) => this.mouseMoveEvent(e,d))
+           .on("mouseleave", (e,d) => this.mouseLeaveEvent(e,d));  
 
         this.applyToolTip();
     }
+    
+    //#region Tooltip Test
+
+    // TODO: Tooltips are getting cut off by the the rigth side and bottom of the SVG. Need to add checks to keep them from getting cut off.
 
     applyToolTip() {
         console.log('AT: applyToolTip()');
+        d3.select('#svg_piecesLineChart').append("g").attr("id", "piecesLCTooltip");
+        this.createToolkit();
+    }
+
+    /**
+     * A helper method that creates the rectangle for the
+     * tooltip
+     */
+    createToolkit() {
+        let toolKit = d3.select("#svg_piecesLineChart")
+            .append("g")
+            .attr("id", "#piecesLCTooltip")
+
+        toolKit.append("rect")
+            .attr("id", "tooltip")
+            .attr("ry", 20)
+            .attr("rx", 20)
+            .style("opacity", 0)
+    }
+
+    mouseOverEvent(e,d) {
+        if(d.year != undefined && d.set_name != undefined) {
+            console.log(d.year)
+
+            let x = (this.xScale(d.year) < this.width - 200)? 
+                this.xScale(d.year) : this.xScale(d.year) - 200;
+            
+            let y = (this.yScale(d.num_parts) > this.height - 200)? 
+                this.yScale(d.num_parts) - 200 : this.yScale(d.num_parts);
+
+            d3.select("#tooltip")
+                .style("opacity", "100%")
+                .attr("x", x + 30)
+                .attr("y", y + 10)
+                .attr("rx", 20)
+                .attr("ry", 20)
+                
+            d3.select("#piecesLCTooltip")
+                .raise()
+                .append("text")
+                .attr("id", "toolText")
+                .text("Set Name: " + d.set_name)
+                .attr('x', x + 34)
+                .attr('y', y + 40) 
+
+            d3.select("#piecesLCTooltip")
+                .raise()
+                .append("text")
+                .attr("id", "toolText")
+                .text("Number of Color: " + d.num_parts)
+                .attr('x', x + 34)
+                .attr('y', y + 60) 
+        }
+        
+    }
+
+    mouseMoveEvent(e,d) {
+        d3.select("#tooltip")
+            .style("opacity", "100%")
+            .attr("rx", 20)
+            .attr("ry", 20);
+        
+        d3.select("#piecesLCTooltip").selectAll("text").style("opacity", 1);
 
     }
+
+    mouseLeaveEvent(e,d) {
+        d3.select("#tooltip")
+                    .style("opacity", 0)
+                    .attr("x", 0)
+                    .attr("y", 0);
+        
+        d3.select("#piecesLCTooltip").selectAll("text").remove()
+    }
+
+    //#endregion
 }
