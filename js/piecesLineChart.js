@@ -7,27 +7,17 @@ class PiecesLineChart {
 
     constructor(data) {
         this.data = data;
-        // this.data = data.filter(d => d.num_parts > 1000);
-        console.log(this.data);
 
         // Get SVG Data
         this.svgHeight = parseInt(d3.select('#svg_piecesLineChart').style('height'))
-        console.log("height: " + this.svgHeight)
         this.svgWidth = parseInt(d3.select('#svg_piecesLineChart').style('width'))
-        console.log('width: ' + this.svgWidth)
 
         // Get Data Metadata
 
         this.yearMin = d3.min(this.data, d => d.year);
-        console.log(this.yearMin)
         this.yearMax = d3.max(this.data, d => d.year);
-        console.log(this.yearMax)
         this.num_partsMin = d3.min(this.data, d=> d.num_parts);
-        console.log(this.num_partsMin)
         this.num_partsMax = d3.max(this.data, d => d.num_parts);
-        console.log(this.num_partsMax)
-
-        // console.log(this.data.filter(d => d.year > 2022))
 
         // Make Scales
 
@@ -37,25 +27,24 @@ class PiecesLineChart {
                        .range([45, this.svgWidth - 20]) // To
 
         // Y-Scale
-        // this.yScale = d3.scaleLog()
         this.yScale = d3.scaleLinear()
                        .domain([this.num_partsMin, Math.ceil(this.num_partsMax * 0.001) * 1000])
                        .range([this.svgHeight - 25, 20])
+
+        this.yAxis = undefined;
 
     }
 
     //#region Draw Basic Chart
 
     drawLineChart() {
-        console.log('AT: drawLineChart()');
 
         this.drawAxes(false);
         this.drawDots();
         this.toggleLogScale();
     }
 
-    drawAxes(drawLogrithmic) {
-        console.log('AT: drawAxes()');
+    drawAxes() {
 
         let svg = d3.select('#svg_piecesLineChart');
 
@@ -74,25 +63,17 @@ class PiecesLineChart {
            .call(xAxis)
 
         // Draw yAxis
-        let yAxis = d3.axisLeft()
+        this.yAxis = d3.axisLeft()
                       .scale(this.yScale)
-        
-        if (drawLogrithmic) {
-            yAxis.tickValues([0, 10, 100, 1000, 10000, 12000]);
-        } else {
-            yAxis.tickValues([0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000]);
-        }
+                      .tickValues([0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000]);
 
-
-        // TODO: A "<g> attribute trnasform: Trailing garbage, "translate(0,NaN)" error is being thrown near here when the log scale is toggled. It doesn't seem to be breaking anything, but fix it anyway.
         svg.append('g')
            .attr('id', 'y-axis')
            .attr('transform', `translate(${45}, ${0})`)
-           .call(yAxis)
+           .call(this.yAxis)
     }
 
     drawDots() {
-        console.log('AT: drawDots()');
 
         let svg = d3.select('#svg_piecesLineChart')
                     .append('g')
@@ -117,55 +98,43 @@ class PiecesLineChart {
 
     //#region Linear-to-Log Scale Change
 
-    // TODO: If time permits, add transistions to the log-to-linear scale transitions.
+    // TODO: The log scale y-axis has its labels in the wrong locations! Fix this.
     toggleLogScale() {
 
         d3.select('#lineChart-log-toggle').on('click', e => {
-
-            console.log(e)
 
             if (e.target.checked) {
 
                 console.log('HERE')
 
-                // TODO: Add more meaningful y-axis labels by passing true/false to the drawAxes() method to determine what axis labels to apply.
-
                 // Change yScale
                 this.yScale = d3.scaleLog()
                                 .domain([this.num_partsMin, Math.ceil(this.num_partsMax * 0.001) * 1000])
                                 .range([this.svgHeight - 25, 20])
-
-                // Remove old elements
-                d3.select('#dots-group').remove();
-                d3.select('#y-axis').remove();
-                d3.select('#piecesLCTooltip').remove();
-
-                // Redraw new elements
-                this.drawAxes(true);
-                this.drawDots();
+                
+                this.yAxis.tickValues([0, 10, 100, 1000, 10000, 12000]);
 
             } else {
-
-                // X-Scale
-                this.xScale = d3.scaleLinear()
-                                .domain([this.yearMin, this.yearMax]) // From
-                                .range([45, this.svgWidth - 20]) // To
 
                 // Y-Scale
                 this.yScale = d3.scaleLinear()
                                 .domain([this.num_partsMin, Math.ceil(this.num_partsMax * 0.001) * 1000])
                                 .range([this.svgHeight - 25, 20])
 
-                // Remove old elements
-                d3.select('#dots-group').remove();
-                d3.select('#y-axis').remove();
-                d3.select('#piecesLCTooltip').remove();
-
-                // Redraw new elements
-                this.drawAxes();
-                this.drawDots();
+                this.yAxis.tickValues([0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000]);
 
             }
+
+            d3.select('#dots-group')
+                .selectAll('circle')
+                .transition()
+                .duration(1000)
+                .attr('cy', d => this.yScale(d.num_parts))
+
+            d3.select('#y-axis')
+              .transition()
+              .duration(1000)
+              .call(this.yAxis)
 
         })
     }
@@ -174,7 +143,7 @@ class PiecesLineChart {
     
     //#region Tooltip Logic
 
-    // TODO: Tooltips are getting cut off by the the rigth side and bottom of the SVG. Need to add checks to keep them from getting cut off.
+    // TODO: Tooltips are getting cut off by the the right side and bottom of the SVG. Need to add checks to keep them from getting cut off.
 
     applyToolTip() {
         console.log('AT: applyToolTip()');
