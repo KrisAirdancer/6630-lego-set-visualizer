@@ -176,7 +176,6 @@ class Heatmap {
                 .attr('x', x + 34)
                 .attr('y', y + 40) 
 
-
             d3.select("#heat_tool_tip")
                 .raise()
                 .append("text")
