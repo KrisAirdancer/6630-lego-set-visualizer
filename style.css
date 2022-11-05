@@ -1,3 +1,5 @@
+/* TODO: Style SVGs to look nice */
+
 :root {
     --main-div-background: rgba(228, 228, 228, 0.75);
     --border-color: grey;
@@ -78,6 +80,11 @@ p {
     max-width: 300px;
 }
 
+.heatmap-text {
+    max-width: none;
+    margin-bottom: 10px;
+}
+
 h1 {
     font-size: 26px;
 }
@@ -97,9 +104,14 @@ h2 {
 
 /***** Flexbox *****/
 
-.flex-container {
+.flex-container-column {
     display: flex;
     flex-direction: row;
+}
+
+.flex-container-row {
+    display: flex;
+    flex-direction: column;
 }
 
 /***** Introduction <div> *****/
@@ -178,6 +190,8 @@ h2 {
 
 }
 
+/***** Other *****/
+
 #tooltip {
     text-align: center;    
     height: 80px;
@@ -198,4 +212,21 @@ h2 {
     height: 10px;
     width: 90px;
     z-index: auto;
+}
+
+#div_heatmap-select {
+    margin-bottom: 10px;
+}
+
+/* TODO: Style the selectors */
+#heatmap-select-1 {
+    background-color: var(--lego-yellow);
+    border-radius: 5px;
+    border-color: var(--border-color);
+}
+
+#heatmap-select-2 {
+    background-color: var(--lego-yellow);
+    border-radius: 5px;
+    border-color: var(--border-color);
 }

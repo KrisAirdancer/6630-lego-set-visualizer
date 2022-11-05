@@ -213,7 +213,7 @@ class Heatmap {
      * based on the informaiton that is given.
      */
     updateHeatmap(data) {
-        let svg = d3.select("#svg_heatmap").attr("height", 700);
+        let svg = d3.select("#svg_heatmap").attr("height", 500);
         svg.append("g").attr("id", "heat_tool_tip");
 
         this.height = parseInt(svg.style("height"))-this.padding.bottom;
