@@ -11,9 +11,10 @@ class Heatmap {
      * @param {Array Object} globalData 
      */
     constructor(data) {
+        this.firstOption = "num_set";
+        this.second_option = "uniq_color";
         this.completeData = data;
-        console.log(data);
-        data = data.filter(d => d.num_parts >= 2500);
+        data = this.createSetColorData();
 
         this.padding = {
             top: 10,
@@ -22,9 +23,19 @@ class Heatmap {
             left: 50
         };
 
-        this.updateHeatmap(data)
+        this.createSetColorData();
+
+        let svg = d3.select("#svg_heatmap").attr("height", 500);
+        svg.append("g").attr("id", "heat_tool_tip");
+
+        this.height = parseInt(svg.style("height"))-this.padding.bottom;
+        this.width = parseInt(svg.style("width")) - this.padding.right;
+        
+        this.createScaling(data, this.height, this.width, svg);
+        this.drawRect(data, this.xScale, this.yScale, this.colorScale);
 
         this.createToolkit();
+        d3.select("#heatmap-select-1").on('change',e => this.selection_1_event(e))
     }
 
     //#region Setup
@@ -35,12 +46,13 @@ class Heatmap {
      * @param {int} height 
      * @param {int} width 
      */
-    createScaling(data, height, width, svg) {
+    createScaling(data, height, width) {
         let yearData = [...d3.group(data, d => d.year).keys()];
-        let setName = [...d3.group(data, d=> d.set_name).keys()];
+        let setName = [...d3.group(data, d=> d.yValue).keys()];
+        console.log("value_names: ", setName)
         setName = setName.sort((a,b) => (a>b)?-1:1);
 
-        this.createXAxis(yearData, width, height, svg);
+        this.createXAxis(yearData, width, height);
         this.createYAxis(setName, height);
         this.createColorScale(data);   
     }
@@ -51,8 +63,9 @@ class Heatmap {
      * @param {Object} data 
      */
     createColorScale(data) {
-        let max_color = parseInt(d3.max(data, d=> d.num_color));
-        let min_color = parseInt(d3.min(data, d=> d.num_color))
+        console.log(data[0])
+        let max_color = parseInt(d3.max(data, d=> parseInt(d.scaleValue)));
+        let min_color = parseInt(d3.min(data, d=> parseInt(d.scaleValue)));
 
         this.colorScale = d3.scaleLinear()
             .domain([min_color, max_color])
@@ -91,7 +104,7 @@ class Heatmap {
             return "" + d;
         }).tickValues(this.xScale.domain().filter(function(d,i){ return !(i%5)}))
         
-        svg.append("g").attr("id", "x-axis")
+        d3.select("#heat_tool_tip").append("g").attr("id", "x-axis")
             .attr("transform", "translate(0," + height + ")")
             .call(xaxis);
     }
@@ -126,22 +139,22 @@ class Heatmap {
      * @param {Function} colorScale 
      * @param {HTML element} svg 
      */
-    drawRect(data, yearScale, set_scale, colorScale, svg) {
-        let rec = svg.append('g').attr('id', 'heat_rect')
+    drawRect(data, yearScale, set_scale, colorScale) {
+        let rec = d3.select("#heat_tool_tip").append('g').attr('id', 'heat_rect')
             .selectAll('rect')
             .data(data)
             .enter()
             .append("rect")
             
         rec.attr('x', d => yearScale(d.year))
-            .attr('y', d => set_scale(d.set_name))
+            .attr('y', d => set_scale(d.yValue))
             .attr('width', yearScale.bandwidth())
             .attr("height", set_scale.bandwidth())
             .style("fill", d => {
-                if(d.num_color == undefined)
+                if(d.scaleValue == undefined)
                     return 'gray'
                 else
-                    return colorScale(parseInt(d.num_color))
+                    return colorScale(parseInt(d.scaleValue))
             })
             .on("mouseover", (e,d) => this.mouseOverEvent(e,d))
             .on("mousemove", (e,d) => this.mouseMoveEvent(e,d))
@@ -151,18 +164,24 @@ class Heatmap {
     //#endregion
 
     //#region Event Handlers
+
+    /**
+     * An Event handler for a tool tip that
+     * enters the rect nodes on the heatmap.
+     * @param {Event} e 
+     * @param {Data} d 
+     */
     mouseOverEvent(e,d) {
-        if(d.year != undefined && d.set_name != undefined) {
-            console.log(d.year)
+        if(d.year != undefined && d.yValue != undefined) {
 
             let x = (this.xScale(d.year) < this.width-200)? 
                 this.xScale(d.year) : this.xScale(d.year)-200;
             
-            let y = (this.yScale(d.set_name) > this.height - 100)? 
-                this.yScale(d.set_name)-100 : this.yScale(d.set_name);
+            let y = (this.yScale(d.yValue) > this.height - 100)? 
+                this.yScale(d.yValue)-100 : this.yScale(d.yValue);
 
             d3.select("#tooltip")
-                .style("opacity", "10%")
+                .style("opacity", "100%")
                 .attr("x", x + 30)
                 .attr("y", y + 10)
                 .attr("rx", 20)
@@ -172,7 +191,7 @@ class Heatmap {
                 .raise()
                 .append("text")
                 .attr("id", "toolText")
-                .text("Set Name: " + d.set_name)
+                .text("Set Name: " + d.yValue)
                 .attr('x', x + 34)
                 .attr('y', y + 40) 
 
@@ -180,16 +199,22 @@ class Heatmap {
                 .raise()
                 .append("text")
                 .attr("id", "toolText")
-                .text("Number of Color: " + d.num_color)
+                .text("Number of Color: " + d.scaleValue)
                 .attr('x', x + 34)
                 .attr('y', y + 60) 
         }
         
     }
 
+    /**
+     * An Event Handler for the tooltip
+     * moving across the element
+     * @param {Event} e 
+     * @param {Data} d 
+     */
     mouseMoveEvent(e,d) {
         d3.select("#tooltip")
-            .style("opacity", "10%")
+            .style("opacity", "100%")
             .attr("rx", 20)
             .attr("ry", 20);
         
@@ -197,6 +222,12 @@ class Heatmap {
 
     }
 
+    /**
+     * An Event Handler for the tooltip 
+     * leaving the node event
+     * @param {Event} e 
+     * @param {Data} d 
+     */
     mouseLeaveEvent(e,d) {
         d3.select("#tooltip")
                     .style("opacity", 0)
@@ -206,22 +237,65 @@ class Heatmap {
         d3.select("#heat_tool_tip").selectAll("text").remove()
     }
 
+    /**
+     * An event handler that will update
+     * the heatmap based on the selection of 
+     * data
+     * @param {Event} e 
+     */
+    selection_1_event(e) {
+        // Remove previous data
+        this.firstOption = e.target.value;
+        d3.select("#heat_tool_tip").remove();
+        d3.select("#svg_heatmap").append("g").attr("id", "heat_tool_tip")
+
+        // Grab the second data value
+        let second_option ;
+        console.log(second_option);
+        switch(e.target.value) {
+            case "num_set":
+                let data = switchDataSets();
+                this.createScaling(data, this.height, this.width)
+                break;
+            case "uniq_color":
+                break;
+            case "theme":
+                break;
+            case "pieces":
+               break;
+        };
+    }
+
     //#endregion
 
-    /**
-     * A helper function that will handle updating the table 
-     * based on the informaiton that is given.
-     */
-    updateHeatmap(data) {
-        let svg = d3.select("#svg_heatmap").attr("height", 500);
-        svg.append("g").attr("id", "heat_tool_tip");
-
-        this.height = parseInt(svg.style("height"))-this.padding.bottom;
-        this.width = parseInt(svg.style("width")) - this.padding.right;
-        
-        this.createScaling(data, this.height, this.width, svg);
-        this.drawRect(data, this.xScale, this.yScale, this.colorScale, svg);
+    switchDataSets() {
+        if(this.firstOption === "num_set" && this.second_option === "uniq_color")
+            return this.createSetColorData();
 
     }
+
+    /**
+     * A helper function that will create a 
+     * data structure that has yValue = set_name, 
+     * scaleValue = num_value
+     */
+    createSetColorData() {
+        let newData = [];
+        let index = 0;
+        let sorted = [...d3.group(this.completeData, d => d.set_name)];
+        sorted.forEach(d => {
+            if(d[1][0].num_parts >= 2500) {
+                newData[index++] = {
+                    year: d[1][0].year,
+                    yValue: d[1][0].set_name,
+                    scaleValue: d[1][0].num_color
+                }
+            }
+        })
+
+        return newData;
+    }
+
+
 
 }

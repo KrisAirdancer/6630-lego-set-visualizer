@@ -36,7 +36,7 @@ footer {
    This should yield a 75%-25% svg-p distribution.
  */
 svg {
-    background-color: grey;
+    /* background-color: grey; */
     flex-grow: 4;
     border-radius: 10px;
 }
