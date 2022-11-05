@@ -15,14 +15,15 @@ class Heatmap {
         this.second_option = "uniq_color";
         this.completeData = data;
         data = this.createSetColorData();
-
+        
         this.padding = {
             top: 10,
             right: 50,
-            bottom: 30,
+            bottom: 50,
             left: 50
         };
-
+        
+        d3.select("#heatmap-select-1").on('change',e => this.selection_1_event(e))
         this.createSetColorData();
 
         let svg = d3.select("#svg_heatmap").attr("height", 500);
@@ -31,11 +32,15 @@ class Heatmap {
         this.height = parseInt(svg.style("height"))-this.padding.bottom;
         this.width = parseInt(svg.style("width")) - this.padding.right;
         
-        this.createScaling(data, this.height, this.width, svg);
-        this.drawRect(data, this.xScale, this.yScale, this.colorScale);
+        let yearData = [...d3.group(data, d => d.year).keys()];
+        let setName = [...d3.group(data, d=> d.yValue).keys()];
+        setName = setName.sort((a,b) => (a>b)?-1:1);
 
-        this.createToolkit();
-        d3.select("#heatmap-select-1").on('change',e => this.selection_1_event(e))
+        this.createXAxis(yearData, this.width, this.height);
+        this.createYAxis(setName, this.height);
+        this.createColorScale(data);  
+
+        this.drawRect(data, this.xScale, this.yScale, this.colorScale);
     }
 
     //#region Setup
@@ -47,14 +52,7 @@ class Heatmap {
      * @param {int} width 
      */
     createScaling(data, height, width) {
-        let yearData = [...d3.group(data, d => d.year).keys()];
-        let setName = [...d3.group(data, d=> d.yValue).keys()];
-        console.log("value_names: ", setName)
-        setName = setName.sort((a,b) => (a>b)?-1:1);
-
-        this.createXAxis(yearData, width, height);
-        this.createYAxis(setName, height);
-        this.createColorScale(data);   
+         
     }
 
     /**
@@ -93,7 +91,7 @@ class Heatmap {
      * @param {Integer} width 
      * @param {Html element} svg 
      */
-    createXAxis(yearData, width, height, svg) {
+    createXAxis(yearData, width, height) {
         // Create the X-Scale
         this.xScale = d3.scaleBand()
             .domain(yearData)
@@ -104,7 +102,7 @@ class Heatmap {
             return "" + d;
         }).tickValues(this.xScale.domain().filter(function(d,i){ return !(i%5)}))
         
-        d3.select("#heat_tool_tip").append("g").attr("id", "x-axis")
+        d3.select("#svg_heatmap").append("g").attr("id", "x-axis")
             .attr("transform", "translate(0," + height + ")")
             .call(xaxis);
     }
@@ -114,9 +112,7 @@ class Heatmap {
      * tooltip
      */
       createToolkit() {
-        let toolKit = d3.select("#svg_heatmap")
-            .append("g")
-            .attr("id", "#heat_tool_tip")
+        let toolKit = d3.select("#heat_tool_tip")
 
         toolKit.append("rect")
             .attr("id", "tooltip")
@@ -159,6 +155,8 @@ class Heatmap {
             .on("mouseover", (e,d) => this.mouseOverEvent(e,d))
             .on("mousemove", (e,d) => this.mouseMoveEvent(e,d))
             .on("mouseleave", (e,d) => this.mouseLeaveEvent(e,d));  
+        
+        this.createToolkit();
     }
     
     //#endregion
@@ -181,6 +179,7 @@ class Heatmap {
                 this.yScale(d.yValue)-100 : this.yScale(d.yValue);
 
             d3.select("#tooltip")
+                .raise()
                 .style("opacity", "100%")
                 .attr("x", x + 30)
                 .attr("y", y + 10)
@@ -254,8 +253,13 @@ class Heatmap {
         console.log(second_option);
         switch(e.target.value) {
             case "num_set":
-                let data = switchDataSets();
-                this.createScaling(data, this.height, this.width)
+                let data = this.switchDataSets();
+                let setName = [...d3.group(data, d=> d.yValue).keys()];
+                setName = setName.sort((a,b) => (a>b)?-1:1);
+                
+                this.createYAxis(setName, this.height);
+                this.createColorScale(data);  
+                this.drawRect(data, this.xScale, this.yScale, this.colorScale)
                 break;
             case "uniq_color":
                 break;
