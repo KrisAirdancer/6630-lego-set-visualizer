@@ -12,9 +12,9 @@ class PiecesLineChart {
 
         // Get SVG Data
         this.svgHeight = parseInt(d3.select('#svg_piecesLineChart').style('height'))
-        console.log(this.svgHeight)
+        console.log("height: " + this.svgHeight)
         this.svgWidth = parseInt(d3.select('#svg_piecesLineChart').style('width'))
-        console.log(this.svgWidth)
+        console.log('width: ' + this.svgWidth)
 
         // Get Data Metadata
 

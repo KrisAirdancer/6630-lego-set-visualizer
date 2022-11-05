@@ -21,11 +21,24 @@
         </div>
 
         <div id="piecesLineChart" class="flex-container main-div">
+
             <div class="main-text leftVisElement">
                 <h2>Pieces per Year</h2>
                 <p id="p_piecesLineChart">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Tempus imperdiet nulla malesuada pellentesque elit. Varius vel pharetra vel turpis nunc. Ullamcorper a lacus vestibulum sed arcu non. Est velit egestas dui id ornare. Mauris commodo quis imperdiet massa tincidunt nunc pulvinar sapien et. Blandit libero volutpat sed cras ornare.</p>
             </div>
-            <svg id="svg_piecesLineChart" class="rightVisElement"></svg>
+
+            <div id="piecesLineChart-group" class="rightVisElement flex-container-column">
+                
+                <div id="div_lineChart-log-toggle">
+
+                    <input type="checkbox" name="name_lineChart-log-toggle" id="lineChart-log-toggle">
+                    <label for="name_lineChart-log-toggle">Log Scale</label>
+
+                </div>
+
+                <svg id="svg_piecesLineChart"></svg>
+            </div>
+
         </div>
 
         <div id="themesLineChart" class="flex-container main-div">

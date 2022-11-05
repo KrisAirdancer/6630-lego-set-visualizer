@@ -97,6 +97,11 @@ h2 {
 
 /***** Flexbox *****/
 
+.flex-container-column {
+    display: flex;
+    flex-direction: column;
+}
+
 .flex-container {
     display: flex;
     flex-direction: row;
@@ -203,4 +208,8 @@ h2 {
     height: 10px;
     width: 90px;
     z-index: auto;
+}
+
+#piecesLineChart-group {
+    width: 100%;
 }
