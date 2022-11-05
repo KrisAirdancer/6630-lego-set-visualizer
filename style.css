@@ -181,6 +181,8 @@ h2 {
 
 /***** Other *****/
 
+/* TODO: Tooltips are a bit clunky looking. Style them a bit better. */
+
 #tooltip {
     text-align: center;    
     height: 80px;
