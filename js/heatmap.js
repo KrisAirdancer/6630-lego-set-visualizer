@@ -25,6 +25,7 @@ class Heatmap {
         };
         
         d3.select("#heatmap-select-1").on('change',e => this.selection_1_event(e))
+        d3.select("#heatmap-select-2").on('change',e => this.selection_2_event(e))
         this.createSetColorData();
 
         let svg = d3.select("#svg_heatmap").attr("height", 500);
@@ -191,7 +192,7 @@ class Heatmap {
                 .raise()
                 .append("text")
                 .attr("id", "toolText")
-                .text("Set Name: " + d.yValue)
+                .text("Name: " + d.yValue)
                 .attr('x', x + 34)
                 .attr('y', y + 40) 
 
@@ -199,7 +200,7 @@ class Heatmap {
                 .raise()
                 .append("text")
                 .attr("id", "toolText")
-                .text("Number of Color: " + d.scaleValue)
+                .text("Number: " + d.scaleValue)
                 .attr('x', x + 34)
                 .attr('y', y + 60) 
         }
@@ -238,6 +239,30 @@ class Heatmap {
     }
 
     /**
+     * An event handler that will update 
+     * the heatmap based on the selection 
+     * of the frequency data.
+     * @param {Event} e 
+     */
+    selection_2_event(e) {
+        this.second_option = e.target.value;
+        d3.select("#heat_tool_tip").remove();
+        d3.select("#svg_heatmap").append("g").attr("id", "heat_tool_tip")
+        
+        let data = this.switchDataSets();
+
+        if(data.size == 0)
+            return;
+
+        let setName = [...d3.group(data, d=> d.yValue).keys()];
+        setName = setName.sort((a,b) => (a>b)?-1:1);
+        
+        this.createYAxis(setName, this.height);
+        this.createColorScale(data);  
+        this.drawRect(data, this.xScale, this.yScale, this.colorScale)
+    }
+
+    /**
      * An event handler that will update
      * the heatmap based on the selection of 
      * data
@@ -249,22 +274,7 @@ class Heatmap {
         d3.select("#heat_tool_tip").remove();
         d3.select("#svg_heatmap").append("g").attr("id", "heat_tool_tip")
 
-        // Grab the second data value
-        let data = [];
-        switch(e.target.value) {
-            case "num_set":
-                data = this.switchDataSets();
-                break;
-            case "uniq_color":
-                data = this.switchDataSets();
-                break;
-            case "theme":
-                data = this.switchDataSets();
-
-                break;
-            case "pieces":
-               break;
-        };
+        let data = this.switchDataSets();
 
         if(data.size == 0)
             return;
@@ -286,9 +296,17 @@ class Heatmap {
             return this.createThemColorData();
         else if (this.firstOption === "uniq_color" && this.second_option === "uniq_color")
             return this.createColorColorData();
-
+        else if (this.firstOption === "num_set" && this.second_option === "num_piece")
+            return this.createSetPieceData();
+        else if (this.firstOption === "theme" && this.second_option === "num_piece")
+            return this.createThemePieceData();
+        
+        return [];
     }
 
+    //#endregion
+
+    //#region SELECTION 1 DATA PROCESSES
     /**
      * A helper function that will cluster the data based on 
      * the unique sets, and the average color used in 
@@ -312,6 +330,7 @@ class Heatmap {
         return newData;
     }
 
+
     /**
      * A helper function that will cluster the unqiue color based on
      * the unique colors, and the number of that color is used in that
@@ -324,8 +343,6 @@ class Heatmap {
 
         sorted.forEach(year => {
             if(year[0] >= 1985) {
-                console.log("year ", year)
-
                 let color = [];
                 let color_value = year[1];
                 
@@ -339,7 +356,6 @@ class Heatmap {
                         })
                     }
                 }
-                console.log("colors: ", color);
 
                 let color_group = d3.group(color, c => c.id);
 
@@ -390,6 +406,65 @@ class Heatmap {
         return newData;
     }
 
+    //#endregion
 
+    //#region SELECTION 2 DATA PROCESSES
+    /**
+     * A helper function that will cluster the data based on 
+     * the unique sets and the number of pieces used
+     * in given that year
+     */
+    createSetPieceData() {
+        let newData = [];
+        let index = 0;
+        let sorted = [...d3.group(this.completeData, d => d.set_name)];
+        sorted.forEach(d => {
+            if(d[1][0].num_parts >= 2000 && d[1][0].year >= '1985') {
+                newData[index++] = {
+                    year: d[1][0].year,
+                    yValue: d[1][0].set_name,
+                    scaleValue: d[1][0].num_parts
+                }
+            }
+        })
 
+        return newData;
+    }
+
+    /**
+     * A helper function that will cluster the data baesd on 
+     * the unique themes and the number of pieces used in 
+     * that given theme
+     * @returns grouped data
+     */
+    createThemePieceData() {
+        let newData = [];
+        let index = 0;
+
+        let sorted = [...d3.group(this.completeData, d => d.theme_name)]
+
+        sorted.forEach(d => {
+            if(d[1][0].num_parts >= 500) {
+                // grab all of the unique colors in the given year
+                let year_info = [...d3.group(d[1], data => data.year)];
+                year_info.forEach(c => {
+                    console.log("c ", c)
+                    if(c[0] >= 1985) {
+                        let value = c[1];
+                        for(let item = 0; item < value.length; item++) {
+                            newData[index++] = {
+                                year: c[0],
+                                yValue: value[item].theme_name,
+                                scaleValue: value[item].num_parts
+                            }
+                        }
+                    }
+                })
+            }
+        })
+
+        return newData;
+    }
+    
+    //#endregion
 }
