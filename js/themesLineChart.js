@@ -5,12 +5,25 @@
 // TODO: May want to cut 1949 out of this visualization b/c it is such an outlier. The vis isn't wrong, it was just a year that they released mostly sets with lots of pieces, and 1950 was a year of sets with just a few (literally) pieces.
 // TODO: Add a color legend to this vis.
 
+/* NEXT STEPS:
+ * - In the event handler functions, set the appropriate variables in the this.displayed object.
+ * - Call the updateVis() method.
+ *     - This method should look at the this.displayed object and transition the lines set to 'true' onto the vis and transition the lines set to 'false' off of the vis.
+ */
+
 class ThemesLineChart {
 
     constructor(data) { 
 
         this.data = data;
         console.log(this.data);
+
+        this.displayed = {
+            themes: true,
+            colors: false,
+            pieces: false,
+            sets: false
+        }
 
         /* Process Data */
 
@@ -264,6 +277,22 @@ class ThemesLineChart {
         console.log('AT: addEventHandlers()');
 
         d3.select('#themeChartToggle-themes').on('click', e => {
+            console.log('AT: themes handler')
+            console.log(e.target.checked)
+        })
+
+        d3.select('#themeChartToggle-colors').on('click', e => {
+            console.log('AT:  colors')
+            console.log(e.target.checked)
+        })
+
+        d3.select('#themeChartToggle-pieces').on('click', e => {
+            console.log('AT:  pieces')
+            console.log(e.target.checked)
+        })
+
+        d3.select('#themeChartToggle-sets').on('click', e => {
+            console.log('AT:  sets')
             console.log(e.target.checked)
         })
     }
