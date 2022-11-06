@@ -51,6 +51,9 @@ class ThemesLineChart {
     drawLineChart() {
         this.drawAxes();
         this.drawThemesLine();
+        this.drawSetsLine();
+        this.drawPiecesLine();
+        this.drawColorsLine();
     }
 
     drawAxes() {
@@ -92,28 +95,78 @@ class ThemesLineChart {
                 )
     }
 
+    drawSetsLine() {
+
+    }
+
+    // Average number of pieces per set per year
+    drawPiecesLine() {
+
+    }
+
+    drawColorsLine() {
+
+    }
+
     processData() {
 
         let years = d3.groups(this.data, d => d.year);
+        console.log(years)
+        let yearData = [];
 
-        let themeCounts = []
+        years.forEach(year => {
+
+            yearData.push({
+                year: year[0],
+                themes: 0,
+                num_unique_themes: 0,
+                ave_num_pieces: 0,
+                num_colors: 0,
+                num_sets: 0
+            })
+        });
+        console.log(yearData)
+
+        this.getUniqueThemesAndCount(years, yearData);
+        this.getAverageNumOfPieces(years, yearData);
+
+        console.log(yearData)
+        return yearData;
+    }
+
+    getUniqueThemesAndCount(years, yearData) {
 
         for (let i = 0; i < years.length; i++) {
             let uniqueThemes = new Set();
 
             years[i][1].forEach(entry => {
-
                 uniqueThemes.add(entry.theme_name)
             });
 
-            themeCounts.push({
-                year: years[i][0],
-                themes: uniqueThemes,
-                num_unique_themes: uniqueThemes.size
-            })
+            // Add data to yearData object
+            yearData[i].num_unique_themes = uniqueThemes.size;
+            yearData[i].themes = Array.from(uniqueThemes);
         }
 
-        return themeCounts;
+        console.log('FINAL:')
+        return yearData;
+    }
+
+    getAverageNumOfPieces(years, yearData) {
+
+        for (let i = 0; i < years.length; i++) {
+
+            let sets = years[i][1];
+
+            let sum = 0;
+
+            sets.forEach(set => {
+                sum += set.num_parts;
+            });
+
+            // TODO: May want to implement rounding of the average number of sets here.
+            yearData[i].ave_num_pieces = (sum / sets.length)
+        }
     }
 
     //#endregion
