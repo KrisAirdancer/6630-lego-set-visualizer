@@ -300,6 +300,8 @@ class Heatmap {
             return this.createSetPieceData();
         else if (this.firstOption === "theme" && this.second_option === "num_piece")
             return this.createThemePieceData();
+        else if (this.firstOption === "num_set" && this.second_option === "num_set")
+            return this.createSetSetData();
         
         return [];
     }
@@ -462,6 +464,23 @@ class Heatmap {
             }
         })
 
+        return newData;
+    }
+
+    createSetSetData() {
+        let newData = [];
+        let index = 0;
+        let sorted = [...d3.group(this.completeData, d => d.set_name)];
+        sorted.forEach(d => {
+            if(d[1][0].num_parts >= 2000 && d[1][0].year >= '1985') {
+                newData[index++] = {
+                    year: d[1][0].year,
+                    yValue: d[1][0].set_name,
+                    scaleValue: 1
+                }
+            }
+        })
+        console.log(newData)
         return newData;
     }
     
