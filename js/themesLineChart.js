@@ -122,14 +122,16 @@ class ThemesLineChart {
                 num_unique_themes: 0,
                 ave_num_pieces: 0,
                 num_colors: 0,
-                num_sets: 0
+                num_sets: year[1].length
             })
         });
         console.log(yearData)
 
         this.getUniqueThemesAndCount(years, yearData);
         this.getAverageNumOfPieces(years, yearData);
+        this.getUniqueColorsAndCount(years, yearData);
 
+        console.log('FINAL:')
         console.log(yearData)
         return yearData;
     }
@@ -148,7 +150,6 @@ class ThemesLineChart {
             yearData[i].themes = Array.from(uniqueThemes);
         }
 
-        console.log('FINAL:')
         return yearData;
     }
 
@@ -167,6 +168,27 @@ class ThemesLineChart {
             // TODO: May want to implement rounding of the average number of sets here.
             yearData[i].ave_num_pieces = (sum / sets.length)
         }
+    }
+
+    getUniqueColorsAndCount(years, yearData) {
+
+        for (let i = 0; i < years.length; i++) {
+            let uniqueColors = new Set();
+
+            years[i][1].forEach(entry => {
+                let sets = entry.colors;
+
+                sets.forEach(color => {
+                    uniqueColors.add(color.name);
+                });
+            });
+
+            // Add data to yearData object
+            yearData[i].num_unique_themes = uniqueColors.size;
+            yearData[i].themes = Array.from(uniqueColors);
+        }
+
+        return yearData;
     }
 
     //#endregion
