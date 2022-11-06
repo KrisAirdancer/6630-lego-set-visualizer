@@ -104,12 +104,12 @@ h2 {
 
 /***** Flexbox *****/
 
-.flex-container-column {
+.flex-container-row {
     display: flex;
     flex-direction: row;
 }
 
-.flex-container-row {
+.flex-container-column {
     display: flex;
     flex-direction: column;
 }
@@ -175,7 +175,7 @@ h2 {
 }
 
 #svg_themesLineChart {
-    /* height: 500px; */
+    height: 400px;
 }
 
 #svg_heatmap {
@@ -228,4 +228,13 @@ h2 {
     background-color: var(--lego-yellow);
     border-radius: 5px;
     border-color: var(--border-color);
+}
+
+#themesLineChart-group {
+    width: 100%;
+}
+
+#div_themesChartToggle-group {
+    margin-bottom: 10px;
+    margin-left: 20px;
 }

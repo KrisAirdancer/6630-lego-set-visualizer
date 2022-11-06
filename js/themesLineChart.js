@@ -2,6 +2,8 @@
 
 // TODO: Consider adding a toggle to switch between number of themes per year and number of sets per year or even both together.
 // TODO: Add tooltips
+// TODO: May want to cut 1949 out of this visualization b/c it is such an outlier. The vis isn't wrong, it was just a year that they released mostly sets with lots of pieces, and 1950 was a year of sets with just a few (literally) pieces.
+// TODO: Add a color legend to this vis.
 
 class ThemesLineChart {
 
@@ -152,7 +154,8 @@ class ThemesLineChart {
     processData() {
 
         let years = d3.groups(this.data, d => d.year);
-        // console.log(years)
+        console.log('YEARS:')
+        console.log(years)
         let yearData = [];
 
         years.forEach(year => {
@@ -173,7 +176,7 @@ class ThemesLineChart {
         this.getAverageNumOfPieces(years, yearData);
         this.getUniqueColorsAndCount(years, yearData);
 
-        console.log('FINAL:')
+        console.log('YEARDATA:')
         console.log(yearData)
         return yearData;
     }
@@ -230,6 +233,18 @@ class ThemesLineChart {
         }
 
         return yearData;
+    }
+
+    //#endregion
+
+    //#region Add Toggle
+
+    addToggle() {
+
+    }
+
+    determineAxisScaling() {
+        // Loop over all min and max values for all plotted lines and select the largest and smallest among them.
     }
 
     //#endregion

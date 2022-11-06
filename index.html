@@ -20,7 +20,7 @@
             <p>Mauris commodo quis imperdiet massa tincidunt nunc pulvinar sapien et. Blandit libero volutpat sed cras ornare. Diam phasellus vestibulum lorem sed risus ultricies tristique nulla. Risus in hendrerit gravida rutrum quisque non tellus orci. Vel pharetra vel turpis nunc eget lorem dolor sed viverra. Tincidunt arcu non sodales neque sodales ut etiam. Amet purus gravida quis blandit. Suspendisse ultrices gravida dictum fusce ut placerat. Pharetra magna ac placerat vestibulum lectus mauris. Id velit ut tortor pretium. Mauris rhoncus aenean vel elit scelerisque. Id velit ut tortor pretium viverra.</p>
         </div>
 
-        <div id="piecesLineChart" class="flex-container-column main-div">
+        <div id="piecesLineChart" class="flex-container-row main-div">
             <div class="main-text leftVisElement">
                 <h2>Pieces per Year</h2>
                 <p id="p_piecesLineChart">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Tempus imperdiet nulla malesuada pellentesque elit. Varius vel pharetra vel turpis nunc. Ullamcorper a lacus vestibulum sed arcu non. Est velit egestas dui id ornare. Mauris commodo quis imperdiet massa tincidunt nunc pulvinar sapien et. Blandit libero volutpat sed cras ornare.</p>
@@ -28,15 +28,40 @@
             <svg id="svg_piecesLineChart" class="rightVisElement"></svg>
         </div>
 
-        <div id="themesLineChart" class="flex-container-column main-div">
-            <svg id="svg_themesLineChart" class="leftVisElement"></svg>
+        <div id="themesLineChart" class="flex-container-row main-div">
+
+
+            <div id="themesLineChart-group" class="leftVisElement flex-container-column">
+                
+                <div id="div_themesChartToggle-group">
+
+                    <input type="checkbox" name="name_themeChartToggle-themes" id="themeChartToggle-themes">
+                    <label for="name_lineChartToggle-themes">Themes per Year</label>
+
+                    <input type="checkbox" name="name_themeChartToggle-colors" id="themeChartToggle-colors">
+                    <label for="name_lineChartToggle-colors">Colors per Year</label>
+
+                    <input type="checkbox" name="name_themeChartToggle-pieces" id="themeChartToggle-pieces">
+                    <label for="name_lineChartToggle-pieces">Ave. Pieces per Year</label>
+
+                    <input type="checkbox" name="name_themeChartToggle-sets" id="themeChartToggle-sets">
+                    <label for="name_lineChartToggle-sets">Sets per Year</label>
+
+                </div>
+
+                <svg id="svg_themesLineChart"></svg>
+            </div>
+
+            
+
             <div class="main-text rightVisElement">
                 <h2>Themes per Year</h2>
                 <p id="p_themesLineChart">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Tempus imperdiet nulla malesuada pellentesque elit. Varius vel pharetra vel turpis nunc. Ullamcorper a lacus vestibulum sed arcu non. Est velit egestas dui id ornare. Mauris commodo quis imperdiet massa tincidunt nunc pulvinar sapien et. Blandit libero volutpat sed cras ornare.</p>    
             </div>
+
         </div>
 
-        <div id="theSquiggler" class="flex-container-column main-div">
+        <div id="theSquiggler" class="flex-container-row main-div">
             <div class="main-text leftVisElement">
                 <h2>The Squiggler</h2>
                 <p id="p_theSquiggler">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Tempus imperdiet nulla malesuada pellentesque elit.</p>
