@@ -42,7 +42,7 @@ class ThemesLineChart {
 
         // Y-Scale
         this.yScale = d3.scaleLinear()
-                        .domain([this.num_themesMin, Math.ceil(this.num_themesMax * 0.1) * 10])
+                        .domain([0, Math.ceil(this.num_themesMax * 0.1) * 10])
                         .range([this.svgHeight - 25, 20])
     }
     
@@ -50,7 +50,7 @@ class ThemesLineChart {
 
     drawLineChart() {
         this.drawAxes();
-        this.drawLine();
+        this.drawThemesLine();
     }
 
     drawAxes() {
@@ -77,8 +77,19 @@ class ThemesLineChart {
            .call(this.yAxis)
     }
 
-    drawLine() {
+    drawThemesLine() {
 
+        let svg = d3.select('#svg_themesLineChart')
+        
+        svg.append('path')
+           .datum(this.themesData)
+           .attr('fill', 'none')
+           .attr('stroke', 'black')
+           .attr('stroke-width', '1.5')
+           .attr('d', d3.line()
+                        .x(d => this.xScale(d.year))
+                        .y(d => this.yScale(d.num_unique_themes))
+                )
     }
 
     processData() {
