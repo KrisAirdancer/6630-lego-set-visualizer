@@ -85,6 +85,7 @@ class ThemesLineChart {
         let svg = d3.select('#svg_themesLineChart')
         
         svg.append('path')
+           .attr('id', 'themesLine')
            .datum(this.themesData)
            .attr('fill', 'none')
            .attr('stroke', 'black')
@@ -97,16 +98,56 @@ class ThemesLineChart {
 
     drawSetsLine() {
 
+        let svg = d3.select('#svg_themesLineChart')
+        
+        svg.append('path')
+           .attr('id', 'setsLine')
+           .datum(this.themesData)
+           .attr('fill', 'none')
+           .attr('stroke', 'red')
+           .attr('stroke-width', '1.5')
+           .attr('d', d3.line()
+                        .x(d => this.xScale(d.year))
+                        .y(d => this.yScale(d.num_sets))
+                )
     }
 
     // Average number of pieces per set per year
     drawPiecesLine() {
 
+        let svg = d3.select('#svg_themesLineChart')
+        
+        svg.append('path')
+           .attr('id', 'piecesLine')
+           .datum(this.themesData)
+           .attr('fill', 'none')
+           .attr('stroke', 'blue')
+           .attr('stroke-width', '1.5')
+           .attr('d', d3.line()
+                        .x(d => this.xScale(d.year))
+                        .y(d => this.yScale(d.ave_num_pieces))
+                )
     }
 
     drawColorsLine() {
 
+        let svg = d3.select('#svg_themesLineChart')
+        
+        svg.append('path')
+           .attr('id', 'colorsLine')
+           .datum(this.themesData)
+           .attr('fill', 'none')
+           .attr('stroke', 'green')
+           .attr('stroke-width', '1.5')
+           .attr('d', d3.line()
+                        .x(d => this.xScale(d.year))
+                        .y(d => this.yScale(d.num_unique_colors))
+                )
     }
+
+    //#endregion
+
+    //#region Process Data
 
     processData() {
 
