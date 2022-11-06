@@ -68,7 +68,7 @@ class Heatmap {
 
         this.colorScale = d3.scaleLinear()
             .domain([min_color, max_color])
-            .range(['white', "#F9A900"]);
+            .range(['#ffe9f2','#8b0000']);
     }
 
     /**
@@ -256,6 +256,7 @@ class Heatmap {
                 data = this.switchDataSets();
                 break;
             case "uniq_color":
+                data = this.switchDataSets();
                 break;
             case "theme":
                 data = this.switchDataSets();
@@ -268,8 +269,6 @@ class Heatmap {
         if(data.size == 0)
             return;
 
-        console.log(data);
-
         let setName = [...d3.group(data, d=> d.yValue).keys()];
         setName = setName.sort((a,b) => (a>b)?-1:1);
         
@@ -281,22 +280,25 @@ class Heatmap {
     //#endregion
 
     switchDataSets() {
-        if(this.firstOption === "num_set" && this.second_option === "uniq_color")
+        if (this.firstOption === "num_set" && this.second_option === "uniq_color")
             return this.createSetColorData();
-        else if(this.firstOption === "theme" && this.second_option === "uniq_color")
+        else if (this.firstOption === "theme" && this.second_option === "uniq_color")
             return this.createThemColorData();
+        else if (this.firstOption === "uniq_color" && this.second_option === "uniq_color")
+            return this.createColorColorData();
 
     }
 
     /**
-     * A helper function that will create a 
-     * data structure that has yValue = set_name, 
-     * scaleValue = num_value
+     * A helper function that will cluster the data based on 
+     * the unique sets, and the average color used in 
+     * that year given that theme.
      */
     createSetColorData() {
         let newData = [];
         let index = 0;
         let sorted = [...d3.group(this.completeData, d => d.set_name)];
+
         sorted.forEach(d => {
             if(d[1][0].num_parts >= 2000) {
                 newData[index++] = {
@@ -310,6 +312,59 @@ class Heatmap {
         return newData;
     }
 
+    /**
+     * A helper function that will cluster the unqiue color based on
+     * the unique colors, and the number of that color is used in that
+     * given given time period. 
+     */
+    createColorColorData() {
+        let newData = [];
+        let index = 0;
+        let sorted = [...d3.group(this.completeData, d => d.year)];
+
+        sorted.forEach(year => {
+            if(year[0] >= 1985) {
+                console.log("year ", year)
+
+                let color = [];
+                let color_value = year[1];
+                
+                let color_index = 0;
+                for(let i = 0; i< color_value.length; i++) {
+                    if(color_value[i].num_parts >= 500) {
+                        let colors = color_value[i].colors;
+                        let color_g = d3.group(colors, d => d.id);
+                        color_g.forEach(g => {
+                            color[color_index++] = g[0]
+                        })
+                    }
+                }
+                console.log("colors: ", color);
+
+                let color_group = d3.group(color, c => c.id);
+
+                let keys = [...color_group.keys()];
+                for(let j = 0; j < color_group.size; j++) { 
+                    if(keys[j] !== undefined) {                     
+                        newData[index++] = {
+                            year: year[0],
+                            yValue: color_group.get(keys[j])[0].name,
+                            scaleValue: color_group.get(keys[j]).length
+                        }
+                    }
+                }
+                
+        }})
+        return newData;
+
+    }
+
+    /**
+     * A helper function that will cluster the data based on 
+     * the unique themes and the average color used in 
+     * that year given that theme.
+     * @returns 
+     */
     createThemColorData() {
         let newData = [];
         let index = 0;
