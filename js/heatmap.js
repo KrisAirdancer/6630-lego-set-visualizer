@@ -448,7 +448,6 @@ class Heatmap {
                 // grab all of the unique colors in the given year
                 let year_info = [...d3.group(d[1], data => data.year)];
                 year_info.forEach(c => {
-                    console.log("c ", c)
                     if(c[0] >= 1985) {
                         let value = c[1];
                         for(let item = 0; item < value.length; item++) {
