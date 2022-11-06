@@ -15,7 +15,8 @@ class ThemesLineChart {
         /* Process Data */
 
         this.themesData = this.processData();
-        // console.log(this.themesData)
+        console.log('THEMESDATA:')
+        console.log(this.themesData)
 
         /* Get SVG Data */
 
@@ -28,12 +29,30 @@ class ThemesLineChart {
 
         this.yearMin = d3.min(this.themesData, d => d.year);
         this.yearMax = d3.max(this.themesData, d => d.year);
-        this.num_themesMin = d3.min(this.themesData, d=> d.num_unique_themes);
-        this.num_themesMax = d3.max(this.themesData, d => d.num_unique_themes);
+        this.num_unique_themesMin = d3.min(this.themesData, d=> d.num_unique_themes);
+        this.num_unique_themesMax = d3.max(this.themesData, d => d.num_unique_themes);
+
+        this.ave_num_piecesMin = d3.min(this.themesData, d => d.ave_num_pieces);
+        this.ave_num_piecesMax = d3.max(this.themesData, d => d.ave_num_pieces);
+        this.num_setsMin = d3.min(this.themesData, d => d.num_sets);
+        this.num_setsMax = d3.max(this.themesData, d => d.num_sets);
+        this.num_unique_colorsMin = d3.min(this.themesData, d => d.num_unique_colors);
+        this.num_unique_colorsMax = d3.max(this.themesData, d => d.num_unique_colors);
+
         console.log('yearMin: ' + this.yearMin)
-        console.log('yearMax: '+ this.yearMax)
-        console.log('num_themesMin: ' + this.num_themesMin)
-        console.log('num_themesMax: '+ this.num_themesMax)
+        console.log('yearMax: ' + this.yearMax)
+        console.log('num_themesMin: ' + this.num_unique_themesMin)
+        console.log('num_themesMax: ' + this.num_unique_themesMax)
+        console.log('ave_num_piecesMin: ' + this.ave_num_piecesMin)
+        console.log('ave_num_piecesMax: ' + this.ave_num_piecesMax)
+        console.log('num_setsMin: ' + this.num_setsMin)
+        console.log('num_setsMax: ' + this.num_setsMax)
+        console.log('num_unique_colorsMin: ' + this.num_unique_colorsMin)
+        console.log('num_unique_colorsMax: ' + this.num_unique_colorsMax)
+
+        this.globalMin = d3.min([this.num_unique_themesMin, this.ave_num_piecesMin, this.num_setsMin, this.num_unique_colorsMin]);
+        this.globalMax = d3.max([this.num_unique_themesMax, this.ave_num_piecesMax, this.num_setsMax, this.num_unique_colorsMax]);
+        console.log(`globalMin: ${this.globalMin}, globalMax: ${this.globalMax}`);
 
         /* Make Scales */
 
@@ -44,7 +63,8 @@ class ThemesLineChart {
 
         // Y-Scale
         this.yScale = d3.scaleLinear()
-                        .domain([0, Math.ceil(this.num_themesMax * 0.1) * 10])
+                        // .domain([0, Math.ceil(this.num_unique_themesMax * 0.1) * 10])
+                        .domain([this.globalMin, this.globalMax])
                         .range([this.svgHeight - 25, 20])
     }
     
