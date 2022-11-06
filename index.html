@@ -47,25 +47,25 @@
             <svg id="svg_theSquiggler" class="rightVisElement"></svg>
         </div>
 
-        <div id="interactiveSquiggler" class="flex-container-column main-div">
-            <svg id="svg_interactiveSquiggler" class="leftVisElement"></svg>
-            <div class="main-text rightVisElement">
-                <h2>Interactive Squiggler</h2>
-                <p id="p_interactiveSquiggler">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Eleifend mi in nulla posuere sollicitudin aliquam. Ac tortor vitae purus faucibus ornare. Dignissim suspendisse in est ante in nibh mauris. Augue lacus viverra vitae congue eu consequat ac felis donec. Arcu vitae elementum curabitur vitae nunc sed. Enim ut sem viverra aliquet eget sit amet tellus cras. Tempus quam pellentesque nec nam aliquam sem et tortor consequat. Tempor commodo ullamcorper a lacus vestibulum sed. Amet dictum sit amet justo. Neque sodales ut etiam sit amet nisl purus. Vel pretium lectus quam id leo in vitae turpis massa. Feugiat sed lectus vestibulum mattis ullamcorper velit. Non quam lacus suspendisse faucibus interdum posuere lorem ipsum dolor. Pulvinar etiam non quam lacus suspendisse faucibus interdum.</p>
-            </div>
-        </div>
-
         <div id="heatmap" class="flex-container-row main-div">
             <div class="main-text heatmap-text">
-                <h2>Heatmap</h2>
-                <p id="p_heatmap">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Tempus imperdiet nulla malesuada pellentesque elit. Varius vel pharetra vel turpis nunc. Ullamcorper a lacus vestibulum sed arcu non. Est velit egestas dui id ornare. Mauris commodo quis imperdiet massa tincidunt nunc pulvinar sapien et. Blandit libero volutpat sed cras ornare.</p>
+                <h2>Unique Color Usage Over Time</h2>
+                <p id="p_heatmap">This portion of the project is looking at how color usage changed over time. This visualization is broken into three main segments: Sets, Colors, and Themes. </p>
+                <br>
+                <p id="p_heatmap">The first segment is looking at how sets used colors throughout time. In this data set there are over 16,000 sets, in order to have the visualization readable the number of sets have been binned based on the number of pieces, and the color usage value was the average number of unique colors that have been used by that binned segment. Over time the number of unique colors within given sets has increased over time, especially in sets that have a larger piece count. </p>
+                <br>
+                <p id="p_heatmap">The second segment is looking at how all of the unique colors changed over time. The y-axis is all of the unique colors that were in the data set, and the scaling value is the number of times this color was used within all sets in a given year. Overall, more colors are used as the time progresses.  </p>
+                <br>
+                <p id="p_heatmap">The last segment of this visualization is exploring how many unique colors each theme uses in a given year. This visualization shows as time progresses so does the number of unique colors used in each theme. However, this growth is relatively minimal.  </p>
+                <br>
+                <p id="p_heatmap">Overall, this visualization shows that as time progresses through the number of unique colors used over time increases. This rate can be impacted based on the set and theme that is being used, which is shown by the color differences within a given year. </p>    
             </div>
             <div id="div_heatmap-select">
-                <label for="name_heatmap-select-1">y-axis:</label>
-                <select name="name_heatmap-select-1" id="heatmap-select-1" style="width:350px">
-                    <option value="num_set">Average Number of Unique Color Per Set Over Time</option>
-                    <option value="uniq_color">Color Usages Over Time</option>
-                    <option value="theme">Average Number of Unique Color Per Theme Over Time</option>
+                <label for="name_heatmap-select-1">Question:</label>
+                <select name="name_heatmap-select-1" id="heatmap-select-1" style="width:220px">
+                    <option value="num_set">Sets Color Usage Over Time</option>
+                    <option value="uniq_color">Color General Usage Over Time</option>
+                    <option value="theme">Theme Color Usage Over Time</option>
                 </select>
             </div>
             <svg id="svg_heatmap" class="rightVisElement"></svg>
