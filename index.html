@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="style.css">
     <script src="https://d3js.org/d3.v7.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js"></script>
     <!-- TODO: Update title to final version -->
     <title>Lego Through the Ages</title>
 </head>
@@ -61,17 +62,10 @@
             </div>
             <div id="div_heatmap-select">
                 <label for="name_heatmap-select-1">y-axis:</label>
-                <select name="name_heatmap-select-1" id="heatmap-select-1" style="width:100px">
-                    <option value="num_set">Unqiue Sets</option>
-                    <option value="uniq_color">Unique Color</option>
-                    <option value="theme">Unique Themes</option>
-                </select>
-                <label for="name_heatmap-select-2">breadloaf:</label>
-                <select name="name_heatmap-select-2" id="heatmap-select-2" style="width:100px">
-                    <option value="uniq_color">Number of Colors</option>
-                    <option value="num_piece">Number of Pieces</option>
-                    <option value="num_set">Number of Sets</option>
-                    <option value="">Number of Themes</option>
+                <select name="name_heatmap-select-1" id="heatmap-select-1" style="width:350px">
+                    <option value="num_set">Average Number of Unique Color Per Set Over Time</option>
+                    <option value="uniq_color">Color Usages Over Time</option>
+                    <option value="theme">Average Number of Unique Color Per Theme Over Time</option>
                 </select>
             </div>
             <svg id="svg_heatmap" class="rightVisElement"></svg>
