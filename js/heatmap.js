@@ -480,7 +480,7 @@ class Heatmap {
                 }
             }
         })
-        console.log(newData)
+
         return newData;
     }
     
