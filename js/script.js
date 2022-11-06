@@ -1,10 +1,4 @@
-// Load data with dataProcess.js
-// Initialize visualization objects
-    // One for each vis
-    // Pass each one a copy of the data object
-    // One class (.js file) for each visualization
-// Call the drawX() functions for each of the visualizations
-
+// TODO: Rename all .js files to upper camel case: lineChart.js       -> LineChart.js
 
 data_list = [
             d3.csv('./data/inventories.csv'), // used
@@ -21,6 +15,8 @@ Promise.all(data_list).then(data =>
         data = data.filter(d => d.num_parts > 0);
         let heatmap_vis = new Heatmap(data);
         let squiggler = new TheSquiggler(data);
+        let themesLineChart = new ThemesLineChart(data);
+        themesLineChart.drawLineChart();
     }
 );
 
