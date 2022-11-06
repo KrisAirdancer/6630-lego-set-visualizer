@@ -50,9 +50,9 @@ class ThemesLineChart {
         console.log('num_unique_colorsMin: ' + this.num_unique_colorsMin)
         console.log('num_unique_colorsMax: ' + this.num_unique_colorsMax)
 
-        this.globalMin = d3.min([this.num_unique_themesMin, this.ave_num_piecesMin, this.num_setsMin, this.num_unique_colorsMin]);
-        this.globalMax = d3.max([this.num_unique_themesMax, this.ave_num_piecesMax, this.num_setsMax, this.num_unique_colorsMax]);
-        console.log(`globalMin: ${this.globalMin}, globalMax: ${this.globalMax}`);
+        this.displayedMin = d3.min([this.num_unique_themesMin, this.ave_num_piecesMin, this.num_setsMin, this.num_unique_colorsMin]);
+        this.displayedMax = d3.max([this.num_unique_themesMax, this.ave_num_piecesMax, this.num_setsMax, this.num_unique_colorsMax]);
+        console.log(`globalMin: ${this.displayedMin}, globalMax: ${this.displayedMax}`);
 
         /* Make Scales */
 
@@ -64,7 +64,7 @@ class ThemesLineChart {
         // Y-Scale
         this.yScale = d3.scaleLinear()
                         // .domain([0, Math.ceil(this.num_unique_themesMax * 0.1) * 10])
-                        .domain([this.globalMin, this.globalMax])
+                        .domain([this.displayedMin, this.displayedMax])
                         .range([this.svgHeight - 25, 20])
     }
     
@@ -76,6 +76,7 @@ class ThemesLineChart {
         this.drawSetsLine();
         this.drawPiecesLine();
         this.drawColorsLine();
+        this.addEventHandlers();
     }
 
     drawAxes() {
@@ -258,6 +259,14 @@ class ThemesLineChart {
     //#endregion
 
     //#region Add Toggle
+
+    addEventHandlers() {
+        console.log('AT: addEventHandlers()');
+
+        d3.select('#themeChartToggle-themes').on('click', e => {
+            console.log(e.target.checked)
+        })
+    }
 
     addToggle() {
 
