@@ -11,6 +11,7 @@ class Heatmap {
      * @param {Array Object} globalData 
      */
     constructor(data) {
+
         this.firstOption = "num_set";
         this.second_option = "uniq_color";
         this.completeData = data;
@@ -32,7 +33,8 @@ class Heatmap {
         this.height = parseInt(svg.style("height"))-this.padding.bottom;
         this.width = parseInt(svg.style("width")) - this.padding.right;
         
-        let yearData = [...d3.group(data, d => d.year).keys()];
+        let years = this.completeData.filter(d => parseInt(d.year) >= 1985);
+        let yearData = [...d3.group(years, d => d.year).keys()];
         let setName = [...d3.group(data, d=> d.yValue).keys()];
         setName = setName.sort((a,b) => (a>b)?-1:1);
 
@@ -61,7 +63,6 @@ class Heatmap {
      * @param {Object} data 
      */
     createColorScale(data) {
-        console.log(data[0])
         let max_color = parseInt(d3.max(data, d=> parseInt(d.scaleValue)));
         let min_color = parseInt(d3.min(data, d=> parseInt(d.scaleValue)));
 
@@ -249,25 +250,32 @@ class Heatmap {
         d3.select("#svg_heatmap").append("g").attr("id", "heat_tool_tip")
 
         // Grab the second data value
-        let second_option ;
-        console.log(second_option);
+        let data = [];
         switch(e.target.value) {
             case "num_set":
-                let data = this.switchDataSets();
-                let setName = [...d3.group(data, d=> d.yValue).keys()];
-                setName = setName.sort((a,b) => (a>b)?-1:1);
-
-                this.createYAxis(setName, this.height);
-                this.createColorScale(data);  
-                this.drawRect(data, this.xScale, this.yScale, this.colorScale)
+                data = this.switchDataSets();
                 break;
             case "uniq_color":
                 break;
             case "theme":
+                data = this.switchDataSets();
+
                 break;
             case "pieces":
                break;
         };
+
+        if(data.size == 0)
+            return;
+
+        console.log(data);
+
+        let setName = [...d3.group(data, d=> d.yValue).keys()];
+        setName = setName.sort((a,b) => (a>b)?-1:1);
+        
+        this.createYAxis(setName, this.height);
+        this.createColorScale(data);  
+        this.drawRect(data, this.xScale, this.yScale, this.colorScale)
     }
 
     //#endregion
@@ -275,6 +283,8 @@ class Heatmap {
     switchDataSets() {
         if(this.firstOption === "num_set" && this.second_option === "uniq_color")
             return this.createSetColorData();
+        else if(this.firstOption === "theme" && this.second_option === "uniq_color")
+            return this.createThemColorData();
 
     }
 
@@ -288,12 +298,37 @@ class Heatmap {
         let index = 0;
         let sorted = [...d3.group(this.completeData, d => d.set_name)];
         sorted.forEach(d => {
-            if(d[1][0].num_parts >= 2500) {
+            if(d[1][0].num_parts >= 2000) {
                 newData[index++] = {
                     year: d[1][0].year,
                     yValue: d[1][0].set_name,
                     scaleValue: d[1][0].num_color
                 }
+            }
+        })
+
+        return newData;
+    }
+
+    createThemColorData() {
+        let newData = [];
+        let index = 0;
+
+        let sorted = [...d3.group(this.completeData, d => d.theme_name)]
+
+        sorted.forEach(d => {
+            if(d[1][0].num_parts >= 500) {
+                // grab all of the unique colors in the given year
+                let year_info = [...d3.group(d[1], data => data.year)];
+                year_info.forEach(c => {
+                    if(c[0] >= 1985) {
+                        newData[index++] = {
+                            year: c[0],
+                            yValue: d[1][0].theme_name,
+                            scaleValue: Math.round((d3.mean(c[1], color => color.num_color)*100)/100)
+                        }
+                    }
+                })
             }
         })
 
