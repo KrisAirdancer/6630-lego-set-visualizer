@@ -12,6 +12,8 @@
 </head>
 <body>
 
+    <!-- TODO: Once the project is complete, go through and remove all unused IDs, Classes, Names, etc. from the HTML elements in this file and the CSS file.-->
+
     <main>
 
         <div id="introduction" class="main-div">
@@ -25,7 +27,9 @@
 
             <div class="main-text leftVisElement">
                 <h2>Pieces per Year</h2>
-                <p id="p_piecesLineChart">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Tempus imperdiet nulla malesuada pellentesque elit. Varius vel pharetra vel turpis nunc. Ullamcorper a lacus vestibulum sed arcu non. Est velit egestas dui id ornare. Mauris commodo quis imperdiet massa tincidunt nunc pulvinar sapien et. Blandit libero volutpat sed cras ornare.</p>
+                <p id="p_piecesLineChart">See how the number of pieces per set has changed over time</p>
+                <br>
+                <p>Each dot represents one set. y-axis is piece count.</p>
             </div>
 
             <div id="piecesLineChart-group" class="rightVisElement flex-container-column">
@@ -69,8 +73,10 @@
             
 
             <div class="main-text rightVisElement">
-                <h2>Themes per Year</h2>
-                <p id="p_themesLineChart">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Tempus imperdiet nulla malesuada pellentesque elit. Varius vel pharetra vel turpis nunc. Ullamcorper a lacus vestibulum sed arcu non. Est velit egestas dui id ornare. Mauris commodo quis imperdiet massa tincidunt nunc pulvinar sapien et. Blandit libero volutpat sed cras ornare.</p>    
+                <h2>Temporal Comparator</h2>
+                <p>Compare trends in lego metrics over time.</p> 
+                <br>
+                <p>Checkbox logic not yet implemented.</p>   
             </div>
 
         </div>
@@ -85,9 +91,10 @@
             <svg id="svg_theSquiggler" class="rightVisElement"></svg>
         </div>
 
-        <div id="heatmap" class="flex-container-row main-div">
+        <div id="heatmap" class="flex-container-column main-div">
+
             <div class="main-text heatmap-text">
-                <h2>Unique Color Usage Over Time</h2>
+                <h2>Trend Heatmap</h2>
                 <p id="p_heatmap">This portion of the project is looking at how color usage changed over time. This visualization is broken into three main segments: Sets, Colors, and Themes. </p>
                 <br>
                 <p id="p_heatmap">The first segment is looking at how sets used colors throughout time. In this data set there are over 16,000 sets, in order to have the visualization readable the number of sets have been binned based on the number of pieces, and the color usage value was the average number of unique colors that have been used by that binned segment. Over time the number of unique colors within given sets has increased over time, especially in sets that have a larger piece count. </p>
@@ -98,15 +105,20 @@
                 <br>
                 <p id="p_heatmap">Overall, this visualization shows that as time progresses through the number of unique colors used over time increases. This rate can be impacted based on the set and theme that is being used, which is shown by the color differences within a given year. </p>    
             </div>
-            <div id="div_heatmap-select">
-                <label for="name_heatmap-select-1">Question:</label>
-                <select name="name_heatmap-select-1" id="heatmap-select-1" style="width:220px">
+
+            <div id="div_heatmap-select-group">
+
+                <label for="name_heatmap-select">Question:</label>
+                <select name="name_heatmap-select" id="heatmap-select" style="width:220px">
                     <option value="num_set">Sets Color Usage Over Time</option>
                     <option value="uniq_color">Color General Usage Over Time</option>
                     <option value="theme">Theme Color Usage Over Time</option>
                 </select>
+
             </div>
-            <svg id="svg_heatmap" class="rightVisElement"></svg>
+
+            <svg id="svg_heatmap"></svg>
+
         </div>
 
     </main>

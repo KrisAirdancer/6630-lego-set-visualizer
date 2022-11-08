@@ -1,7 +1,8 @@
 /* TODO: Style SVGs to look nice */
+/* TODO: Remove the empty CSS rulesets when we are done. */
 
 :root {
-    --main-div-background: rgba(228, 228, 228, 0.8);
+    --main-div-background: rgba(228, 228, 228, 0.90);
     --border-color: grey;
     --main-text-background: rgba(228, 228, 228, 0.4);
     --shadow-color: #969696;
@@ -164,10 +165,6 @@ h2 {
     
 }
 
-#interactiveSquiggler {
-    
-}
-
 /***** SVGs *****/
 
 #svg_piecesLineChart {
@@ -180,14 +177,10 @@ h2 {
 }
 
 #svg_heatmap {
-    background-color: white;
+    /* background-color: white; */
 }
 
 #svg_theSquiggler {
-
-}
-
-#svg_interactiveSquiggler {
 
 }
 
@@ -216,18 +209,12 @@ h2 {
     z-index: auto;
 }
 
-#div_heatmap-select {
+#div_heatmap-select-group {
     margin-bottom: 10px;
 }
 
 /* TODO: Style the selectors */
-#heatmap-select-1 {
-    background-color: var(--lego-yellow);
-    border-radius: 5px;
-    border-color: var(--border-color);
-}
-
-#heatmap-select-2 {
+#heatmap-select {
     background-color: var(--lego-yellow);
     border-radius: 5px;
     border-color: var(--border-color);

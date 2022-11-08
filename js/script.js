@@ -1,4 +1,7 @@
-// TODO: Rename all .js files to upper camel case: lineChart.js       -> LineChart.js
+// TODO: Rename all .js files to upper camel case: lineChart.js -> LineChart.js
+// TODO: Need to add axis labels to all visualizations.
+// TODO: Clear out all console.log() calls from ALL files.
+// TODO: Clear out all commented out code from ALL files.
 
 data_list = [
             d3.csv('./data/inventories.csv'), // used

@@ -21,7 +21,7 @@ class Heatmap {
             left: 50
         };
         
-        d3.select("#heatmap-select-1").on('change',e => this.selection_1_event(e))
+        d3.select("#heatmap-select").on('change',e => this.selection_1_event(e))
         this.createSetColorData();
 
         let svg = d3.select("#svg_heatmap").attr("height", 500);
@@ -54,7 +54,9 @@ class Heatmap {
 
         this.colorScale = d3.scaleLinear()
             .domain([min_color, max_color])
-            .range(["#f7fbff","#08306b"]);
+            .range(["#9BC1D0","#C66B08"]);
+            // .range(["#f7fbff","#08306b"]); // <-- Vista's version
+            // TODO: Choose better colors for the Heatmap
     }
 
     /**
