@@ -17,7 +17,7 @@ class TheSquiggler {
 
         this.padding ={
             top: 10,
-            right: 10, 
+            right: 40, 
             bottom: 40, 
             left: 10
         };
@@ -47,7 +47,7 @@ class TheSquiggler {
                     .range([this.padding.left, this.width - this.padding.right]);
         
         let yScale = d3.scaleLinear()
-            .domain([d3.min([squiggler.avg_color], d3.max([squiggler.avg_color]))])
+            .domain([d3.min(this.data, d => d.avg_color), d3.max(this.data, d => d.avg_color)])
             .range([this.padding.top, this.height - this.padding.bottom]);
 
         let svg = d3.select("#svg_theSquiggler")
@@ -55,9 +55,15 @@ class TheSquiggler {
                     .attr("id", "x-axis");
         
         // Draw Axis
-        svg.attr("transform", "translate(0," + (this.height - this.padding.bottom)  + ")")
+        svg.attr("transform", "translate("+ this.padding.right + "," + (this.height - this.padding.bottom)  + ")")
             .call(d3.axisBottom(xScale));
         
+        svg = d3.select("#svg_theSquiggler")
+            .append("g")
+            .attr("id", "y-axis");
+        
+        svg.attr("transform", "translate("+ this.padding.right + ", 0)")
+            .call(d3.axisLeft(yScale));
         // Create an XScale -> num of themes
         // Create an YScale -> average color/set
         
