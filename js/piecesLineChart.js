@@ -49,7 +49,7 @@ class PiecesLineChart {
         let svg = d3.select('#svg_piecesLineChart');
 
         // Draw Axes
-        console.log('this.svgHeight: ' + this.svgHeight)
+        // console.log('this.svgHeight: ' + this.svgHeight)
 
         // Draw xAxis
         let xAxis = d3.axisBottom()

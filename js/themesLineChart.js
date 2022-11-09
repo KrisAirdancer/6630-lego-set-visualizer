@@ -16,7 +16,7 @@ class ThemesLineChart {
     constructor(data) { 
 
         this.data = data;
-        console.log(this.data);
+        // console.log(this.data);
 
         this.displayed = {
             themes: true,
@@ -28,15 +28,15 @@ class ThemesLineChart {
         /* Process Data */
 
         this.themesData = this.processData();
-        console.log('THEMESDATA:')
-        console.log(this.themesData)
+        // console.log('THEMESDATA:')
+        // console.log(this.themesData)
 
         /* Get SVG Data */
 
         this.svgHeight = parseInt(d3.select('#svg_themesLineChart').style('height'))
         this.svgWidth = parseInt(d3.select('#svg_themesLineChart').style('width'))
-        console.log('svgHeight: ' + this.svgHeight)
-        console.log('svgWidth: '+ this.svgWidth)
+        // console.log('svgHeight: ' + this.svgHeight)
+        // console.log('svgWidth: '+ this.svgWidth)
 
         /* Get Data Metadata */
 
@@ -52,20 +52,20 @@ class ThemesLineChart {
         this.num_unique_colorsMin = d3.min(this.themesData, d => d.num_unique_colors);
         this.num_unique_colorsMax = d3.max(this.themesData, d => d.num_unique_colors);
 
-        console.log('yearMin: ' + this.yearMin)
-        console.log('yearMax: ' + this.yearMax)
-        console.log('num_themesMin: ' + this.num_unique_themesMin)
-        console.log('num_themesMax: ' + this.num_unique_themesMax)
-        console.log('ave_num_piecesMin: ' + this.ave_num_piecesMin)
-        console.log('ave_num_piecesMax: ' + this.ave_num_piecesMax)
-        console.log('num_setsMin: ' + this.num_setsMin)
-        console.log('num_setsMax: ' + this.num_setsMax)
-        console.log('num_unique_colorsMin: ' + this.num_unique_colorsMin)
-        console.log('num_unique_colorsMax: ' + this.num_unique_colorsMax)
+        // console.log('yearMin: ' + this.yearMin)
+        // console.log('yearMax: ' + this.yearMax)
+        // console.log('num_themesMin: ' + this.num_unique_themesMin)
+        // console.log('num_themesMax: ' + this.num_unique_themesMax)
+        // console.log('ave_num_piecesMin: ' + this.ave_num_piecesMin)
+        // console.log('ave_num_piecesMax: ' + this.ave_num_piecesMax)
+        // console.log('num_setsMin: ' + this.num_setsMin)
+        // console.log('num_setsMax: ' + this.num_setsMax)
+        // console.log('num_unique_colorsMin: ' + this.num_unique_colorsMin)
+        // console.log('num_unique_colorsMax: ' + this.num_unique_colorsMax)
 
         this.displayedMin = d3.min([this.num_unique_themesMin, this.ave_num_piecesMin, this.num_setsMin, this.num_unique_colorsMin]);
         this.displayedMax = d3.max([this.num_unique_themesMax, this.ave_num_piecesMax, this.num_setsMax, this.num_unique_colorsMax]);
-        console.log(`globalMin: ${this.displayedMin}, globalMax: ${this.displayedMax}`);
+        // console.log(`globalMin: ${this.displayedMin}, globalMax: ${this.displayedMax}`);
 
         /* Make Scales */
 
@@ -188,8 +188,8 @@ class ThemesLineChart {
     processData() {
 
         let years = d3.groups(this.data, d => d.year);
-        console.log('YEARS:')
-        console.log(years)
+        // console.log('YEARS:')
+        // console.log(years)
         let yearData = [];
 
         years.forEach(year => {
@@ -210,8 +210,8 @@ class ThemesLineChart {
         this.getAverageNumOfPieces(years, yearData);
         this.getUniqueColorsAndCount(years, yearData);
 
-        console.log('YEARDATA:')
-        console.log(yearData)
+        // console.log('YEARDATA:')
+        // console.log(yearData)
         return yearData;
     }
 
@@ -274,26 +274,26 @@ class ThemesLineChart {
     //#region Add Toggle
 
     addEventHandlers() {
-        console.log('AT: addEventHandlers()');
+        // console.log('AT: addEventHandlers()');
 
         d3.select('#themeChartToggle-themes').on('click', e => {
-            console.log('AT: themes handler')
-            console.log(e.target.checked)
+            // console.log('AT: themes handler')
+            // console.log(e.target.checked)
         })
 
         d3.select('#themeChartToggle-colors').on('click', e => {
-            console.log('AT:  colors')
-            console.log(e.target.checked)
+            // console.log('AT:  colors')
+            // console.log(e.target.checked)
         })
 
         d3.select('#themeChartToggle-pieces').on('click', e => {
-            console.log('AT:  pieces')
-            console.log(e.target.checked)
+            // console.log('AT:  pieces')
+            // console.log(e.target.checked)
         })
 
         d3.select('#themeChartToggle-sets').on('click', e => {
-            console.log('AT:  sets')
-            console.log(e.target.checked)
+            // console.log('AT:  sets')
+            // console.log(e.target.checked)
         })
     }
 
