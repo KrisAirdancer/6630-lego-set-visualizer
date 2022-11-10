@@ -2,11 +2,8 @@
 
 // TODO: Add tooltips. Maybe...
 // TODO: Add a color legend to this vis.
-
-/* NEXT STEPS:
- * - Call the updateVis() method.
- *     - This method should look at the this.displayed object and transition the lines set to 'true' onto the vis and transition the lines set to 'false' off of the vis.
- */
+// TODO: Add logic to prevent the user from removing all lines. Set it up so that if they remove the last displayed line, it won't let them.
+// TODO: Add transitions to the lines.
 
 class ThemesLineChart {
 
@@ -172,18 +169,29 @@ class ThemesLineChart {
 
     updateLines() {
 
+        // Remove all lines
+
+        d3.select('#colorsLine').remove();
+        d3.select('#piecesLine').remove();
+        d3.select('#setsLine').remove();
+        d3.select('#themesLine').remove();
+
+        // Draw displayed lines
+
         if (this.displayed.colors) {
+            this.drawColorsLine();
         }
+
         if (this.displayed.pieces) {
-            
+            this.drawPiecesLine();
         }
+
         if (this.displayed.sets) {
-            
+            this.drawSetsLine();
         }
+
         if (this.displayed.themes) {
             this.drawThemesLine();
-        } else {
-            d3.select('#themesLine').remove();
         }
     }
 
@@ -296,9 +304,11 @@ class ThemesLineChart {
             && !this.displayed.colors
             && !this.displayed.sets
             && !this.displayed.pieces) { displayedMaxes.push(0); }
+        
         console.log(displayedMaxes)
 
-        this.displayedMax = d3.min(displayedMaxes);        
+        this.displayedMax = d3.max(displayedMaxes);  
+        console.log(this.displayedMax);      
     }
 
     //#endregion
@@ -319,35 +329,26 @@ class ThemesLineChart {
 
         d3.select('#themeChartToggle-colors').on('click', e => {
 
-            if (!this.displayed.colors) {
-                this.drawColorsLine();
-                this.displayed.colors = true;
-            } else {
-                d3.select('#colorsLine').remove();
-                this.displayed.colors = false;
-            }
+            this.displayed.colors = !this.displayed.colors;
+
+            this.updateYAxis();
+            this.updateLines();
         })
 
         d3.select('#themeChartToggle-pieces').on('click', e => {
 
-            if (!this.displayed.pieces) {
-                this.drawPiecesLine();
-                this.displayed.pieces = true;
-            } else {
-                d3.select('#piecesLine').remove();
-                this.displayed.pieces = false;
-            }
+            this.displayed.pieces = !this.displayed.pieces;
+
+            this.updateYAxis();
+            this.updateLines();
         })
 
         d3.select('#themeChartToggle-sets').on('click', e => {
 
-            if (!this.displayed.sets) {
-                this.drawSetsLine();
-                this.displayed.sets = true;
-            } else {
-                d3.select('#setsLine').remove();
-                this.displayed.sets = false;
-            }
+            this.displayed.sets = !this.displayed.sets;
+
+            this.updateYAxis();
+            this.updateLines();
         })
     }
 
