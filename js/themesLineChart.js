@@ -1,8 +1,6 @@
 // Number of themes per year
 
-// TODO: Consider adding a toggle to switch between number of themes per year and number of sets per year or even both together.
-// TODO: Add tooltips
-// TODO: May want to cut 1949 out of this visualization b/c it is such an outlier. The vis isn't wrong, it was just a year that they released mostly sets with lots of pieces, and 1950 was a year of sets with just a few (literally) pieces.
+// TODO: Add tooltips. Maybe...
 // TODO: Add a color legend to this vis.
 
 /* NEXT STEPS:
@@ -86,10 +84,9 @@ class ThemesLineChart {
     drawLineChart() {
         this.drawAxes();
         this.drawThemesLine();
-        this.drawSetsLine();
-        this.drawPiecesLine();
-        this.drawColorsLine();
         this.addEventHandlers();
+
+        document.getElementById('themeChartToggle-themes').checked = true;
     }
 
     drawAxes() {
@@ -277,23 +274,47 @@ class ThemesLineChart {
         console.log('AT: addEventHandlers()');
 
         d3.select('#themeChartToggle-themes').on('click', e => {
-            console.log('AT: themes handler')
-            console.log(e.target.checked)
+
+            if (!this.displayed.themes) {
+                this.drawThemesLine();
+                this.displayed.themes = true;
+            } else {
+                d3.select('#themesLine').remove();
+                this.displayed.themes = false;
+            }
         })
 
         d3.select('#themeChartToggle-colors').on('click', e => {
-            console.log('AT:  colors')
-            console.log(e.target.checked)
+
+            if (!this.displayed.colors) {
+                this.drawColorsLine();
+                this.displayed.colors = true;
+            } else {
+                d3.select('#colorsLine').remove();
+                this.displayed.colors = false;
+            }
         })
 
         d3.select('#themeChartToggle-pieces').on('click', e => {
-            console.log('AT:  pieces')
-            console.log(e.target.checked)
+
+            if (!this.displayed.pieces) {
+                this.drawPiecesLine();
+                this.displayed.pieces = true;
+            } else {
+                d3.select('#piecesLine').remove();
+                this.displayed.pieces = false;
+            }
         })
 
         d3.select('#themeChartToggle-sets').on('click', e => {
-            console.log('AT:  sets')
-            console.log(e.target.checked)
+
+            if (!this.displayed.sets) {
+                this.drawSetsLine();
+                this.displayed.sets = true;
+            } else {
+                d3.select('#setsLine').remove();
+                this.displayed.sets = false;
+            }
         })
     }
 
