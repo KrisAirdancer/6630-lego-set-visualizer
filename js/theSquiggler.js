@@ -13,6 +13,8 @@ class TheSquiggler {
      */
     constructor(globalData) {
         let data = [...d3.group(globalData, d => d.year)];
+        this.firstSelection = "uniq_color";
+        this.secondSelection = "theme";
         console.log(data);
 
         this.padding ={
@@ -27,11 +29,15 @@ class TheSquiggler {
         for(let i= 0; i < data.length; i++) {
             let value = [...d3.group(data[i][1], d => d.theme_name)];
             let colors = d3.mean(data[i][1], d => d.num_color);
+            let piece = d3.mean(data[i][1], d => d.num_parts);
+            let set_value = [...d3.group(data[i][1], d => d.theme_name)];
 
             squiggler[index++] = {
                 year: data[i][0],
                 num_theme: value.length,
                 avg_color: colors,
+                avg_piece: piece,
+                num_sets: set_value.length
             }
         }
 
@@ -42,10 +48,14 @@ class TheSquiggler {
         let xScale = d3.scaleLinear()
                     .domain([0, d3.max(this.data, d => d.num_theme)])
                     .range([this.padding.left, this.width - this.padding.right]);
+
+        this.xScale = xScale;
         
         let yScale = d3.scaleLinear()
             .domain([d3.max(this.data, d => d.avg_color), 0])
             .range([this.padding.top, this.height - this.padding.bottom]);
+
+        this.yScale = yScale;
 
         let svg = d3.select("#svg_theSquiggler")
                     .append("g")
@@ -72,17 +82,14 @@ class TheSquiggler {
             .attr("stroke", "black")
             .attr("d", d3.line()
                 .curve(d3.curveCardinal.tension(0.5))
-                .x(function(d) {
-                    console.log(d);
-                    return xScale(d.num_theme)
-                })
+                .x(d => xScale(d.num_theme))
                 .y(d => yScale(d.avg_color)))
 
         svg = d3.select("#svg_theSquiggler")
             .append("g")
             .attr("id", "vis_dots")
         
-        svg.selectAll("dot")
+        svg.selectAll("circle")
             .data(this.data)
             .enter()
             .append("circle")
@@ -112,24 +119,364 @@ class TheSquiggler {
                 .attr("font-size", 10)
                 .attr("opacity", "60%")
                 
-        
+        d3.select("#squiggler-select-1").on('change', e => this.updateYScale(e));
+        d3.select("#squiggler-select-2").on('change', e => this.updateXScale(e));
     }
 
-    /**
-     * A helper function that will draw the 
-     * connected scatter plot for the visualizaiton
-     * @param {Object} data 
-     */
-    drawlineChart(data) {
-        // Draw a path from each data
-        // .on tooltip that give the information
+    updateYScale(e) {
+        this.firstSelection = e.target.value;
+        let selected = e.target.value;
+        let xScale = this.xScale;
+        let yScale = this.yScale;
+
+        switch(selected) {
+            case "uniq_color":
+                yScale = d3.scaleLinear()
+                .domain([d3.max(this.data, d => d.avg_color), 0])
+                .range([this.padding.top, this.height - this.padding.bottom]);
+
+                this.yScale = yScale;
+
+                d3.select('#y-axis')
+                    .transition()
+                    .duration(1000)
+                    .call(d3.axisLeft(yScale));
+
+                d3.select("#vis_dots")
+                        .selectAll("circle")
+                        .transition()
+                        .duration(1000)
+                        .attr("cy",d => yScale(d.avg_color));
+                
+                d3.select("#vis_text")
+                    .selectAll("text")
+                    .transition()
+                    .duration(1000)
+                    .attr("y",d => yScale(d.avg_color));
+
+                
+                if(this.secondSelection ==="uniq_color") {
+                    d3.select("#vis_path")
+                    .selectAll("path")
+                    .transition()
+                    .duration(1000)
+                    .attr("d", d3.line()
+                        .curve(d3.curveCardinal.tension(0.5))
+                        .x(d => xScale(d.avg_color))
+                        .y(d => yScale(d.avg_color)));
+
+                } else if (this.secondSelection === "theme") {
+                    d3.select("#vis_path")
+                    .selectAll("path")
+                    .transition()
+                    .duration(1000)
+                    .attr("d", d3.line()
+                        .curve(d3.curveCardinal.tension(0.5))
+                        .x(d => xScale(d.num_theme))
+                        .y(d => yScale(d.avg_color)));
+
+                } else {
+                    d3.select("#vis_path")
+                    .selectAll("path")
+                    .transition()
+                    .duration(1000)
+                    .attr("d", d3.line()
+                        .curve(d3.curveCardinal.tension(0.5))
+                        .x(d => xScale(d.avg_piece))
+                        .y(d => yScale(d.avg_color)))
+                }
+                break;
+            case "theme":
+                yScale = d3.scaleLinear()
+                    .domain([d3.max(this.data, d => d.num_theme), 0])
+                    .range([this.padding.top, this.height - this.padding.bottom]);
+                
+                this.yScale = yScale;
+                
+                d3.select('#y-axis')
+                    .transition()
+                    .duration(1000)
+                    .call(d3.axisLeft(yScale));
+                
+                d3.select("#vis_dots")
+                    .selectAll("circle")
+                    .transition()
+                    .duration(1000)
+                    .attr("cy", d => yScale(d.num_theme));
+                
+                d3.select("#vis_text")
+                    .selectAll("text")
+                    .transition()
+                    .duration(1000)
+                    .attr("y",d => yScale(d.num_theme));
+
+                if(this.secondSelection ==="uniq_color") {
+                    d3.select("#vis_path")
+                    .selectAll("path")
+                    .transition()
+                    .duration(1000)
+                    .attr("d", d3.line()
+                        .curve(d3.curveCardinal.tension(0.5))
+                        .x(d => xScale(d.avg_color))
+                        .y(d => yScale(d.num_theme)));
+  
+                } else if (this.secondSelection === "theme") {
+                    d3.select("#vis_path")
+                    .selectAll("path")
+                    .transition()
+                    .duration(1000)
+                    .attr("d", d3.line()
+                        .curve(d3.curveCardinal.tension(0.5))
+                        .x(d => xScale(d.num_theme))
+                        .y(d => yScale(d.num_theme)));
+
+                } else {
+                    d3.select("#vis_path")
+                    .selectAll("path")
+                    .transition()
+                    .duration(1000)
+                    .attr("d", d3.line()
+                        .curve(d3.curveCardinal.tension(0.5))
+                        .x(d => xScale(d.avg_piece))
+                        .y(d => yScale(d.num_theme)));
+
+                }
+
+                break;
+            case "num_piece":
+                yScale = d3.scaleLinear()
+                    .domain([d3.max(this.data, d => d.avg_piece), 0])
+                    .range([this.padding.top, this.height - this.padding.bottom]);
+                
+                this.yScale = yScale;
+                
+                d3.select('#y-axis')
+                    .transition()
+                    .duration(1000)
+                    .call(d3.axisLeft(yScale));
+                
+                d3.select("#vis_dots")
+                    .selectAll("circle")
+                    .transition()
+                    .duration(1000)
+                    .attr("cy", d => yScale(d.avg_piece));
+                
+                d3.select("#vis_text")
+                    .selectAll("text")
+                    .transition()
+                    .duration(1000)
+                    .attr("y",d => yScale(d.avg_piece));
+
+                if(this.secondSelection ==="uniq_color") {
+                    d3.select("#vis_path")
+                    .selectAll("path")
+                    .transition()
+                    .duration(1000)
+                    .attr("d", d3.line()
+                        .curve(d3.curveCardinal.tension(0.5))
+                        .x(d => xScale(d.avg_color))
+                        .y(d => yScale(d.avg_piece)))
+
+
+                } else if (this.secondSelection === "theme") {
+                    d3.select("#vis_path")
+                    .selectAll("path")
+                    .transition()
+                    .duration(1000)
+                    .attr("d", d3.line()
+                        .curve(d3.curveCardinal.tension(0.5))
+                        .x(d => xScale(d.num_theme))
+                        .y(d => yScale(d.avg_piece)))
+
+                } else {
+                    d3.select("#vis_path")
+                    .selectAll("path")
+                    .transition()
+                    .duration(1000)
+                    .attr("d", d3.line()
+                        .curve(d3.curveCardinal.tension(0.5))
+                        .x(d => xScale(d.avg_piece))
+                        .y(d => yScale(d.avg_piece)))
+                }
+                break;
+        }
+
     }
 
-    /**
-     * A helper function that will be used to highlight some aspect
-     * of the data
-     */
-    showStoryComponent() {
+    updateXScale(e) {
+        this.secondSelection = e.target.value;
+        let selected = e.target.value;
+        let xScale = this.xScale;
+        let yScale = this.yScale;
+
+        switch(selected) {
+            case "uniq_color":
+                xScale = d3.scaleLinear()
+                .domain([0,d3.max(this.data, d => d.avg_color)])
+                .range([this.padding.left, this.width - this.padding.right]);
+                this.xScale = xScale;
+
+                d3.select('#x-axis')
+                    .transition()
+                    .duration(1000)
+                    .call(d3.axisBottom(xScale));
+
+                d3.select("#vis_dots")
+                        .selectAll("circle")
+                        .transition()
+                        .duration(1000)
+                        .attr("cx",d => xScale(d.avg_color));
+                
+                d3.select("#vis_text")
+                    .selectAll("text")
+                    .transition()
+                    .duration(1000)
+                    .attr("x",d => xScale(d.avg_color));
+
+                
+                if(this.firstSelection ==="uniq_color") {
+                    d3.select("#vis_path")
+                    .selectAll("path")
+                    .transition()
+                    .duration(1000)
+                    .attr("d", d3.line()
+                        .curve(d3.curveCardinal.tension(0.5))
+                        .x(d => xScale(d.avg_color))
+                        .y(d => yScale(d.avg_color)));
+
+                } else if (this.secondSelection === "theme") {
+                    d3.select("#vis_path")
+                    .selectAll("path")
+                    .transition()
+                    .duration(1000)
+                    .attr("d", d3.line()
+                        .curve(d3.curveCardinal.tension(0.5))
+                        .x(d => xScale(d.avg_color))
+                        .y(d => yScale(d.num_theme)));
+
+                } else {
+                    d3.select("#vis_path")
+                    .selectAll("path")
+                    .transition()
+                    .duration(1000)
+                    .attr("d", d3.line()
+                        .curve(d3.curveCardinal.tension(0.5))
+                        .x(d => xScale(d.avg_color))
+                        .y(d => yScale(d.avg_piece)))
+                }
+                break;
+            case "theme":
+                xScale = d3.scaleLinear()
+                    .domain([0, d3.max(this.data, d => d.num_theme)])
+                    .range([this.padding.left, this.width - this.padding.right]);
+                
+                this.xScale = xScale;
+                
+                d3.select('#x-axis')
+                    .transition()
+                    .duration(1000)
+                    .call(d3.axisBottom(xScale));
+                
+                d3.select("#vis_dots")
+                    .selectAll("circle")
+                    .transition()
+                    .duration(1000)
+                    .attr("cx", d => xScale(d.num_theme));
+                
+                d3.select("#vis_text")
+                    .selectAll("text")
+                    .transition()
+                    .duration(1000)
+                    .attr("x", d => yScale(d.num_theme));
+
+                if(this.firstSelection ==="uniq_color") {
+                    d3.select("#vis_path")
+                    .selectAll("path")
+                    .transition()
+                    .duration(1000)
+                    .attr("d", d3.line()
+                        .curve(d3.curveCardinal.tension(0.5))
+                        .x(d => xScale(d.num_theme))
+                        .y(d => yScale(d.avg_color)));
+  
+                } else if (this.secondSelection === "theme") {
+                    d3.select("#vis_path")
+                    .selectAll("path")
+                    .transition()
+                    .duration(1000)
+                    .attr("d", d3.line()
+                        .curve(d3.curveCardinal.tension(0.5))
+                        .x(d => xScale(d.num_theme))
+                        .y(d => yScale(d.num_theme)));
+
+                } else {
+                    d3.select("#vis_path")
+                    .selectAll("path")
+                    .transition()
+                    .duration(1000)
+                    .attr("d", d3.line()
+                        .curve(d3.curveCardinal.tension(0.5))
+                        .x(d => xScale(d.num_theme))
+                        .y(d => yScale(d.avg_piece)));
+                }
+
+                break;
+            case "num_piece":
+                xScale = d3.scaleLinear()
+                    .domain([0, d3.max(this.data, d => d.avg_piece)])
+                    .range([this.padding.left, this.width - this.padding.right]);
+                
+                this.xScale = xScale;
+                d3.select('#x-axis')
+                    .transition()
+                    .duration(1000)
+                    .call(d3.axisBottom(xScale));
+                
+                d3.select("#vis_dots")
+                    .selectAll("circle")
+                    .transition()
+                    .duration(1000)
+                    .attr("cx", d => xScale(d.avg_piece));
+                
+                d3.select("#vis_text")
+                    .selectAll("text")
+                    .transition()
+                    .duration(1000)
+                    .attr("x", d => xScale(d.avg_piece));
+
+                if(this.secondSelection ==="uniq_color") {
+                    d3.select("#vis_path")
+                    .selectAll("path")
+                    .transition()
+                    .duration(1000)
+                    .attr("d", d3.line()
+                        .curve(d3.curveCardinal.tension(0.5))
+                        .x(d => xScale(d.avg_piece))
+                        .y(d => yScale(d.avg_color)))
+
+
+                } else if (this.secondSelection === "theme") {
+                    d3.select("#vis_path")
+                    .selectAll("path")
+                    .transition()
+                    .duration(1000)
+                    .attr("d", d3.line()
+                        .curve(d3.curveCardinal.tension(0.5))
+                        .x(d => xScale(d.avg_piece))
+                        .y(d => yScale(d.num_theme)))
+
+                } else {
+                    d3.select("#vis_path")
+                    .selectAll("path")
+                    .transition()
+                    .duration(1000)
+                    .attr("d", d3.line()
+                        .curve(d3.curveCardinal.tension(0.5))
+                        .x(d => xScale(d.avg_piece))
+                        .y(d => yScale(d.avg_piece)))
+                }
+                break;
+        }
 
     }
 
