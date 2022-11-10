@@ -4,7 +4,6 @@
 // TODO: Add a color legend to this vis.
 
 /* NEXT STEPS:
- * - In the event handler functions, set the appropriate variables in the this.displayed object.
  * - Call the updateVis() method.
  *     - This method should look at the this.displayed object and transition the lines set to 'true' onto the vis and transition the lines set to 'false' off of the vis.
  */
@@ -50,19 +49,11 @@ class ThemesLineChart {
         this.num_unique_colorsMin = d3.min(this.themesData, d => d.num_unique_colors);
         this.num_unique_colorsMax = d3.max(this.themesData, d => d.num_unique_colors);
 
-        console.log('yearMin: ' + this.yearMin)
-        console.log('yearMax: ' + this.yearMax)
-        console.log('num_themesMin: ' + this.num_unique_themesMin)
-        console.log('num_themesMax: ' + this.num_unique_themesMax)
-        console.log('ave_num_piecesMin: ' + this.ave_num_piecesMin)
-        console.log('ave_num_piecesMax: ' + this.ave_num_piecesMax)
-        console.log('num_setsMin: ' + this.num_setsMin)
-        console.log('num_setsMax: ' + this.num_setsMax)
-        console.log('num_unique_colorsMin: ' + this.num_unique_colorsMin)
-        console.log('num_unique_colorsMax: ' + this.num_unique_colorsMax)
-
-        this.displayedMin = d3.min([this.num_unique_themesMin, this.ave_num_piecesMin, this.num_setsMin, this.num_unique_colorsMin]);
-        this.displayedMax = d3.max([this.num_unique_themesMax, this.ave_num_piecesMax, this.num_setsMax, this.num_unique_colorsMax]);
+        // TODO: Set to round displayedMax to the next highest MSD. Ex. if max = 192, round to 200; of max = 2878, round to 3000; if max = 2023, round to what?
+        // Maximum and Minimum y-axis values
+        this.displayedMin = 0;
+        this.displayedMax;
+        this.setDisplayedMax();
         console.log(`globalMin: ${this.displayedMin}, globalMax: ${this.displayedMax}`);
 
         /* Make Scales */
@@ -74,9 +65,11 @@ class ThemesLineChart {
 
         // Y-Scale
         this.yScale = d3.scaleLinear()
-                        // .domain([0, Math.ceil(this.num_unique_themesMax * 0.1) * 10])
+                        // .domain([0, Math.ceil(this.num_unique_themesMax * 0.1) * 10]) // TODO: Round the axis labels somehow
                         .domain([this.displayedMin, this.displayedMax])
                         .range([this.svgHeight - 25, 20])
+
+        this.yAxis = d3.axisLeft();
     }
     
     //#region Draw basic chart
@@ -104,8 +97,7 @@ class ThemesLineChart {
            .call(xAxis)
 
         // Draw yAxis
-        this.yAxis = d3.axisLeft()
-                      .scale(this.yScale)
+        this.yAxis.scale(this.yScale);
 
         svg.append('g')
            .attr('id', 'y-axis')
@@ -176,6 +168,23 @@ class ThemesLineChart {
                         .x(d => this.xScale(d.year))
                         .y(d => this.yScale(d.num_unique_colors))
                 )
+    }
+
+    updateLines() {
+
+        if (this.displayed.colors) {
+        }
+        if (this.displayed.pieces) {
+            
+        }
+        if (this.displayed.sets) {
+            
+        }
+        if (this.displayed.themes) {
+            this.drawThemesLine();
+        } else {
+            d3.select('#themesLine').remove();
+        }
     }
 
     //#endregion
@@ -266,6 +275,32 @@ class ThemesLineChart {
         return yearData;
     }
 
+    setDisplayedMax() {
+        console.log('AT: setDisplayedMax()');
+
+        let displayedMaxes = [];
+
+        if (this.displayed.themes) {
+            displayedMaxes.push(this.num_unique_themesMax);
+        }
+        if (this.displayed.colors) {
+            displayedMaxes.push(this.num_unique_colorsMax)
+        }
+        if (this.displayed.sets) {
+            displayedMaxes.push(this.num_setsMax)
+        }
+        if (this.displayed.pieces) {
+            displayedMaxes.push(this.ave_num_piecesMax)
+        }
+        if (!this.displayed.themes
+            && !this.displayed.colors
+            && !this.displayed.sets
+            && !this.displayed.pieces) { displayedMaxes.push(0); }
+        console.log(displayedMaxes)
+
+        this.displayedMax = d3.min(displayedMaxes);        
+    }
+
     //#endregion
 
     //#region Add Toggle
@@ -274,14 +309,12 @@ class ThemesLineChart {
         console.log('AT: addEventHandlers()');
 
         d3.select('#themeChartToggle-themes').on('click', e => {
+            console.log('AT: themes event handler');
 
-            if (!this.displayed.themes) {
-                this.drawThemesLine();
-                this.displayed.themes = true;
-            } else {
-                d3.select('#themesLine').remove();
-                this.displayed.themes = false;
-            }
+            this.displayed.themes = !this.displayed.themes;
+
+            this.updateYAxis();
+            this.updateLines();
         })
 
         d3.select('#themeChartToggle-colors').on('click', e => {
@@ -318,12 +351,21 @@ class ThemesLineChart {
         })
     }
 
-    addToggle() {
+    updateYAxis() {
+        console.log('AT: updateYAxis()');
 
-    }
+        this.setDisplayedMax();
 
-    determineAxisScaling() {
-        // Loop over all min and max values for all plotted lines and select the largest and smallest among them.
+        this.yScale = d3.scaleLinear()
+                        .domain([this.displayedMin, this.displayedMax])
+                        .range([this.svgHeight - 25, 20])
+
+        this.yAxis.scale(this.yScale);
+
+        d3.select('#y-axis')
+          .transition()
+          .duration(1000)
+          .call(this.yAxis)
     }
 
     //#endregion
