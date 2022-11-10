@@ -99,6 +99,9 @@ class TheSquiggler {
                 .attr("stroke", "#69b3a2")
                 .attr("stroke-width", 3)
                 .attr("fill", "white")
+            .on("mouseover", (e,d) => this.mouseOverEvent(e,d))
+            .on("mousemove", (e,d) => this.mouseMoveEvent(e,d))
+            .on("mouseleave", (e,d) => this.mouseLeaveEvent(e,d));
             
         svg = d3.select("#svg_theSquiggler")
             .append("g")
@@ -121,6 +124,106 @@ class TheSquiggler {
                 
         d3.select("#squiggler-select-1").on('change', e => this.updateYScale(e));
         d3.select("#squiggler-select-2").on('change', e => this.updateXScale(e));
+    }
+
+    /**
+     * A helper method that creates the rectangle for the
+     * tooltip
+     */
+     createToolkit() {
+        let toolKit = d3.select("#svg_theSquiggler")
+            .append("g")
+            .attr("id", "squigglerTooltip")
+
+        toolKit.append("rect")
+            .attr("id", "tooltip")
+            .attr("ry", 20)
+            .attr("rx", 20)
+            .style("opacity", 0)
+    }
+
+    mouseOverEvent(e,d) {
+        // Need to update the tool tip based on the selected values
+        let y = undefined;
+        console.log("this is d in upper ", d)
+        if(this.firstSelection === "uniq_color") {
+            y = (this.yScale(d.avg_color) > this.height - 200)? 
+            this.yScale(d.avg_color) - 200 : this.yScale(d.avg_color);
+        } else if (this.firstSelection === "theme") {
+            y = (this.yScale(d.num_theme) > this.height - 200)? 
+            this.yScale(d.num_theme) - 200 : this.yScale(d.num_theme);
+        } else {
+            y = (this.yScale(d.avg_piece) > this.height - 200)? 
+            this.yScale(d.avg_piece) - 200 : this.yScale(d.avg_piece);
+        }
+
+        let x = undefined;
+        if(this.secondSelection === "uniq_color") {
+            x = (this.xScale(d.avg_color) > this.width - 200)? 
+            this.xScale(d.avg_color) - 200 : this.xScale(d.avg_color);
+        } else if (this.firstSelection === "theme") {
+            x = (this.xScale(d.num_theme) > this.width - 200)? 
+            this.xScale(d.num_theme) - 200 : this.xScale(d.num_theme);
+        } else {
+            x = (this.xScale(d.avg_piece) > this.width - 200)? 
+            this.xScale(d.avg_piece) - 200 : this.xScale(d.avg_piece);
+        }
+
+        d3.select("#tooltip")
+            .style("opacity", "100%")
+            .attr("x", x + 30)
+            .attr("y", y + 10)
+            .attr("rx", 20)
+            .attr("ry", 20)
+            
+        d3.select("#squigglerTooltip")
+            .raise()
+            .append("text")
+            .attr("id", "toolText")
+            .text(function(d) {
+                if(this.firstSelection === "uniq_color") {
+                    return "Average Unique Color: " + d.avg_color;
+                } else if (this.firstSelection === "theme") {
+                    return "Number of Themes: " + d.num_theme;
+                } 
+                return "Average Piece Count: " + d.avg_piece;
+            })
+            .attr('x', x + 34)
+            .attr('y', y + 40) 
+
+        d3.select("#squigglerTooltip")
+            .raise()
+            .append("text")
+            .attr("id", "toolText")
+            .text(function(d) {
+                if(this.firstSelection === "uniq_color") {
+                    return "Average Unique Color: " + d.avg_color;
+                } else if (this.firstSelection === "theme") {
+                    return "Number of Themes: " + d.num_theme;
+                } 
+                return "Average Piece Count: " + d.avg_piece;
+            })
+            .attr('x', x + 34)
+            .attr('y', y + 60) 
+    }
+
+    mouseMoveEvent(e,d) {
+        d3.select("#tooltip")
+            .style("opacity", "100%")
+            .attr("rx", 20)
+            .attr("ry", 20);
+        
+        d3.select("#squigglerTooltip").selectAll("text").style("opacity", 1);
+
+    }
+
+    mouseLeaveEvent(e,d) {
+        d3.select("#tooltip")
+                    .style("opacity", 0)
+                    .attr("x", 0)
+                    .attr("y", 0);
+        
+        d3.select("#squigglerTooltip").selectAll("text").remove()
     }
 
     updateYScale(e) {
