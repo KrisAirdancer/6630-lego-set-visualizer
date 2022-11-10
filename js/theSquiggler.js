@@ -101,8 +101,8 @@ class TheSquiggler {
             .data(this.data)
             .enter()
             .append("text")
-                .attr("x", d => xScale(d.num_theme) + 2)
-                .attr("y", d => yScale(d.avg_color) + 2)
+                .attr("x", d => xScale(d.num_theme) + 5)
+                .attr("y", d => yScale(d.avg_color))
                 .attr("stroke", "black")
                 .text(function(d,i) {
                     if(i % 10 == 0)
