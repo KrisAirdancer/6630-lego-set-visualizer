@@ -232,3 +232,11 @@ h2 {
 #piecesLineChart-group {
     width: 100%;
 }
+
+#squiggler-svg-group {
+    width: 100%;
+}
+
+.squiggler-selector {
+    margin: 6px;
+}
