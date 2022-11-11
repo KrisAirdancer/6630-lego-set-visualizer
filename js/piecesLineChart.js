@@ -24,7 +24,7 @@ class PiecesLineChart {
         // X-Scale
         this.xScale = d3.scaleLinear()
                        .domain([this.yearMin, this.yearMax]) // From
-                       .range([45, this.svgWidth - 20]) // To
+                       .range([60, this.svgWidth - 20]) // To
 
         // Y-Scale
         this.yScale = d3.scaleLinear()
@@ -48,9 +48,6 @@ class PiecesLineChart {
 
         let svg = d3.select('#svg_piecesLineChart');
 
-        // Draw Axes
-        // console.log('this.svgHeight: ' + this.svgHeight)
-
         // Draw xAxis
         let xAxis = d3.axisBottom()
                       .scale(this.xScale)
@@ -62,6 +59,15 @@ class PiecesLineChart {
            .attr('transform', `translate(${0}, ${this.svgHeight - 25})`)
            .call(xAxis)
 
+        let axisGroup = svg.append('g').attr("id", "x label");
+        axisGroup.append("text")
+                .attr("text-anchor", "end")
+                .attr("x", 0)
+                .attr("y", 0)
+                .attr('transform', `translate(${this.svgWidth/2}, ${this.svgHeight})`)
+                .text("Year")
+                .attr("font-size", 15)
+
         // Draw yAxis
         this.yAxis = d3.axisLeft()
                       .scale(this.yScale)
@@ -69,8 +75,18 @@ class PiecesLineChart {
 
         svg.append('g')
            .attr('id', 'y-axis')
-           .attr('transform', `translate(${45}, ${0})`)
+           .attr('transform', `translate(${60}, ${0})`)
            .call(this.yAxis)
+
+        let yGroup = svg.append('g').attr("id", "y label");
+        yGroup.append("text")
+           .attr("text-anchor", "end")
+           .attr("x", -200)
+           .attr("y", 13)
+           .attr("transform", "rotate(-90)")
+           .text("Number of Pieces")
+           .attr("font-size", 15)
+        
     }
 
     drawDots() {
@@ -108,23 +124,16 @@ class PiecesLineChart {
                 this.yScale = d3.scaleLog()
                                 .domain([this.num_partsMin, Math.ceil(this.num_partsMax * 0.001) * 1000])
                                 .range([this.svgHeight - 25, 20])
-                
-                this.yAxis.tickValues([0, 10, 100, 1000, 10000, 12000])
-                          .scale(this.yScale);
-
+                                .nice();
             } else {
 
                 // Y-Scale
                 this.yScale = d3.scaleLinear()
                                 .domain([this.num_partsMin, Math.ceil(this.num_partsMax * 0.001) * 1000])
                                 .range([this.svgHeight - 25, 20])
-
-                this.yAxis.tickValues([0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000])
-                          .scale(this.yScale);
-
+                                .nice();
             }
 
-            // TODO: This is throwing the following error when the log scale is activated: "Error: <g> attribute transform: Trailing garbage, "translate(0,NaN)""
             d3.select('#dots-group')
                 .selectAll('circle')
                 .transition()
@@ -132,11 +141,10 @@ class PiecesLineChart {
                 .attr('cx', d => this.xScale(d.year))
                 .attr('cy', d => this.yScale(d.num_parts))
 
-            d3.select('#y-axis')
-              .transition()
-              .duration(1000)
-              .call(this.yAxis)
-
+            d3.selectAll('#y-axis')
+                .transition()
+                .duration(1000)
+                .call(d3.axisLeft(this.yScale))
         })
     }
 
@@ -166,13 +174,12 @@ class PiecesLineChart {
 
     mouseOverEvent(e,d) {
         if(d.year != undefined && d.set_name != undefined) {
-            console.log(d.year)
 
-            let x = (this.xScale(d.year) < this.width - 200)? 
-                this.xScale(d.year) : this.xScale(d.year) - 200;
+            let x = (this.xScale(d.year) < this.svgWidth - 350)? 
+                this.xScale(d.year) : this.xScale(d.year) - 350;
             
-            let y = (this.yScale(d.num_parts) > this.height - 200)? 
-                this.yScale(d.num_parts) - 200 : this.yScale(d.num_parts);
+            let y = (this.yScale(d.num_parts) > this.svgHeight - 100)? 
+                this.yScale(d.num_parts) - 100 : this.yScale(d.num_parts);
 
             d3.select("#tooltip")
                 .style("opacity", "100%")

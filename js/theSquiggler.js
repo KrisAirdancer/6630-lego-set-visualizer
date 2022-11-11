@@ -55,6 +55,15 @@ class TheSquiggler {
         svg.attr("transform", "translate("+ 0 + "," + (this.height - this.padding.bottom)  + ")")
             .call(d3.axisBottom(this.xScale));
 
+        let axisGroup = d3.select("#svg_theSquiggler").append('g').attr("id", "squiggler_xlabel");
+        axisGroup.append("text")
+                .attr("text-anchor", "end")
+                .attr("x", 0)
+                .attr("y", 0)
+                .attr('transform', `translate(${this.width/2}, ${this.height - 10})`)
+                .text("Number of Unqiue Colors")
+                .attr("font-size", 15)
+
         this.yScale = d3.scaleLinear()
             .domain([d3.max(tempData, d => d.y), 0])
             .range([this.padding.top, this.height - this.padding.bottom]);
@@ -65,6 +74,15 @@ class TheSquiggler {
         
         svg.attr("transform", "translate("+ this.padding.left + ", 0)")
             .call(d3.axisLeft(this.yScale));
+
+        let yGroup = d3.select("#svg_theSquiggler").append('g').attr("id", "squiggler_ylabel");
+        yGroup.append("text")
+                .attr("text-anchor", "end")
+                .attr("x", -150)
+                .attr("y", 13)
+                .attr("transform", "rotate(-90)")
+                .text("Number of Themes")
+                .attr("font-size", 15)
     }
 
     /**
@@ -254,6 +272,7 @@ class TheSquiggler {
     moveNext(e) {
         this.clicked = (this.clicked+1)%4;
         this.switchPlot();
+        this.updateAxisLabels();
     }
 
     /**
@@ -265,6 +284,142 @@ class TheSquiggler {
         this.clicked = d3.min([(this.clicked-1) % 4, this.clicked-1]);
         this.clicked = (this.clicked < -3)? 0 : this.clicked;
         this.switchPlot();
+        this.updateAxisLabels();
+    }
+
+    updateAxisLabels() {
+        d3.select("#svg_theSquiggler").select("#squiggler_xlabel").remove();
+        d3.select("#svg_theSquiggler").select("#squiggler_ylabel").remove();
+        let yLabel = d3.select("#svg_theSquiggler").append('g').attr("id", "squiggler_ylabel");
+        let xLabel = d3.select("#svg_theSquiggler").append('g').attr("id", "squiggler_xlabel");
+
+
+        switch(this.clicked) {
+            case -3: // Unique Color vs theme
+                xLabel.append("text")
+                    .attr("text-anchor", "end")
+                    .attr("x", 0)
+                    .attr("y", 0)
+                    .attr('transform', `translate(${this.width/2}, ${this.height - 10})`)
+                    .text("Number of Themes")
+                    .attr("font-size", 15)
+
+                yLabel.append("text")
+                .attr("text-anchor", "end")
+                .attr("x", -150)
+                .attr("y", 13)
+                .attr("transform", "rotate(-90)")
+                .text("Average Number of Unique Colors")
+                .attr("font-size", 15)
+
+                break;
+
+            case -2: // pieces vs themes
+                xLabel.append("text")
+                    .attr("text-anchor", "end")
+                    .attr("x", 0)
+                    .attr("y", 0)
+                    .attr('transform', `translate(${this.width/2}, ${this.height - 10})`)
+                    .text("Number of Themes")
+                    .attr("font-size", 15);
+
+                yLabel.append("text")
+                    .attr("text-anchor", "end")
+                    .attr("x", -150)
+                    .attr("y", 13)
+                    .attr("transform", "rotate(-90)")
+                    .text("Average Number of Pieces")
+                    .attr("font-size", 15);
+                break;
+            
+            case -1: // Theme vs pieces
+                xLabel.append("text")
+                    .attr("text-anchor", "end")
+                    .attr("x", 0)
+                    .attr("y", 0)
+                    .attr('transform', `translate(${this.width/2}, ${this.height - 10})`)
+                    .text("Average Number of Pieces")
+                    .attr("font-size", 15);
+
+                yLabel.append("text")
+                    .attr("text-anchor", "end")
+                    .attr("x", -150)
+                    .attr("y", 13)
+                    .attr("transform", "rotate(-90)")
+                    .text("Number of Themes")
+                    .attr("font-size", 15)
+                break;
+
+            case 0: // Theme vs color
+                xLabel.append("text")
+                    .attr("text-anchor", "end")
+                    .attr("x", 0)
+                    .attr("y", 0)
+                    .attr('transform', `translate(${this.width/2}, ${this.height - 10})`)
+                    .text("Average Number of Unique Colors")
+                    .attr("font-size", 15);
+
+                yLabel.append("text")
+                    .attr("text-anchor", "end")
+                    .attr("x", -150)
+                    .attr("y", 13)
+                    .attr("transform", "rotate(-90)")
+                    .text("Number of Themes")
+                    .attr("font-size", 15)
+                break;
+            case 1: // Theme vs pieces
+                xLabel.append("text")
+                    .attr("text-anchor", "end")
+                    .attr("x", 0)
+                    .attr("y", 0)
+                    .attr('transform', `translate(${this.width/2}, ${this.height - 10})`)
+                    .text("Average Number of Pieces")
+                    .attr("font-size", 15);
+
+                yLabel.append("text")
+                    .attr("text-anchor", "end")
+                    .attr("x", -150)
+                    .attr("y", 13)
+                    .attr("transform", "rotate(-90)")
+                    .text("Number of Themes")
+                    .attr("font-size", 15)
+                break;
+            case 2: // pieces vs themes
+                xLabel.append("text")
+                    .attr("text-anchor", "end")
+                    .attr("x", 0)
+                    .attr("y", 0)
+                    .attr('transform', `translate(${this.width/2}, ${this.height - 10})`)
+                    .text("Number of Themes")
+                    .attr("font-size", 15);
+
+                yLabel.append("text")
+                    .attr("text-anchor", "end")
+                    .attr("x", -150)
+                    .attr("y", 13)
+                    .attr("transform", "rotate(-90)")
+                    .text("Average Number of Pieces")
+                    .attr("font-size", 15)
+                break;
+
+            case 3: // Unique Color vs theme
+                xLabel.append("text")
+                    .attr("text-anchor", "end")
+                    .attr("x", 0)
+                    .attr("y", 0)
+                    .attr('transform', `translate(${this.width/2}, ${this.height - 10})`)
+                    .text("Number of Themes")
+                    .attr("font-size", 15);
+
+                yLabel.append("text")
+                    .attr("text-anchor", "end")
+                    .attr("x", -150)
+                    .attr("y", 13)
+                    .attr("transform", "rotate(-90)")
+                    .text("Average Number of Unique Colors")
+                    .attr("font-size", 15)
+                break;
+        }
     }
 
     /**
