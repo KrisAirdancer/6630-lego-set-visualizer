@@ -1,8 +1,8 @@
 // Number of themes per year
 
-// TODO: Add tooltips. Maybe...
 // TODO: Add a color legend to this vis.
 // TODO: Add logic to prevent the user from removing all lines. Set it up so that if they remove the last displayed line, it won't let them.
+    // Add a counter that keeps track of how many lines are currently displayed and add a check where if only one is displayed, to return and not remove it.
 // TODO: Add transitions to the lines.
 
 class ThemesLineChart {

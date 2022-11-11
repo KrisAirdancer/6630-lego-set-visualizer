@@ -98,7 +98,6 @@ class PiecesLineChart {
 
     //#region Linear-to-Log Scale Change
 
-    // TODO: The log scale y-axis has its labels in the wrong locations! Fix this.
     toggleLogScale() {
 
         d3.select('#lineChart-log-toggle').on('click', e => {
@@ -144,8 +143,6 @@ class PiecesLineChart {
     //#endregion
     
     //#region Tooltip Logic
-
-    // TODO: Tooltips are getting cut off by the the right side and bottom of the SVG. Need to add checks to keep them from getting cut off.
 
     applyToolTip() {
         this.createToolkit();

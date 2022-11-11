@@ -1,5 +1,5 @@
-/* TODO: Style SVGs to look nice */
-/* TODO: Remove the empty CSS rulesets when we are done. */
+/* TODO: Style the entire thing to look nice: Button & dropdown styling, scatterplot dot colors, line colors, etc. */
+/* TODO: Delete out all commented out code. */
 
 :root {
     --main-div-background: rgba(228, 228, 228, 0.90);
@@ -20,10 +20,6 @@ body {
        in the event that the background-image
        doesn't load. */
     background-color: var(--lego-yellow);
-
-    /* TODO: The rainbow background is only there for testing. Try to replace it with an image of legos or something. */
-    /* background-image: linear-gradient(violet, indigo, blue, green, yellow, orange, red); */
-
     background-image: url("assets/lego_base.jpg");
     background-size: 50%;
 }
@@ -55,15 +51,12 @@ p {
    properly differentiate them.
  */
 .main-div {
-    /* TODO: What looks better with the shadow? 5px or 10px? */
     margin: 10px 0px 10px 0px;
     padding: 0px;
     border-radius: 20px;
     padding: 10px;
     border: 2px solid var(--border-color);
     background-color: var(--main-div-background);
-    /* TODO: Does it look better or worse with the shadow? */
-    /* x-axis, y-axis, blur, spread, color https://developer.mozilla.org/en-US/docs/Learn/CSS/Howto/Add_a_shadow */
     box-shadow: 2px 2px 5px 2px var(--shadow-color);
 }
 
@@ -147,24 +140,6 @@ h2 {
     background-color: #e7bc00;
 }
 
-/***** <div> Tags *****/
-
-#piecesLineChart {
-
-}
-
-#themesLineChart {
-    
-}
-
-#heatmap {
-    
-}
-
-#theSquiggler {
-    
-}
-
 /***** SVGs *****/
 
 #svg_piecesLineChart {
@@ -174,14 +149,6 @@ h2 {
 
 #svg_themesLineChart {
     height: 400px;
-}
-
-#svg_heatmap {
-    /* background-color: white; */
-}
-
-#svg_theSquiggler {
-
 }
 
 /***** Other *****/
