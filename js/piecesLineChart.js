@@ -24,7 +24,7 @@ class PiecesLineChart {
         // X-Scale
         this.xScale = d3.scaleLinear()
                        .domain([this.yearMin, this.yearMax]) // From
-                       .range([45, this.svgWidth - 20]) // To
+                       .range([60, this.svgWidth - 20]) // To
 
         // Y-Scale
         this.yScale = d3.scaleLinear()
@@ -62,6 +62,15 @@ class PiecesLineChart {
            .attr('transform', `translate(${0}, ${this.svgHeight - 25})`)
            .call(xAxis)
 
+        let axisGroup = svg.append('g').attr("id", "x label");
+        axisGroup.append("text")
+                .attr("text-anchor", "end")
+                .attr("x", 0)
+                .attr("y", 0)
+                .attr('transform', `translate(${this.svgWidth/2}, ${this.svgHeight})`)
+                .text("Year")
+                .attr("font-size", 15)
+
         // Draw yAxis
         this.yAxis = d3.axisLeft()
                       .scale(this.yScale)
@@ -69,8 +78,18 @@ class PiecesLineChart {
 
         svg.append('g')
            .attr('id', 'y-axis')
-           .attr('transform', `translate(${45}, ${0})`)
+           .attr('transform', `translate(${60}, ${0})`)
            .call(this.yAxis)
+
+        let yGroup = svg.append('g').attr("id", "y label");
+        yGroup.append("text")
+           .attr("text-anchor", "end")
+           .attr("x", -200)
+           .attr("y", 13)
+           .attr("transform", "rotate(-90)")
+           .text("Number of Pieces")
+           .attr("font-size", 15)
+        
     }
 
     drawDots() {
