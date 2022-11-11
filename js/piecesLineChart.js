@@ -48,9 +48,6 @@ class PiecesLineChart {
 
         let svg = d3.select('#svg_piecesLineChart');
 
-        // Draw Axes
-        // console.log('this.svgHeight: ' + this.svgHeight)
-
         // Draw xAxis
         let xAxis = d3.axisBottom()
                       .scale(this.xScale)
@@ -129,25 +126,15 @@ class PiecesLineChart {
                                 .domain([this.num_partsMin, Math.ceil(this.num_partsMax * 0.001) * 1000])
                                 .range([this.svgHeight - 25, 20])
                                 .nice();
-                
-                this.yAxis.tickValues([0, 10, 100, 1000, 10000, 12000])
-                          .scale(this.yScale);
-
             } else {
 
                 // Y-Scale
                 this.yScale = d3.scaleLinear()
                                 .domain([this.num_partsMin, Math.ceil(this.num_partsMax * 0.001) * 1000])
                                 .range([this.svgHeight - 25, 20])
-
-                this.yAxis.tickValues([0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000])
-                          .scale(this.yScale);
-
+                                .nice();
             }
 
-            console.log([...d3.filter(this.data, d => d.num_parts === NaN)])
-
-            // TODO: This is throwing the following error when the log scale is activated: "Error: <g> attribute transform: Trailing garbage, "translate(0,NaN)""
             d3.select('#dots-group')
                 .selectAll('circle')
                 .transition()
