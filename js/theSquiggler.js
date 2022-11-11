@@ -252,7 +252,7 @@ class TheSquiggler {
      * @param {Event} e 
      */
     moveNext(e) {
-        this.clicked = (this.clicked+1)%5;
+        this.clicked = (this.clicked+1)%4;
         this.switchPlot();
     }
 
@@ -262,8 +262,8 @@ class TheSquiggler {
      * @param {Event} e 
      */
     movePrevious(e) {
-        this.clicked = d3.min([(this.clicked-1) % 5, this.clicked-1]);
-        this.clicked = (this.clicked < -4)? 0 : this.clicked;
+        this.clicked = d3.min([(this.clicked-1) % 4, this.clicked-1]);
+        this.clicked = (this.clicked < -3)? 0 : this.clicked;
         this.switchPlot();
     }
 
@@ -280,16 +280,9 @@ class TheSquiggler {
             let text_x = undefined;
             let text_y = undefined;
             switch(this.clicked) {
-                case -4: // Unique Color vs theme
+                case -3: // Unique Color vs theme
                     x = this.data[i].num_theme;
                     text_x = "Number of Themes";
-                    y = this.data[i].avg_color;
-                    text_y = "Average Unqiue Colors Used";
-                    break;
-                
-                case -3: // Unique Color vs piece
-                    x = this.data[i].avg_piece;
-                    text_x = "Average Number of Pieces";
                     y = this.data[i].avg_color;
                     text_y = "Average Unqiue Colors Used";
                     break;
@@ -326,13 +319,8 @@ class TheSquiggler {
                     y = this.data[i].avg_piece;
                     text_y = "Average Number of Pieces";
                     break;
-                case 3: // Unique Color vs piece
-                    x = this.data[i].avg_piece;
-                    text_x = "Average Number of Pieces";
-                    y = this.data[i].avg_color;
-                    text_y = "Average Unique Colors Used";
-                    break;
-                case 4: // Unique Color vs theme
+
+                case 3: // Unique Color vs theme
                     x = this.data[i].num_theme;
                     text_x = "Number of Themes";
                     y = this.data[i].avg_color;
