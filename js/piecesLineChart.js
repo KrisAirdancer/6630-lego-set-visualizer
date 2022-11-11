@@ -7,6 +7,7 @@ class PiecesLineChart {
 
     constructor(data) {
         this.data = data;
+        console.log(data);
 
         // Get SVG Data
         this.svgHeight = parseInt(d3.select('#svg_piecesLineChart').style('height'))
