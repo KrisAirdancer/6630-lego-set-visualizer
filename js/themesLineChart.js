@@ -58,6 +58,8 @@ class ThemesLineChart {
                         .range([this.svgHeight - 25, 20])
 
         this.yAxis = d3.axisLeft();
+
+        
     }
     
     //#region Draw basic chart
@@ -73,6 +75,15 @@ class ThemesLineChart {
     drawAxes() {
         let svg = d3.select('#svg_themesLineChart');
 
+        let xLabel = svg.append('g').attr("id", "theme_xlabel");
+        xLabel.append("text")
+                .attr("text-anchor", "end")
+                .attr("x", 0)
+                .attr("y", 0)
+                .attr('transform', `translate(${this.svgWidth/2}, ${this.svgHeight})`)
+                .text("Year")
+                .attr("font-size", 15)
+
         // Draw xAxis
         let xAxis = d3.axisBottom()
                       .scale(this.xScale)
@@ -84,6 +95,14 @@ class ThemesLineChart {
            .attr('transform', `translate(${0}, ${this.svgHeight - 25})`)
            .call(xAxis)
 
+        let yGroup = svg.append('g').attr("id", "theme_ylabel");
+        yGroup.append("text")
+            .attr("text-anchor", "end")
+            .attr("x", -150)
+            .attr("y", 13)
+            .attr("transform", "rotate(-90)")
+            .text("Item Count")
+            .attr("font-size", 15)
         // Draw yAxis
         this.yAxis.scale(this.yScale);
 
