@@ -39,6 +39,15 @@ class Heatmap {
         this.createColorScale(data);  
 
         this.drawRect(data, this.xScale, this.yScale, this.colorScale);
+
+        let yLabel = d3.select("#svg_heatmap").append("g").attr("id", "heatmap_ylabel");
+        yLabel.append("text")
+            .attr("text-anchor", "end")
+            .attr("x", -this.height/2)
+            .attr("y", this.width+ 30)
+            .attr("transform", "rotate(-90)")
+            .text("Pieces Per Set")
+            .attr("font-size", 15)
     }
 
     //#region Setup
@@ -92,6 +101,16 @@ class Heatmap {
         d3.select("#svg_heatmap").append("g").attr("id", "x-axis")
             .attr("transform", "translate(0," + height + ")")
             .call(xaxis);
+
+        let xLabel = d3.select("#svg_heatmap").append("g").attr("id", "heatmap_xlabel");
+        
+        xLabel.append("text")
+            .attr("text-anchor", "end")
+            .attr("x", 0)
+            .attr("y", 0)
+            .attr('transform', `translate(${this.width/2}, ${this.height+20})`)
+            .text("Year")
+            .attr("font-size", 15)
     }
 
      /**
@@ -153,6 +172,7 @@ class Heatmap {
             .attr('id', 'legend')
             .attr("transform", "translate(10,10)")
             .call(legend);
+        
     }
     
     //#endregion
@@ -232,9 +252,9 @@ class Heatmap {
      */
     mouseLeaveEvent(e,d) {
         d3.select("#tooltip")
-                    .style("opacity", 0)
-                    .attr("x", 0)
-                    .attr("y", 0);
+            .style("opacity", 0)
+            .attr("x", 0)
+            .attr("y", 0);
         
         d3.select("#heat_tool_tip").selectAll("text").remove()
 
@@ -283,12 +303,29 @@ class Heatmap {
      * @returns Processed Data
      */
     switchDataSets() {
-        if (this.firstOption === "num_set")
+        d3.select("#svg_heatmap").select("#heatmap_ylabel").remove();
+        let yLabel = d3.select("#svg_heatmap").append("g").attr("id", "heatmap_ylabel");
+        
+        if (this.firstOption === "num_set") {
+            yLabel.append("text")
+                .attr("text-anchor", "end")
+                .attr("x", -this.height/2)
+                .attr("y", this.width+ 30)
+                .attr("transform", "rotate(-90)")
+                .text("Pieces Per Set")
+                .attr("font-size", 15)
             return this.createSetColorData();
-        else if (this.firstOption === "theme")
-            return this.createThemColorData();
-        else
+        }
+        else {
+            yLabel.append("text")
+                .attr("text-anchor", "end")
+                .attr("x", -this.height/2)
+                .attr("y", this.width+ 30)
+                .attr("transform", "rotate(-90)")
+                .text("Color Name")
+                .attr("font-size", 15)
             return this.createColorColorData();
+        }
     }
 
     /**
@@ -364,65 +401,5 @@ class Heatmap {
         return newData;
 
     }
-
-    /**
-     * A helper function that will cluster the data based on 
-     * the unique themes and the average color used in 
-     * that year given that theme.
-     * @returns 
-     */
-    createThemColorData() {
-        let newData = [];
-        let index = 0;
-
-        let sorted = [...d3.group(this.completeData, d => d.theme_name)]
-
-        sorted.forEach(d => {
-            if(d[1][0].num_parts >= 500) {
-                // grab all of the unique colors in the given year
-                let year_info = [...d3.group(d[1], data => data.year)];
-                year_info.forEach(c => {
-                    newData[index++] = {
-                        year: c[0],
-                        yValue: d[1][0].theme_name,
-                        scaleValue: Math.round((d3.mean(c[1], color => color.num_color)*100)/100),
-                        textValue: `Theme Name : ${d[1][0].theme_name}.`,
-                        textValue2: "Number of Unique Colors: "
-                    }
-                })
-            }
-        })
-
-        return newData;
-    }
-
-    /**
-     * A helper function that will cluster the data based on 
-     * the unique sets and the number of pieces used
-     * in given that year
-     */
-    createSetPieceData() {
-        let newData = [];
-        let index = 0;
-        let sorted = [...d3.group(this.completeData, d => d.year)];
-
-        sorted.forEach(d => {
-            let value = 0;
-            for(let change = 340; change < 17000; change += 340) {
-                let filterData = d[1].filter(f => f.num_parts >= change - 340 && f.num_parts < change);
-                if(filterData.length > 0) {
-                    newData[index++] = {
-                        year: d[0],
-                        yValue: value,
-                        scaleValue: Math.round(((d3.mean(filterData, f => f.num_parts)/change)*100))
-                    }
-                } 
-                value++;
-            }
-        })
-
-        return newData;
-    }
-    
     //#endregion
 }
