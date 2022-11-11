@@ -137,13 +137,13 @@ class PiecesLineChart {
             d3.select('#dots-group')
                 .selectAll('circle')
                 .transition()
-                .duration(1000)
+                .duration(800)
                 .attr('cx', d => this.xScale(d.year))
                 .attr('cy', d => this.yScale(d.num_parts))
 
             d3.selectAll('#y-axis')
                 .transition()
-                .duration(1000)
+                .duration(800)
                 .call(d3.axisLeft(this.yScale))
         })
     }
