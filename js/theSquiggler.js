@@ -14,9 +14,6 @@ class TheSquiggler {
     constructor(globalData) {
         this.clicked = 0;
         let data = [...d3.group(globalData, d => d.year)];
-        this.firstSelection = "uniq_color";
-        this.secondSelection = "theme";
-        console.log(data);
 
         this.padding ={
             top: 10,
@@ -25,6 +22,114 @@ class TheSquiggler {
             left: 40
         };
 
+        let tempData = this.createData(data);
+        this.height = parseInt(d3.select("#svg_theSquiggler").style("height"));
+        this.width = parseInt(d3.select("#svg_theSquiggler").style("width"));
+
+        this.createAxis(tempData);
+        this.createConnectedGraph(tempData);
+        
+        d3.select("#squiggler_prev").on('click', e => this.movePrevious(e));
+        d3.select("#squiggler_next").on('click', e => this.moveNext(e));
+    }
+
+    //#region SETUP FUNCTION
+
+    /**
+     * A helper function that will create the Axis
+     * for the connected squiggler. 
+     * @param {Object} tempData 
+     */
+    createAxis(tempData) {
+        this.xScale = d3.scaleLinear()
+                    .domain([0, d3.max(tempData, d => d.x)])
+                    .range([this.padding.left, this.width - this.padding.right]);
+        
+                    
+        let svg = d3.select("#svg_theSquiggler")
+            .append("g")
+            .attr("id", "squiggler-x-axis");
+        
+        svg.attr("transform", "translate("+ 0 + "," + (this.height - this.padding.bottom)  + ")")
+            .call(d3.axisBottom(this.xScale));
+
+        this.yScale = d3.scaleLinear()
+            .domain([d3.max(tempData, d => d.y), 0])
+            .range([this.padding.top, this.height - this.padding.bottom]);
+        
+        svg = d3.select("#svg_theSquiggler")
+            .append("g")
+            .attr("id", "squiggler-y-axis");
+        
+        svg.attr("transform", "translate("+ this.padding.left + ", 0)")
+            .call(d3.axisLeft(this.yScale));
+    }
+
+    /**
+     * A helper function that will draw the connected 
+     * scatter plot in the initial graph
+     * @param {Object} tempData 
+     */
+    createConnectedGraph(tempData) {
+        let svg = d3.select("#svg_theSquiggler")
+            .append("g")
+            .attr("id", "vis_path")
+
+        svg.append("path")
+            .datum(tempData)
+            .attr("fill", "none")
+            .attr("stroke", "black")
+            .attr("d", d3.line()
+                .curve(d3.curveCardinal.tension(0.5))
+                .x(d => this.xScale(d.x))
+                .y(d => this.yScale(d.y)))
+
+        svg = d3.select("#svg_theSquiggler")
+            .append("g")
+            .attr("id", "vis_dots")
+        
+        svg.selectAll("circle")
+            .data(tempData)
+            .enter()
+            .append("circle")
+                .attr("cx", d => this.xScale(d.x))
+                .attr("cy", d => this.yScale(d.y))
+                .attr("r", 2)
+                .attr("stroke", "#69b3a2")
+                .attr("stroke-width", 3)
+                .attr("fill", "white")
+            .on("mouseover", (e,d) => this.mouseOverEvent(e,d))
+            .on("mousemove", (e,d) => this.mouseMoveEvent(e,d))
+            .on("mouseleave", (e,d) => this.mouseLeaveEvent(e,d));
+            
+        svg = d3.select("#svg_theSquiggler")
+            .append("g")
+            .attr("id", "vis_text")
+
+        svg.selectAll("text")
+            .data(tempData)
+            .enter()
+            .append("text")
+                .attr("x", d => this.xScale(d.x) + 5)
+                .attr("y", d => this.yScale(d.y))
+                .attr("stroke", "black")
+                .text(function(d,i) {
+                    if(i % 10 == 0)
+                        return d.year;
+                    return "";
+                })
+                .attr("font-size", 10)
+                .attr("opacity", "60%")
+    }
+
+    /**
+     * A helper function that will process the 
+     * data based on the attributes that are 
+     * needed for the connected scatter plot
+     * @param {Object} data 
+     * @returns Processed Data
+     */
+    createData(data) {
         let squiggler = [];
         let tempData = [];
 
@@ -51,92 +156,12 @@ class TheSquiggler {
         }
 
         this.data = squiggler;
-        console.log(tempData);
-
-
-        this.height = parseInt(d3.select("#svg_theSquiggler").style("height"));
-        this.width = parseInt(d3.select("#svg_theSquiggler").style("width"));
-
-        let xScale = d3.scaleLinear()
-                    .domain([0, d3.max(tempData, d => d.x)])
-                    .range([this.padding.left, this.width - this.padding.right]);
-
-        this.xScale = xScale;
-        
-        let yScale = d3.scaleLinear()
-            .domain([d3.max(tempData, d => d.y), 0])
-            .range([this.padding.top, this.height - this.padding.bottom]);
-
-        this.yScale = yScale;
-
-        let svg = d3.select("#svg_theSquiggler")
-                    .append("g")
-                    .attr("id", "squiggler-x-axis");
-        
-        // Draw Axis
-        svg.attr("transform", "translate("+ 0 + "," + (this.height - this.padding.bottom)  + ")")
-            .call(d3.axisBottom(xScale));
-        
-        svg = d3.select("#svg_theSquiggler")
-            .append("g")
-            .attr("id", "squiggler-y-axis");
-        
-        svg.attr("transform", "translate("+ this.padding.left + ", 0)")
-            .call(d3.axisLeft(yScale));
-        
-        svg = d3.select("#svg_theSquiggler")
-        .append("g")
-        .attr("id", "vis_path")
-
-        svg.append("path")
-            .datum(tempData)
-            .attr("fill", "none")
-            .attr("stroke", "black")
-            .attr("d", d3.line()
-                .curve(d3.curveCardinal.tension(0.5))
-                .x(d => xScale(d.x))
-                .y(d => yScale(d.y)))
-
-        svg = d3.select("#svg_theSquiggler")
-            .append("g")
-            .attr("id", "vis_dots")
-        
-        svg.selectAll("circle")
-            .data(tempData)
-            .enter()
-            .append("circle")
-                .attr("cx", d => xScale(d.x))
-                .attr("cy", d => yScale(d.y))
-                .attr("r", 2)
-                .attr("stroke", "#69b3a2")
-                .attr("stroke-width", 3)
-                .attr("fill", "white")
-            .on("mouseover", (e,d) => this.mouseOverEvent(e,d))
-            .on("mousemove", (e,d) => this.mouseMoveEvent(e,d))
-            .on("mouseleave", (e,d) => this.mouseLeaveEvent(e,d));
-            
-        svg = d3.select("#svg_theSquiggler")
-            .append("g")
-            .attr("id", "vis_text")
-
-        svg.selectAll("text")
-            .data(tempData)
-            .enter()
-            .append("text")
-                .attr("x", d => xScale(d.x) + 5)
-                .attr("y", d => yScale(d.y))
-                .attr("stroke", "black")
-                .text(function(d,i) {
-                    if(i % 10 == 0)
-                        return d.year;
-                    return "";
-                })
-                .attr("font-size", 10)
-                .attr("opacity", "60%")
-                
-        d3.select("#squiggler_prev").on('click', e => this.movePrevious(e));
-        d3.select("#squiggler_next").on('click', e => this.moveNext(e));
+        return tempData;
     }
+    
+    //#endregion
+
+    //#region TOOLTIP FUNCTIONS
 
     /**
      * A helper method that creates the rectangle for the
@@ -238,46 +263,79 @@ class TheSquiggler {
         // d3.select("#squigglerTooltip").selectAll("text").remove()
     }
 
+    //#endregion
+
+    //#region EVENT HANDLERS
+    
+    /**
+     * An event handler that will move the chart to the next
+     * graph structure.
+     * @param {Event} e 
+     */
     moveNext(e) {
         this.clicked = (this.clicked+1)%5;
         this.switchPlot();
     }
 
+    /**
+     * An event handler that will move the chart to the 
+     * previous position
+     * @param {Event} e 
+     */
     movePrevious(e) {
         this.clicked = d3.min([(this.clicked-1) % 5, this.clicked-1]);
         this.clicked = (this.clicked < -4)? 0 : this.clicked;
         this.switchPlot();
     }
 
+    /**
+     * A helper function that will update the the data structure
+     * to be able to transition the data
+     */
     switchPlot() {
         let data = [];
         let index = 0;
 
         for(let i= 0; i < this.data.length; i++) {
             let x, y = 0;
-            switch(Math.abs(this.clicked)) {
+            switch(this.clicked) {
+                case -4: // Unique Color vs theme
+                    x = this.data[i].num_theme;
+                    y = this.data[i].avg_color;
+                    break;
+                
+                case -3: // Unique Color vs piece
+                    x = this.data[i].avg_piece;
+                    y = this.data[i].avg_color;
+                    break;
+
+                case -2: // pieces vs themes
+                    x = this.data[i].num_theme;
+                    y = this.data[i].avg_piece;
+                    break;
+                
+                case -1: // Theme vs pieces
+                    x = this.data[i].avg_piece;
+                    y = this.data[i].num_theme;
+                    break;
+
                 case 0: // Theme vs color
-                    console.log("Case 0")
                     x = this.data[i].avg_color;
                     y = this.data[i].num_theme;
                     break;
                 case 1: // Theme vs pieces
-                    console.log("Case 1")
                     x = this.data[i].avg_piece;
                     y = this.data[i].num_theme;
                     break;
                 case 2: // pieces vs themes
-                    console.log("Case 2")
                     x = this.data[i].num_theme;
                     y = this.data[i].avg_piece;
                     break;
                 case 3: // Unique Color vs piece
-                    console.log("Case 3")
                     x = this.data[i].avg_piece;
                     y = this.data[i].avg_color;
                     break;
                 case 4: // Unique Color vs theme
-                    console.log("Case 4")
                     x = this.data[i].num_theme;
                     y = this.data[i].avg_color;
                     break;
@@ -290,14 +348,16 @@ class TheSquiggler {
             };
         }
 
-        console.log(data);
-
         this.updateGraph(data);
 
     }
 
+    /**
+     * A helper function that will transition the 
+     * data using different scaling funcitons
+     * @param {Object} data 
+     */
     updateGraph(data){
-
         // Theme Y-Axis
         this.yScale = d3.scaleLinear()
             .domain([d3.max(data, d => d.y), 0])
@@ -346,8 +406,8 @@ class TheSquiggler {
             .attr("x", d => this.xScale(d.x))
             .attr("y", d => this.yScale(d.y));
 
-        let path = g.select("#vis_path").selectAll("path")
-                .data(data);
+        let path = svg.select("#vis_path").select("path")
+                .datum(data);
 
         // Move the path line
         path
@@ -359,5 +419,6 @@ class TheSquiggler {
                 .y(d => this.yScale(d.y)));
     }
 
+    //#endregion
 
 }
