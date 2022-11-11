@@ -128,6 +128,7 @@ class PiecesLineChart {
                 this.yScale = d3.scaleLog()
                                 .domain([this.num_partsMin, Math.ceil(this.num_partsMax * 0.001) * 1000])
                                 .range([this.svgHeight - 25, 20])
+                                .nice();
                 
                 this.yAxis.tickValues([0, 10, 100, 1000, 10000, 12000])
                           .scale(this.yScale);
@@ -144,6 +145,8 @@ class PiecesLineChart {
 
             }
 
+            console.log([...d3.filter(this.data, d => d.num_parts === NaN)])
+
             // TODO: This is throwing the following error when the log scale is activated: "Error: <g> attribute transform: Trailing garbage, "translate(0,NaN)""
             d3.select('#dots-group')
                 .selectAll('circle')
@@ -152,11 +155,10 @@ class PiecesLineChart {
                 .attr('cx', d => this.xScale(d.year))
                 .attr('cy', d => this.yScale(d.num_parts))
 
-            d3.select('#y-axis')
-              .transition()
-              .duration(1000)
-              .call(this.yAxis)
-
+            d3.selectAll('#y-axis')
+                .transition()
+                .duration(1000)
+                .call(d3.axisLeft(this.yScale))
         })
     }
 
@@ -188,13 +190,12 @@ class PiecesLineChart {
 
     mouseOverEvent(e,d) {
         if(d.year != undefined && d.set_name != undefined) {
-            console.log(d.year)
 
-            let x = (this.xScale(d.year) < this.width - 200)? 
-                this.xScale(d.year) : this.xScale(d.year) - 200;
+            let x = (this.xScale(d.year) < this.svgWidth - 350)? 
+                this.xScale(d.year) : this.xScale(d.year) - 350;
             
-            let y = (this.yScale(d.num_parts) > this.height - 200)? 
-                this.yScale(d.num_parts) - 200 : this.yScale(d.num_parts);
+            let y = (this.yScale(d.num_parts) > this.svgHeight - 100)? 
+                this.yScale(d.num_parts) - 100 : this.yScale(d.num_parts);
 
             d3.select("#tooltip")
                 .style("opacity", "100%")
