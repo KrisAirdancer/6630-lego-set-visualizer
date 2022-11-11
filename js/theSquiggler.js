@@ -31,6 +31,8 @@ class TheSquiggler {
         
         d3.select("#squiggler_prev").on('click', e => this.movePrevious(e));
         d3.select("#squiggler_next").on('click', e => this.moveNext(e));
+
+        this.createToolkit();
     }
 
     //#region SETUP FUNCTION
@@ -152,6 +154,8 @@ class TheSquiggler {
                 year: data[i][0],
                 x: colors,
                 y: value.length,
+                text_x: "Average Unique Colors",
+                text_y: "Number of Themes",
             }
         }
 
@@ -180,87 +184,62 @@ class TheSquiggler {
     }
 
     mouseOverEvent(e,d) {
-        // Need to update the tool tip based on the selected values
-        // let y = undefined;
-        // console.log("this is d in upper ", d)
-        // if(this.firstSelection === "uniq_color") {
-        //     y = (this.yScale(d.avg_color) > this.height - 200)? 
-        //     this.yScale(d.avg_color) - 200 : this.yScale(d.avg_color);
-        // } else if (this.firstSelection === "theme") {
-        //     y = (this.yScale(d.num_theme) > this.height - 200)? 
-        //     this.yScale(d.num_theme) - 200 : this.yScale(d.num_theme);
-        // } else {
-        //     y = (this.yScale(d.avg_piece) > this.height - 200)? 
-        //     this.yScale(d.avg_piece) - 200 : this.yScale(d.avg_piece);
-        // }
+        let y = (this.yScale(d.y) > this.height - 100)? 
+            this.yScale(d.y) - 100 : this.yScale(d.y);
+        
+        let x = (this.xScale(d.x) > this.width - 200)?
+            this.xScale(d.x) - 200 : this.xScale(d.x);
 
-        // let x = undefined;
-        // if(this.secondSelection === "uniq_color") {
-        //     x = (this.xScale(d.avg_color) > this.width - 200)? 
-        //     this.xScale(d.avg_color) - 200 : this.xScale(d.avg_color);
-        // } else if (this.firstSelection === "theme") {
-        //     x = (this.xScale(d.num_theme) > this.width - 200)? 
-        //     this.xScale(d.num_theme) - 200 : this.xScale(d.num_theme);
-        // } else {
-        //     x = (this.xScale(d.avg_piece) > this.width - 200)? 
-        //     this.xScale(d.avg_piece) - 200 : this.xScale(d.avg_piece);
-        // }
 
-        // d3.select("#tooltip")
-        //     .style("opacity", "100%")
-        //     .attr("x", x + 30)
-        //     .attr("y", y + 10)
-        //     .attr("rx", 20)
-        //     .attr("ry", 20)
+        d3.select("#squigglerTooltip").select("#tooltip")
+            .style("opacity", "100%")
+            .attr("x", x + 30)
+            .attr("y", y + 10)
+            .attr("rx", 20)
+            .attr("ry", 20)
             
-        // d3.select("#squigglerTooltip")
-        //     .raise()
-        //     .append("text")
-        //     .attr("id", "toolText")
-        //     .text(function(d) {
-        //         if(this.firstSelection === "uniq_color") {
-        //             return "Average Unique Color: " + d.avg_color;
-        //         } else if (this.firstSelection === "theme") {
-        //             return "Number of Themes: " + d.num_theme;
-        //         } 
-        //         return "Average Piece Count: " + d.avg_piece;
-        //     })
-        //     .attr('x', x + 34)
-        //     .attr('y', y + 40) 
+        d3.select("#squigglerTooltip")
+            .raise()
+            .append("text")
+            .attr("id", "toolText")
+            .text(d.text_x + ": " + Math.round((d.x*100))/100)
+            .attr('x', x + 34)
+            .attr('y', y + 30) 
 
-        // d3.select("#squigglerTooltip")
-        //     .raise()
-        //     .append("text")
-        //     .attr("id", "toolText")
-        //     .text(function(d) {
-        //         if(this.firstSelection === "uniq_color") {
-        //             return "Average Unique Color: " + d.avg_color;
-        //         } else if (this.firstSelection === "theme") {
-        //             return "Number of Themes: " + d.num_theme;
-        //         } 
-        //         return "Average Piece Count: " + d.avg_piece;
-        //     })
-        //     .attr('x', x + 34)
-        //     .attr('y', y + 60) 
+        d3.select("#squigglerTooltip")
+            .raise()
+            .append("text")
+            .attr("id", "toolText")
+            .text(d.text_y + ": " + Math.round((d.y*100))/100)
+            .attr('x', x + 34)
+            .attr('y', y + 50)
+        
+        d3.select("#squigglerTooltip")
+            .raise()
+            .append("text")
+            .attr("id", "toolText")
+            .text("Year: " + d.year)
+            .attr('x', x + 34)
+            .attr('y', y + 70)
     }
 
     mouseMoveEvent(e,d) {
-        // d3.select("#tooltip")
-        //     .style("opacity", "100%")
-        //     .attr("rx", 20)
-        //     .attr("ry", 20);
+        d3.select("#squigglerTooltip").select("#tooltip")
+            .style("opacity", "100%")
+            .attr("rx", 20)
+            .attr("ry", 20);
         
-        // d3.select("#squigglerTooltip").selectAll("text").style("opacity", 1);
+        d3.select("#squigglerTooltip").selectAll("text").style("opacity", 1);
 
     }
 
     mouseLeaveEvent(e,d) {
-        // d3.select("#tooltip")
-        //             .style("opacity", 0)
-        //             .attr("x", 0)
-        //             .attr("y", 0);
+        d3.select("#squigglerTooltip").select("#tooltip")
+                    .style("opacity", 0)
+                    .attr("x", 0)
+                    .attr("y", 0);
         
-        // d3.select("#squigglerTooltip").selectAll("text").remove()
+        d3.select("#squigglerTooltip").selectAll("text").remove()
     }
 
     //#endregion
@@ -298,46 +277,66 @@ class TheSquiggler {
 
         for(let i= 0; i < this.data.length; i++) {
             let x, y = 0;
+            let text_x = undefined;
+            let text_y = undefined;
             switch(this.clicked) {
                 case -4: // Unique Color vs theme
                     x = this.data[i].num_theme;
+                    text_x = "Number of Themes";
                     y = this.data[i].avg_color;
+                    text_y = "Average Unqiue Colors Used";
                     break;
                 
                 case -3: // Unique Color vs piece
                     x = this.data[i].avg_piece;
+                    text_x = "Average Number of Pieces";
                     y = this.data[i].avg_color;
+                    text_y = "Average Unqiue Colors Used";
                     break;
 
                 case -2: // pieces vs themes
                     x = this.data[i].num_theme;
+                    text_x = "Number of Themes";
                     y = this.data[i].avg_piece;
+                    text_y = "Average Number of Pieces";
                     break;
                 
                 case -1: // Theme vs pieces
                     x = this.data[i].avg_piece;
+                    text_x = "Average Number of Pieces";
                     y = this.data[i].num_theme;
+                    text_y = "Number of Themes";
                     break;
 
                 case 0: // Theme vs color
                     x = this.data[i].avg_color;
+                    text_x = "Average Unqiue Colors Used";
                     y = this.data[i].num_theme;
+                    text_y = "Number of Themes";
                     break;
                 case 1: // Theme vs pieces
                     x = this.data[i].avg_piece;
+                    text_x = "Average Number of Pieces";
                     y = this.data[i].num_theme;
+                    text_y = "Number of Themes";
                     break;
                 case 2: // pieces vs themes
                     x = this.data[i].num_theme;
+                    text_x = "Number of Themes";
                     y = this.data[i].avg_piece;
+                    text_y = "Average Number of Pieces";
                     break;
                 case 3: // Unique Color vs piece
                     x = this.data[i].avg_piece;
+                    text_x = "Average Number of Pieces";
                     y = this.data[i].avg_color;
+                    text_y = "Average Unique Colors Used";
                     break;
                 case 4: // Unique Color vs theme
                     x = this.data[i].num_theme;
+                    text_x = "Number of Themes";
                     y = this.data[i].avg_color;
+                    text_y = "Average Unique Colors Used";
                     break;
             }
 
@@ -345,6 +344,8 @@ class TheSquiggler {
                 x:  x,
                 y:  y,
                 year: this.data[i].year,
+                text_x: text_x,
+                text_y: text_y
             };
         }
 
