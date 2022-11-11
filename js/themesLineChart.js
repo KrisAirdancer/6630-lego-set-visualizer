@@ -1,8 +1,6 @@
 // Number of themes per year
 
 // TODO: Add a color legend to this vis.
-// TODO: Add logic to prevent the user from removing all lines. Set it up so that if they remove the last displayed line, it won't let them.
-    // Add a counter that keeps track of how many lines are currently displayed and add a check where if only one is displayed, to return and not remove it.
 // TODO: Add transitions to the lines.
 
 class ThemesLineChart {
@@ -10,27 +8,23 @@ class ThemesLineChart {
     constructor(data) { 
 
         this.data = data;
-        // console.log(this.data);
 
         this.displayed = {
             themes: true,
             colors: false,
             pieces: false,
-            sets: false
+            sets: false,
+            count: 1
         }
 
         /* Process Data */
 
         this.themesData = this.processData();
-        // console.log('THEMESDATA:')
-        // console.log(this.themesData)
 
         /* Get SVG Data */
 
         this.svgHeight = parseInt(d3.select('#svg_themesLineChart').style('height'))
         this.svgWidth = parseInt(d3.select('#svg_themesLineChart').style('width'))
-        // console.log('svgHeight: ' + this.svgHeight)
-        // console.log('svgWidth: '+ this.svgWidth)
 
         /* Get Data Metadata */
 
@@ -46,13 +40,10 @@ class ThemesLineChart {
         this.num_unique_colorsMin = d3.min(this.themesData, d => d.num_unique_colors);
         this.num_unique_colorsMax = d3.max(this.themesData, d => d.num_unique_colors);
 
-
-        // TODO: Set to round displayedMax to the next highest MSD. Ex. if max = 192, round to 200; of max = 2878, round to 3000; if max = 2023, round to what?
         // Maximum and Minimum y-axis values
         this.displayedMin = 0;
         this.displayedMax;
         this.setDisplayedMax();
-        console.log(`globalMin: ${this.displayedMin}, globalMax: ${this.displayedMax}`);
 
         /* Make Scales */
 
@@ -63,7 +54,6 @@ class ThemesLineChart {
 
         // Y-Scale
         this.yScale = d3.scaleLinear()
-                        // .domain([0, Math.ceil(this.num_unique_themesMax * 0.1) * 10]) // TODO: Round the axis labels somehow
                         .domain([this.displayedMin, this.displayedMax])
                         .range([this.svgHeight - 25, 20])
 
@@ -177,22 +167,30 @@ class ThemesLineChart {
         d3.select('#setsLine').remove();
         d3.select('#themesLine').remove();
 
+        this.displayed.count = 0;
+
         // Draw displayed lines
 
         if (this.displayed.colors) {
             this.drawColorsLine();
+            this.displayed.count++;
         }
 
         if (this.displayed.pieces) {
             this.drawPiecesLine();
+            this.displayed.count++;
+            
         }
 
         if (this.displayed.sets) {
             this.drawSetsLine();
+            this.displayed.count++;
+
         }
 
         if (this.displayed.themes) {
             this.drawThemesLine();
+            this.displayed.count++;
         }
     }
 
@@ -203,8 +201,6 @@ class ThemesLineChart {
     processData() {
 
         let years = d3.groups(this.data, d => d.year);
-        // console.log('YEARS:')
-        // console.log(years)
         let yearData = [];
 
         years.forEach(year => {
@@ -225,8 +221,6 @@ class ThemesLineChart {
         this.getAverageNumOfPieces(years, yearData);
         this.getUniqueColorsAndCount(years, yearData);
 
-        // console.log('YEARDATA:')
-        // console.log(yearData)
         return yearData;
     }
 
@@ -285,7 +279,6 @@ class ThemesLineChart {
     }
 
     setDisplayedMax() {
-        console.log('AT: setDisplayedMax()');
 
         let displayedMaxes = [];
 
@@ -305,11 +298,8 @@ class ThemesLineChart {
             && !this.displayed.colors
             && !this.displayed.sets
             && !this.displayed.pieces) { displayedMaxes.push(0); }
-        
-        console.log(displayedMaxes)
 
-        this.displayedMax = d3.max(displayedMaxes);  
-        console.log(this.displayedMax);      
+        this.displayedMax = d3.max(displayedMaxes);
     }
 
     //#endregion
@@ -317,44 +307,118 @@ class ThemesLineChart {
     //#region Add Toggle
 
     addEventHandlers() {
-        // console.log('AT: addEventHandlers()');
 
         d3.select('#themeChartToggle-themes').on('click', e => {
-            console.log('AT: themes event handler');
 
-            this.displayed.themes = !this.displayed.themes;
+            if (!this.displayed.themes) { // Activeate (draw it)
 
-            this.updateYAxis();
-            this.updateLines();
+                this.displayed.themes = !this.displayed.themes;
+                this.displayed.count++;
+
+                this.updateYAxis();
+                this.updateLines();
+
+            } else { // Deactivate (remove it)
+
+                if (this.displayed.count === 1) {
+
+                    document.getElementById('themeChartToggle-themes').checked = true;
+                    return;
+                } else {
+
+                    this.displayed.themes = !this.displayed.themes;
+                    this.displayed.count--;
+
+                    this.updateYAxis();
+                    this.updateLines();
+                }
+            }
+
         })
 
         d3.select('#themeChartToggle-colors').on('click', e => {
 
-            this.displayed.colors = !this.displayed.colors;
+            if (!this.displayed.colors) { // Activeate (draw it)
 
-            this.updateYAxis();
-            this.updateLines();
+                this.displayed.colors = !this.displayed.colors;
+                this.displayed.count++;
+
+                this.updateYAxis();
+                this.updateLines();
+
+            } else { // Deactivate (remove it)
+
+                if (this.displayed.count === 1) {
+
+                    document.getElementById('themeChartToggle-colors').checked = true;
+                    return;
+                } else {
+
+                    this.displayed.colors = !this.displayed.colors;
+                    this.displayed.count--;
+
+                    this.updateYAxis();
+                    this.updateLines();
+                }
+            }
         })
 
         d3.select('#themeChartToggle-pieces').on('click', e => {
 
-            this.displayed.pieces = !this.displayed.pieces;
+            if (!this.displayed.pieces) { // Activeate (draw it)
 
-            this.updateYAxis();
-            this.updateLines();
+                this.displayed.pieces = !this.displayed.pieces;
+                this.displayed.count++;
+
+                this.updateYAxis();
+                this.updateLines();
+
+            } else { // Deactivate (remove it)
+
+                if (this.displayed.count === 1) {
+
+                    document.getElementById('themeChartToggle-pieces').checked = true;
+                    return;
+                } else {
+
+                    this.displayed.pieces = !this.displayed.pieces;
+                    this.displayed.count--;
+
+                    this.updateYAxis();
+                    this.updateLines();
+                }
+            }
         })
 
         d3.select('#themeChartToggle-sets').on('click', e => {
+            
+            if (!this.displayed.sets) { // Activeate (draw it)
 
-            this.displayed.sets = !this.displayed.sets;
+                this.displayed.sets = !this.displayed.sets;
+                this.displayed.count++;
 
-            this.updateYAxis();
-            this.updateLines();
+                this.updateYAxis();
+                this.updateLines();
+
+            } else { // Deactivate (remove it)
+
+                if (this.displayed.count === 1) {
+
+                    document.getElementById('themeChartToggle-sets').checked = true;
+                    return;
+                } else {
+
+                    this.displayed.sets = !this.displayed.sets;
+                    this.displayed.count--;
+
+                    this.updateYAxis();
+                    this.updateLines();
+                }
+            }
         })
     }
 
     updateYAxis() {
-        console.log('AT: updateYAxis()');
 
         this.setDisplayedMax();
 
