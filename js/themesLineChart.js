@@ -20,6 +20,7 @@ class ThemesLineChart {
         /* Process Data */
 
         this.themesData = this.processData();
+        
 
         /* Get SVG Data */
 
@@ -59,7 +60,33 @@ class ThemesLineChart {
 
         this.yAxis = d3.axisLeft();
 
+        let colorScale = d3.scaleOrdinal()
+            .domain(['Theme','Sets','Pieces','Colors'])
+            .range(['black','red','blue','green']);
+            
+        let legend_data = ['Theme','Sets','Pieces','Colors'];
+
+        let svg = d3.select("#svg_themesLineChart")
+            .append('g')
+            .attr('id', 'legend')
+
+        svg.selectAll("rect")
+            .data(legend_data)
+            .enter()
+            .append("rect")
+            .attr("x", 60 )
+            .attr("y", (d,i) => 30 + i*20)
+            .attr("width", 15)
+            .attr("height", 15)
+            .attr("fill", d => colorScale(d));
         
+        svg.selectAll("text")
+            .data(legend_data)
+            .enter()
+            .append("text")
+            .attr("x", 80)
+            .attr("y", (d,i) => 42 + i*20)
+            .text(d => d)
     }
     
     //#region Draw basic chart
