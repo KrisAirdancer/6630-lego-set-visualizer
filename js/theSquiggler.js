@@ -210,7 +210,7 @@ class TheSquiggler {
 
 
         d3.select("#squigglerTooltip").select("#tooltip")
-            .style("opacity", "100%")
+            .style("opacity", "90%")
             .attr("x", x + 30)
             .attr("y", y + 10)
             .attr("rx", 20)
@@ -243,7 +243,7 @@ class TheSquiggler {
 
     mouseMoveEvent(e,d) {
         d3.select("#squigglerTooltip").select("#tooltip")
-            .style("opacity", "100%")
+            .style("opacity", "90%")
             .attr("rx", 20)
             .attr("ry", 20);
         

@@ -209,7 +209,7 @@ class Heatmap {
 
             d3.select("#Heatmap_Tooltip")
                 .select("#tooltip")
-                .style("opacity", "80%")
+                .style("opacity", "90%")
                 .attr("x", x + 30)
                 .attr("y", y + 30)
                 .attr("rx", 20)
@@ -251,7 +251,7 @@ class Heatmap {
     mouseMoveEvent(e,d) {
         d3.select("#Heatmap_Tooltip")
             .select("#tooltip")
-            .style("opacity", "80%")
+            .style("opacity", "90%")
             .attr("rx", 20)
             .attr("ry", 20);
         

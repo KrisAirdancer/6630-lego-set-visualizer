@@ -185,7 +185,7 @@ class PiecesLineChart {
                 this.yScale(d.num_parts) - 100 : this.yScale(d.num_parts);
 
             d3.select("#tooltip")
-                .style("opacity", "100%")
+                .style("opacity", "90%")
                 .attr("x", x + 30)
                 .attr("y", y + 10)
                 .attr("rx", 20)
@@ -212,7 +212,7 @@ class PiecesLineChart {
 
     mouseMoveEvent(e,d) {
         d3.select("#tooltip")
-            .style("opacity", "100%")
+            .style("opacity", "90%")
             .attr("rx", 20)
             .attr("ry", 20);
         
