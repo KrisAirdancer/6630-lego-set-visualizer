@@ -119,6 +119,8 @@ class Heatmap {
      */
       createToolkit() {
         let toolKit = d3.select("#heat_tool_tip")
+            .append("g")
+            .attr("id", "Heatmap_Tooltip")
 
         toolKit.append("rect")
             .attr("id", "tooltip")
@@ -197,17 +199,17 @@ class Heatmap {
      */
     mouseOverEvent(e,d) {
         if(d.year != undefined && d.yValue != undefined) {
-            let x = (this.xScale(d.year) < this.width-200)? 
-                this.xScale(d.year) : this.xScale(d.year)-200;
+            let x = (this.xScale(d.year) < this.width-300)? 
+                this.xScale(d.year) : this.xScale(d.year)-300;
             
             let y = (this.yScale(d.yValue) > this.height - 100)? 
                 this.yScale(d.yValue)-100 : this.yScale(d.yValue);
 
-            d3.select("#tooltip")
-                .raise()
+            d3.select("#Heatmap_Tooltip")
+                .select("#tooltip")
                 .style("opacity", "80%")
                 .attr("x", x + 30)
-                .attr("y", y + 10)
+                .attr("y", y + 30)
                 .attr("rx", 20)
                 .attr("ry", 20)
                 
@@ -217,7 +219,7 @@ class Heatmap {
                 .attr("id", "toolText")
                 .text(d.textValue)
                 .attr('x', x + 34)
-                .attr('y', y + 40) 
+                .attr('y', y + 50) 
 
             d3.select("#heat_tool_tip")
                 .raise()
@@ -225,7 +227,7 @@ class Heatmap {
                 .attr("id", "toolText")
                 .text(d.textValue2 + d.scaleValue)
                 .attr('x', x + 34)
-                .attr('y', y + 60) 
+                .attr('y', y + 70) 
             
             d3.select("#heat_tool_tip")
                 .raise()
@@ -233,7 +235,7 @@ class Heatmap {
                 .attr("id", "toolText")
                 .text("Year: " +  d.year)
                 .attr('x', x + 34)
-                .attr('y', y + 80) 
+                .attr('y', y + 90) 
         }
         
     }
@@ -245,7 +247,8 @@ class Heatmap {
      * @param {Data} d 
      */
     mouseMoveEvent(e,d) {
-        d3.select("#tooltip")
+        d3.select("#Heatmap_Tooltip")
+            .select("#tooltip")
             .style("opacity", "80%")
             .attr("rx", 20)
             .attr("ry", 20);
@@ -261,7 +264,8 @@ class Heatmap {
      * @param {Data} d 
      */
     mouseLeaveEvent(e,d) {
-        d3.select("#tooltip")
+        d3.select("#Heatmap_Tooltip")
+            .select("#tooltip")
             .style("opacity", 0)
             .attr("x", 0)
             .attr("y", 0);
