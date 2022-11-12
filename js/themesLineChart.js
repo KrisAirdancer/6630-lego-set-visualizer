@@ -1,9 +1,3 @@
-// Number of themes per year
-
-// TODO: Add a color legend to this vis.
-// TODO: Add transitions to the lines.
-// TODO: Update the legend so that the names in the legend match the names next to the checkboxes.
-
 class ThemesLineChart {
 
     constructor(data) { 
@@ -61,11 +55,12 @@ class ThemesLineChart {
 
         this.yAxis = d3.axisLeft();
 
+        // TODO: Change the colors of the lines to Legoish colors.
         let colorScale = d3.scaleOrdinal()
             .domain(['Theme','Sets','Pieces','Colors'])
             .range(['black','red','blue','green']);
             
-        let legend_data = ['Theme','Sets','Pieces','Colors'];
+        let legend_data = ['Number of Themes','Number of Sets','Avg. Pieces per Set','Number of Unique Colors'];
 
         let svg = d3.select("#svg_themesLineChart")
             .append('g')
@@ -480,12 +475,6 @@ class ThemesLineChart {
           .duration(1000)
           .call(this.yAxis)
     }
-
-    //#endregion
-
-    //#region Tool Tip
-
-    // TODO: Add tooltip code
 
     //#endregion
 }
