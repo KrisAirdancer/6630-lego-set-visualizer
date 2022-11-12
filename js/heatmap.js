@@ -258,14 +258,14 @@ class Heatmap {
         
         d3.select("#heat_tool_tip").selectAll("text").remove()
 
-        let legend = d3.legendColor()
-            .scale(this.colorScale)
+        // let legend = d3.legendColor()
+        //     .scale(this.colorScale)
         
-        d3.select("#heat_tool_tip")
-            .append('g')
-            .attr('id', 'legend')
-            .attr("transform", "translate(10,10)")
-            .call(legend);
+        // d3.select("#heat_tool_tip")
+        //     .append('g')
+        //     .attr('id', 'legend')
+        //     .attr("transform", "translate(10,10)")
+        //     .call(legend);
     }
 
     /**
@@ -278,7 +278,7 @@ class Heatmap {
         // Remove previous data
         this.firstOption = e.target.value;
         d3.select("#heat_tool_tip").remove();
-        d3.select("#legend").remove();
+        d3.select("#svg_heatmap").select("#legend").remove();
         d3.select("#svg_heatmap").append("g").attr("id", "heat_tool_tip")
 
         let data = this.switchDataSets();
