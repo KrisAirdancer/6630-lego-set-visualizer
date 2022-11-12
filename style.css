@@ -1,5 +1,6 @@
 /* TODO: Style the entire thing to look nice: Button & dropdown styling, scatterplot dot colors, line colors, etc. */
 /* TODO: Delete out all commented out code. */
+/* TODO: Remove unused favicon files. */
 
 :root {
     --main-div-background: rgba(228, 228, 228, 0.90);
@@ -144,7 +145,7 @@ h2 {
 
 #svg_piecesLineChart {
     /* background-color: hsl(0, 0%, 100%, 0.5); */
-    height: 500px;
+    height: 400px;
 }
 
 #svg_themesLineChart {
@@ -202,6 +203,7 @@ h2 {
 
 #squiggler-svg-group {
     width: 100%;
+    min-height: 500px;
 }
 
 .squiggler-selector {

@@ -2,6 +2,7 @@
 
 // TODO: Add a color legend to this vis.
 // TODO: Add transitions to the lines.
+// TODO: Update the legend so that the names in the legend match the names next to the checkboxes.
 
 class ThemesLineChart {
 
