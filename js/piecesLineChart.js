@@ -65,7 +65,7 @@ class PiecesLineChart {
                 .attr("text-anchor", "end")
                 .attr("x", 0)
                 .attr("y", 0)
-                .attr('transform', `translate(${this.svgWidth/2}, ${this.svgHeight})`)
+                .attr('transform', `translate(${(this.svgWidth/2) + 25}, ${this.svgHeight})`)
                 .text("Year")
                 .attr("font-size", 15)
 
@@ -82,7 +82,7 @@ class PiecesLineChart {
         let yGroup = svg.append('g').attr("id", "y label");
         yGroup.append("text")
            .attr("text-anchor", "end")
-           .attr("x", -200)
+           .attr("x", -150)
            .attr("y", 13)
            .attr("transform", "rotate(-90)")
            .text("Number of Pieces")
@@ -103,7 +103,9 @@ class PiecesLineChart {
            .attr('cx', d => this.xScale(d.year))
            .attr('cy', d => this.yScale(d.num_parts))
            .attr('r', '2px')
-           .style('fill', 'black')
+           .style('fill', '#FFCF04')
+           .style('stroke', 'black')
+           .style('stroke-width', '0.75px')
            .on("mouseover", (e,d) => this.mouseOverEvent(e,d))
            .on("mousemove", (e,d) => this.mouseMoveEvent(e,d))
            .on("mouseleave", (e,d) => this.mouseLeaveEvent(e,d));  

@@ -58,7 +58,7 @@ class ThemesLineChart {
         // TODO: Change the colors of the lines to Legoish colors.
         let colorScale = d3.scaleOrdinal()
             .domain(['Theme','Sets','Pieces','Colors'])
-            .range(['black','red','blue','green']);
+            .range(['white','#FF5722','#90A4AE','#FFCF04']);
             
         let legend_data = ['Number of Themes','Number of Sets','Avg. Pieces per Set','Number of Unique Colors'];
 
@@ -74,7 +74,9 @@ class ThemesLineChart {
             .attr("y", (d,i) => 30 + i*20)
             .attr("width", 15)
             .attr("height", 15)
-            .attr("fill", d => colorScale(d));
+            .attr("fill", d => colorScale(d))
+            .style('stroke-width', '1.25px')
+            .style('stroke', 'black')
         
         svg.selectAll("text")
             .data(legend_data)
@@ -140,10 +142,21 @@ class ThemesLineChart {
         let svg = d3.select('#svg_themesLineChart')
         
         svg.append('path')
-           .attr('id', 'themesLine')
+           .attr('id', 'themesLine_back')
            .datum(this.themesData)
            .attr('fill', 'none')
            .attr('stroke', 'black')
+           .attr('stroke-width', '3')
+           .attr('d', d3.line()
+                        .x(d => this.xScale(d.year))
+                        .y(d => this.yScale(d.num_unique_themes))
+                )
+        
+        svg.append('path')
+           .attr('id', 'themesLine')
+           .datum(this.themesData)
+           .attr('fill', 'none')
+           .attr('stroke', 'white')
            .attr('stroke-width', '1.5')
            .attr('d', d3.line()
                         .x(d => this.xScale(d.year))
@@ -156,10 +169,21 @@ class ThemesLineChart {
         let svg = d3.select('#svg_themesLineChart')
         
         svg.append('path')
+           .attr('id', 'setsLine_back')
+           .datum(this.themesData)
+           .attr('fill', 'none')
+           .attr('stroke', 'black')
+           .attr('stroke-width', '3')
+           .attr('d', d3.line()
+                        .x(d => this.xScale(d.year))
+                        .y(d => this.yScale(d.num_sets))
+                )
+
+        svg.append('path')
            .attr('id', 'setsLine')
            .datum(this.themesData)
            .attr('fill', 'none')
-           .attr('stroke', 'red')
+           .attr('stroke', '#FF5722')
            .attr('stroke-width', '1.5')
            .attr('d', d3.line()
                         .x(d => this.xScale(d.year))
@@ -173,10 +197,20 @@ class ThemesLineChart {
         let svg = d3.select('#svg_themesLineChart')
         
         svg.append('path')
+           .attr('id', 'piecesLine_back')
+           .datum(this.themesData)
+           .attr('fill', 'none')
+           .attr('stroke', 'black')
+           .attr('stroke-width', '3')
+           .attr('d', d3.line()
+                        .x(d => this.xScale(d.year))
+                        .y(d => this.yScale(d.ave_num_pieces))
+                )
+        svg.append('path')
            .attr('id', 'piecesLine')
            .datum(this.themesData)
            .attr('fill', 'none')
-           .attr('stroke', 'blue')
+           .attr('stroke', '#90A4AE')
            .attr('stroke-width', '1.5')
            .attr('d', d3.line()
                         .x(d => this.xScale(d.year))
@@ -189,10 +223,21 @@ class ThemesLineChart {
         let svg = d3.select('#svg_themesLineChart')
         
         svg.append('path')
+           .attr('id', 'colorsLine_back')
+           .datum(this.themesData)
+           .attr('fill', 'none')
+           .attr('stroke', 'black')
+           .attr('stroke-width', '3')
+           .attr('d', d3.line()
+                        .x(d => this.xScale(d.year))
+                        .y(d => this.yScale(d.num_unique_colors))
+                )
+
+        svg.append('path')
            .attr('id', 'colorsLine')
            .datum(this.themesData)
            .attr('fill', 'none')
-           .attr('stroke', 'green')
+           .attr('stroke', '#FFCF04')
            .attr('stroke-width', '1.5')
            .attr('d', d3.line()
                         .x(d => this.xScale(d.year))
@@ -208,6 +253,11 @@ class ThemesLineChart {
         d3.select('#piecesLine').remove();
         d3.select('#setsLine').remove();
         d3.select('#themesLine').remove();
+
+        d3.select('#colorsLine_back').remove();
+        d3.select('#piecesLine_back').remove();
+        d3.select('#setsLine_back').remove();
+        d3.select('#themesLine_back').remove();
 
         this.displayed.count = 0;
 
