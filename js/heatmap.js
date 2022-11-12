@@ -63,7 +63,7 @@ class Heatmap {
 
         this.colorScale = d3.scaleLinear()
             .domain([min_color, max_color])
-            .range(["#9BC1D0","#C66B08"]);
+            .range(["white","#DDB000"]);
             // .range(["#f7fbff","#08306b"]); // <-- Vista's version
             // TODO: Choose better colors for the Heatmap
     }
@@ -154,6 +154,8 @@ class Heatmap {
             .attr('y', d => set_scale(d.yValue))
             .attr('width', yearScale.bandwidth())
             .attr("height", set_scale.bandwidth())
+            .style('stroke', 'grey')
+            .style('stroke-width', '1px')
             .style("fill", d => {
                 if(d.scaleValue == undefined)
                     return 'gray'

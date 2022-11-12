@@ -208,3 +208,15 @@ h2 {
 .squiggler-selector {
     margin: 6px;
 }
+
+#squiggler_prev { 
+    background-color: var(--lego-yellow);
+    border-radius: 10px;
+    width: 75px;
+}
+
+#squiggler_next { 
+    background-color: var(--lego-yellow);
+    border-radius: 10px;
+    width: 75px;
+}
