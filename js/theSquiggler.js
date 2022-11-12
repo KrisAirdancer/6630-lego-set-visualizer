@@ -205,8 +205,8 @@ class TheSquiggler {
         let y = (this.yScale(d.y) > this.height - 100)? 
             this.yScale(d.y) - 100 : this.yScale(d.y);
         
-        let x = (this.xScale(d.x) > this.width - 200)?
-            this.xScale(d.x) - 200 : this.xScale(d.x);
+        let x = (this.xScale(d.x) > this.width - 300)?
+            this.xScale(d.x) - 300 : this.xScale(d.x);
 
 
         d3.select("#squigglerTooltip").select("#tooltip")
