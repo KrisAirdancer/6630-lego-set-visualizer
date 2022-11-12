@@ -38,7 +38,7 @@ class Heatmap {
         this.createYAxis(setName, this.height);
         this.createColorScale(data);  
 
-        this.drawRect(data, this.xScale, this.yScale, this.colorScale);
+        this.drawRect(data, this.xScale, this.yScale, this.colorScale, "Avg. Unique Colors");
 
         let yLabel = d3.select("#svg_heatmap").append("g").attr("id", "heatmap_ylabel");
         yLabel.append("text")
@@ -141,7 +141,7 @@ class Heatmap {
      * @param {Function} colorScale 
      * @param {HTML element} svg 
      */
-    drawRect(data, yearScale, set_scale, colorScale) {
+    drawRect(data, yearScale, set_scale, colorScale, name) {
         let rec = d3.select("#heat_tool_tip").append('g').attr('id', 'heat_rect')
             .selectAll('rect')
             .data(data)
@@ -170,8 +170,18 @@ class Heatmap {
         d3.select("#svg_heatmap")
             .append('g')
             .attr('id', 'legend')
-            .attr("transform", "translate(10,10)")
+            .attr("transform", "translate(10,50)")
             .call(legend);
+
+        d3.select("#svg_heatmap")
+            .append("g")
+            .attr("id", "legend_label")
+            .append("text")
+            .raise()
+            .text(name)
+            .attr("x", 10)
+            .attr("y", 40)
+            .attr("font-size", 15)
         
     }
     
@@ -256,16 +266,7 @@ class Heatmap {
             .attr("x", 0)
             .attr("y", 0);
         
-        d3.select("#heat_tool_tip").selectAll("text").remove()
-
-        // let legend = d3.legendColor()
-        //     .scale(this.colorScale)
-        
-        // d3.select("#heat_tool_tip")
-        //     .append('g')
-        //     .attr('id', 'legend')
-        //     .attr("transform", "translate(10,10)")
-        //     .call(legend);
+        d3.select("#heat_tool_tip").selectAll("text").remove();
     }
 
     /**
@@ -279,6 +280,7 @@ class Heatmap {
         this.firstOption = e.target.value;
         d3.select("#heat_tool_tip").remove();
         d3.select("#svg_heatmap").select("#legend").remove();
+        d3.select("#svg_heatmap").select("#legend_label").remove();
         d3.select("#svg_heatmap").append("g").attr("id", "heat_tool_tip")
 
         let data = this.switchDataSets();
@@ -288,7 +290,8 @@ class Heatmap {
         
         this.createYAxis(setName, this.height);
         this.createColorScale(data);  
-        this.drawRect(data, this.xScale, this.yScale, this.colorScale)
+        let name = (e.target.value === "num_set")? "Avg. Unique Colors" : "Frequency";
+        this.drawRect(data, this.xScale, this.yScale, this.colorScale, name);
     }
 
     //#endregion
