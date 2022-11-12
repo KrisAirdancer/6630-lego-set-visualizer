@@ -31,10 +31,12 @@
         <div id="piecesLineChart" class="flex-container-row main-div">
 
             <div class="main-text leftVisElement">
-                <h2>Pieces per Year</h2>
-                <p id="p_piecesLineChart">See how the number of pieces per set has changed over time</p>
+                <h2>Sets & Piece Counts</h2>
+                <p id="p_piecesLineChart">Here, we take a look at how the number of pieces in Lego sets has changed over time. We can easily see that Lego likes to keep the number of pieces in their sets to 1,000-2,000 pices or less. But since around the year 2000, they've begun releasing a fair number of sets with more pices than that. Sometimes far, far more.</p>
                 <br>
-                <p>Each dot represents one set. y-axis is piece count.</p>
+                <p>Now, check the "Log Scale" box to expand the sets out. We can now get a better idea of how the number of sets released by Lego has changed over time. Legos weren't very popular initially, but as time went on, they caught on. Today, Legos are the sole product of the Lego Corporation. Not the case when they first got started.</p>
+                <br>
+                <p>Hover over each dot to see the name of the set it represents and its exact piece count.</p>
             </div>
 
             <div id="piecesLineChart-group" class="rightVisElement flex-container-column">
@@ -58,16 +60,16 @@
                 <div id="div_themesChartToggle-group">
 
                     <input type="checkbox" name="name_themeChartToggle-themes" id="themeChartToggle-themes">
-                    <label for="name_lineChartToggle-themes">Themes per Year</label>
+                    <label for="name_lineChartToggle-themes">Number of Themes</label>
 
                     <input type="checkbox" name="name_themeChartToggle-colors" id="themeChartToggle-colors">
-                    <label for="name_lineChartToggle-colors">Colors per Year</label>
+                    <label for="name_lineChartToggle-colors">Number of Unique Colors</label>
 
                     <input type="checkbox" name="name_themeChartToggle-pieces" id="themeChartToggle-pieces">
-                    <label for="name_lineChartToggle-pieces">Ave. Pieces per Year</label>
+                    <label for="name_lineChartToggle-pieces">Avg. Pieces per Set</label>
 
                     <input type="checkbox" name="name_themeChartToggle-sets" id="themeChartToggle-sets">
-                    <label for="name_lineChartToggle-sets">Sets per Year</label>
+                    <label for="name_lineChartToggle-sets">Number of Sets</label>
 
                 </div>
 
@@ -75,10 +77,12 @@
             </div>
 
             <div class="main-text rightVisElement">
-                <h2>Temporal Comparator</h2>
-                <p>Compare trends in lego metrics over time.</p> 
+                <h2>Themes, Colors, Pieces, and Sets</h2>
+                <p>In this visualization, we explore some additional Lego metrics and how they relate to each other.</p> 
                 <br>
-                <p>Checkbox logic not yet implemented.</p>   
+                <p>Feel free to toggle the different charts on and off to compare thier trends.</p>
+                <br>
+                <p>An couple points of interest are the spike in the number of sets released and the number of unique colors across all sets between ~1995 and 2008. This large growth could have been driven by many things, but it is possible that the Lego Coproperation's licensing of Star Wars in 1999 or the introduction of the Lego Mindstorms kits that same year. From 2010 onward, Lego began to rapidly aquire licenses to manufacture sets for a broad range of popular movies and TV shows, leading to an explosion in the number of sets they have available.</p>
             </div>
 
         </div>
@@ -88,13 +92,16 @@
 
             <div class="main-text leftVisElement">
 
-                <h2>The Squiggler</h2>
-                <p id="p_theSquiggler">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Tempus imperdiet nulla malesuada pellentesque elit.</p>
+                <h2>Lego Trend Relationships</h2>
+                <p id="p_theSquiggler">This is a strange one for sure. But don't worry, it isn't as complicated as that Lego Technic kit your gradma gave you for your 6th birthday.</p>
                 <br>
-                <p>Varius vel pharetra vel turpis nunc. Ullamcorper a lacus vestibulum sed arcu non. Est velit egestas dui id ornare. Mauris commodo quis imperdiet massa tincidunt nunc pulvinar sapien et. Blandit libero volutpat sed cras ornare. Diam phasellus vestibulum lorem sed risus ultricies tristique nulla. Risus in hendrerit gravida rutrum quisque non tellus orci. Vel pharetra vel turpis nunc eget lorem dolor sed viverra. Tincidunt arcu non sodales neque sodales ut etiam. Amet purus gravida quis blandit. Suspendisse ultrices gravida dictum fusce ut placerat. Pharetra magna ac placerat vestibulum lectus mauris. Id velit ut tortor pretium. Mauris rhoncus aenean vel elit scelerisque. Id velit ut tortor pretium viverra.</p>
-           
-            </div>
+                <p>What we're looking at here is the relationships between the number of themes, number of unique colors, and average number of pieces per set over time. Each dot is a year and thier position shows thier value.</p>
+                <br>
+                <p>The big, and probably obvious, takeaways from this is that as the number of themes increases, so does the number of sets released and the number of unique colors. Although, this seems to be only a weak relationship. Looking at the nmber of unique colors vs number of themes plot, we can see that since 2016, this relationship has inverted. And that's not to mention how messy this relationship was before 1995!</p>
+                <br>
+                <p>Use the buttons to the right to scroll through the different relationships.</p>
 
+            </div>
 
             <div id="squiggler-svg-group" class="flex-container-column rightVisElement">
 
@@ -112,21 +119,36 @@
                 <svg id="svg_theSquiggler"></svg>
             </div>
 
-
         </div>
 
 
         <div id="heatmap" class="flex-container-column main-div">
 
             <div class="main-text heatmap-text">
-                <h2>Trend Heatmap</h2>
-                <p id="p_heatmap">This portion of the project is looking at how color usage changed over time. This visualization is broken into three main segments: Sets, Colors, and Themes. </p>
+                <h2>Colors!</h2>
+                <p>
+                    Finally, let's take a deeper look at the colors that Lego has offered since they started manufacturing Lego bricks back in 1949.
+                </p>
                 <br>
-                <p id="p_heatmap">The first segment is looking at how sets used colors throughout time. In this data set there are over 16,000 sets, in order to have the visualization readable the number of sets have been binned based on the number of pieces, and the color usage value was the average number of unique colors that have been used by that binned segment. Over time the number of unique colors within given sets has increased over time, especially in sets that have a larger piece count.</p>
+                <p>
+                    The heatmap below shows the number of pieces in a set on the y-axis and the average number of unique colors among all sets in a given year is encoded in the shade of the block (brick?). Do note that sets with similar piece counts have been grouped to reduce the number of blocks in the heatmap.
+                </p>
                 <br>
-                <p id="p_heatmap">The second segment is looking at how all of the unique colors changed over time. The y-axis is all of the unique colors that were in the data set, and the scaling value is the number of times this color was used within all sets in a given year. Overall, more colors are used as the time progresses.</p>
+                <p>
+                    If you use the toggle below to switch visualizations, you will see a new heatmap with each unique color Lego has ever offered along the y-axis with the frequency with which that color appeared in Lego sets encoded by the color of the bar.
+                </p>
                 <br>
-                <p id="p_heatmap">The last segment of this visualization is exploring how many unique colors each theme uses in a given year. This visualization shows as time progresses so does the number of unique colors used in each theme. However, this growth is relatively minimal.</p>
+                <p>
+                    From these two heatmaps we can see a few interesting trends.
+                </p>
+                <br>
+                <p>
+                    The first of these is that, not surprisingly, the number of unique colors offered in a single set generally increases as the number of pieces in the set increases. In addition to this, it is also notable that the overall number of unique colors offered accross sets of all sizes has increased over time.
+                </p>
+                <br>
+                <p>
+                    Finally, we can see that the number of unique colors offered by Lego has increased over time. This, of course, makes sence considering how many more sets accross a wide variety of themes they offer today versus the past. We can also see that certain colors have become much more common in sets. Among these are "Yellow," "Reddish Brown," "Red," "White," "Tan," and "Black" to name a few. It is also interesting to notice how some colors, such as "Red," "Light Gray," and "Green," among many others, have come in and out of use over the years, as evidenced by the breaks in the horizontal rows.
+                </p>
             </div>
 
             <div id="div_heatmap-select-group">
@@ -146,7 +168,7 @@
     </main>
 
     <footer class="main-div">
-        <p>Webpage + Visualizations by Vista Marston & Chris Marston | Data coutesy <a href="https://rebrickable.com/downloads/">Rebrickable Lego Database</a></p>
+        <p>Webpage + Visualizations by Vista Marston & Chris Marston | Data coutesy the <a href="https://rebrickable.com/downloads/">Rebrickable Lego Database</a></p>
     </footer>
     
 </body>
@@ -158,3 +180,6 @@
 <script src="js/themesLineChart.js"></script>
 
 </html>
+
+<!-- TODO: Change all instances of "Ave." to "Avg." -->
+<!-- TODO: Put all text into a spell checker. No typos! -->
