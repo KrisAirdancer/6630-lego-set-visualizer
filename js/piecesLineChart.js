@@ -200,6 +200,14 @@ class PiecesLineChart {
                 .text("Number of Pieces: " + d.num_parts)
                 .attr('x', x + 34)
                 .attr('y', y + 60) 
+
+            d3.select("#piecesLCTooltip")
+                .raise()
+                .append("text")
+                .attr("id", "toolText")
+                .text("Year Published: " + d.year)
+                .attr('x', x + 34)
+                .attr('y', y + 80) 
         }
         
     }
