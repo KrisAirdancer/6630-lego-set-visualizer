@@ -232,7 +232,7 @@ class Heatmap {
                 .raise()
                 .append("text")
                 .attr("id", "toolText")
-                .text("Year: " +  d.year)
+                .text("Year Published: " +  d.year)
                 .attr('x', x + 34)
                 .attr('y', y + 90) 
         }
