@@ -1,5 +1,3 @@
-// Connected scatterplot - The Squiggler
-
 /**
  * This class is used to create the connected scatterplot
  * to visualization the average number of color per set by 
@@ -564,5 +562,4 @@ class TheSquiggler {
     }
 
     //#endregion
-
 }

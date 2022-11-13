@@ -1,13 +1,7 @@
-// Number of pieces per set per year
-
-// TODO: This is not a line chart. It is a scatterplot. Rename this file.
-// TODO: Change the id and other naming/references to match the above filename change as well (eg. the id attribute in the HTML).
-
 class PiecesLineChart {
 
     constructor(data) {
         this.data = data;
-        console.log(data);
 
         // Get SVG Data
         this.svgHeight = parseInt(d3.select('#svg_piecesLineChart').style('height'))

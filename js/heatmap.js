@@ -64,8 +64,6 @@ class Heatmap {
         this.colorScale = d3.scaleLinear()
             .domain([min_color, max_color])
             .range(["white","#DDB000"]);
-            // .range(["#f7fbff","#08306b"]); // <-- Vista's version
-            // TODO: Choose better colors for the Heatmap
     }
 
     /**
@@ -130,7 +128,6 @@ class Heatmap {
     }
     
     //#endregion
-
 
     //#region DRAWING HEATMAP
     
@@ -302,7 +299,6 @@ class Heatmap {
 
     //#endregion
 
-
     //#region SELECTION Data Processing
 
     /**
@@ -366,7 +362,6 @@ class Heatmap {
 
         return newData;
     }
-
 
     /**
      * A helper function that will cluster the unqiue color based on

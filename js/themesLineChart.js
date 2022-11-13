@@ -55,7 +55,6 @@ class ThemesLineChart {
 
         this.yAxis = d3.axisLeft();
 
-        // TODO: Change the colors of the lines to Legoish colors.
         let colorScale = d3.scaleOrdinal()
             .domain(['Theme','Sets','Pieces','Colors'])
             .range(['white','#FF5722','#90A4AE','#FFCF04']);
@@ -128,6 +127,7 @@ class ThemesLineChart {
             .attr("transform", "rotate(-90)")
             .text("Item Count")
             .attr("font-size", 15)
+            
         // Draw yAxis
         this.yAxis.scale(this.yScale);
 

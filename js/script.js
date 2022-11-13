@@ -1,8 +1,3 @@
-// TODO: Rename all .js files to upper camel case: lineChart.js -> LineChart.js
-// TODO: Need to add axis labels to all visualizations.
-// TODO: Clear out all console.log() calls from ALL files.
-// TODO: Clear out all commented out code from ALL files.
-
 data_list = [
             d3.csv('./data/inventories.csv'), // used
             d3.csv('./data/inventory_parts.csv'), // used
@@ -19,8 +14,8 @@ Promise.all(data_list).then(data => {
         let heatmap_vis = new Heatmap(data);
         let squiggler = new TheSquiggler(data);
         let themesLineChart = new ThemesLineChart(data);
-        themesLineChart.drawLineChart();
         let piecesLineChart = new PiecesLineChart(data);
+        themesLineChart.drawLineChart();
         piecesLineChart.drawLineChart();
     });
 
