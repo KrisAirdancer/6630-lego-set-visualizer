@@ -58,7 +58,7 @@ class TheSquiggler {
                 .attr("text-anchor", "end")
                 .attr("x", 0)
                 .attr("y", 0)
-                .attr('transform', `translate(${this.width/2}, ${this.height - 10})`)
+                .attr('transform', `translate(${(this.width / 2) + 60}, ${this.height - 10})`)
                 .text("Number of Unqiue Colors")
                 .attr("font-size", 15)
 
@@ -76,7 +76,7 @@ class TheSquiggler {
         let yGroup = d3.select("#svg_theSquiggler").append('g').attr("id", "squiggler_ylabel");
         yGroup.append("text")
                 .attr("text-anchor", "end")
-                .attr("x", -150)
+                .attr("x", -190)
                 .attr("y", 13)
                 .attr("transform", "rotate(-90)")
                 .text("Number of Themes")
@@ -291,7 +291,6 @@ class TheSquiggler {
         let yLabel = d3.select("#svg_theSquiggler").append('g').attr("id", "squiggler_ylabel");
         let xLabel = d3.select("#svg_theSquiggler").append('g').attr("id", "squiggler_xlabel");
 
-
         switch(this.clicked) {
             case -3: // Unique Color vs theme
                 xLabel.append("text")
@@ -317,7 +316,7 @@ class TheSquiggler {
                     .attr("text-anchor", "end")
                     .attr("x", 0)
                     .attr("y", 0)
-                    .attr('transform', `translate(${this.width/2}, ${this.height - 10})`)
+                    .attr('transform', `translate(${(this.width / 2) + 60}, ${this.height - 10})`)
                     .text("Number of Themes")
                     .attr("font-size", 15);
 
@@ -325,7 +324,6 @@ class TheSquiggler {
                     .attr("text-anchor", "end")
                     .attr("x", -150)
                     .attr("y", 13)
-                    .attr("transform", "rotate(-90)")
                     .text("Average Number of Pieces")
                     .attr("font-size", 15);
                 break;
@@ -335,7 +333,7 @@ class TheSquiggler {
                     .attr("text-anchor", "end")
                     .attr("x", 0)
                     .attr("y", 0)
-                    .attr('transform', `translate(${this.width/2}, ${this.height - 10})`)
+                    .attr('transform', `translate(${(this.width / 2) + 60}, ${this.height - 10})`)
                     .text("Average Number of Pieces")
                     .attr("font-size", 15);
 
@@ -349,17 +347,18 @@ class TheSquiggler {
                 break;
 
             case 0: // Theme vs color
+
                 xLabel.append("text")
                     .attr("text-anchor", "end")
                     .attr("x", 0)
                     .attr("y", 0)
-                    .attr('transform', `translate(${this.width/2}, ${this.height - 10})`)
+                    .attr('transform', `translate(${(this.width / 2) + 120}, ${this.height - 10})`)
                     .text("Average Number of Unique Colors")
                     .attr("font-size", 15);
 
                 yLabel.append("text")
                     .attr("text-anchor", "end")
-                    .attr("x", -150)
+                    .attr("x", -190)
                     .attr("y", 13)
                     .attr("transform", "rotate(-90)")
                     .text("Number of Themes")
@@ -370,13 +369,13 @@ class TheSquiggler {
                     .attr("text-anchor", "end")
                     .attr("x", 0)
                     .attr("y", 0)
-                    .attr('transform', `translate(${this.width/2}, ${this.height - 10})`)
+                    .attr('transform', `translate(${(this.width / 2) + 100}, ${this.height - 10})`)
                     .text("Average Number of Pieces")
                     .attr("font-size", 15);
 
                 yLabel.append("text")
                     .attr("text-anchor", "end")
-                    .attr("x", -150)
+                    .attr("x", -190)
                     .attr("y", 13)
                     .attr("transform", "rotate(-90)")
                     .text("Number of Themes")
@@ -387,13 +386,13 @@ class TheSquiggler {
                     .attr("text-anchor", "end")
                     .attr("x", 0)
                     .attr("y", 0)
-                    .attr('transform', `translate(${this.width/2}, ${this.height - 10})`)
+                    .attr('transform', `translate(${(this.width / 2) + 60}, ${this.height - 10})`)
                     .text("Number of Themes")
                     .attr("font-size", 15);
 
                 yLabel.append("text")
                     .attr("text-anchor", "end")
-                    .attr("x", -150)
+                    .attr("x", -170)
                     .attr("y", 13)
                     .attr("transform", "rotate(-90)")
                     .text("Average Number of Pieces")
@@ -405,13 +404,13 @@ class TheSquiggler {
                     .attr("text-anchor", "end")
                     .attr("x", 0)
                     .attr("y", 0)
-                    .attr('transform', `translate(${this.width/2}, ${this.height - 10})`)
+                    .attr('transform', `translate(${(this.width / 2) + 60}, ${this.height - 10})`)
                     .text("Number of Themes")
                     .attr("font-size", 15);
 
                 yLabel.append("text")
                     .attr("text-anchor", "end")
-                    .attr("x", -150)
+                    .attr("x", -160)
                     .attr("y", 13)
                     .attr("transform", "rotate(-90)")
                     .text("Average Number of Unique Colors")

@@ -17,7 +17,7 @@ body {
        in the event that the background-image
        doesn't load. */
     background-color: var(--lego-yellow);
-    background-image: url("assets/lego_base.jpg");
+    background-image: url("lego_base.jpg");
     background-size: 50%;
 }
 
