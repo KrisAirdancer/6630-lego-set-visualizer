@@ -212,3 +212,11 @@ h2 {
     border-radius: 10px;
     width: 75px;
 }
+
+#explainBox {
+    text-overflow: wrap;
+    text-align: center;
+    font-size: medium;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    max-width: 100;
+}
