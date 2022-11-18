@@ -4,6 +4,7 @@ class PiecesLineChart {
         this.data = data;
 
         // Get SVG Data
+        d3.select("#svg_piecesLineChart").style("height", "1500")
         this.svgHeight = parseInt(d3.select('#svg_piecesLineChart').style('height'))
         this.svgWidth = parseInt(d3.select('#svg_piecesLineChart').style('width'))
 
@@ -18,12 +19,12 @@ class PiecesLineChart {
 
         // X-Scale
         this.xScale = d3.scaleLinear()
-                       .domain([this.yearMin, this.yearMax]) // From
+                       .domain([this.num_partsMin, Math.ceil(this.num_partsMax * 0.001) * 1000]) // From
                        .range([60, this.svgWidth - 20]) // To
 
         // Y-Scale
         this.yScale = d3.scaleLinear()
-                       .domain([this.num_partsMin, Math.ceil(this.num_partsMax * 0.001) * 1000])
+                       .domain([this.yearMin, this.yearMax])
                        .range([this.svgHeight - 25, 20])
 
         this.yAxis = undefined;
@@ -44,31 +45,32 @@ class PiecesLineChart {
         let svg = d3.select('#svg_piecesLineChart');
 
         // Draw xAxis
-        let xAxis = d3.axisBottom()
-                      .scale(this.xScale)
-                      .tickFormat(d => `${d}`)
-                      .tickValues([1949, 1960, 1970, 1980, 1990, 2000, 2010, 2022])
-
+        
+        // Draw yAxis
+        this.xAxis = d3.axisBottom()
+        .scale(this.xScale)
+        .tickValues([0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000]);
+        
         svg.append('g')
-           .attr('id', 'x-axis')
-           .attr('transform', `translate(${0}, ${this.svgHeight - 25})`)
-           .call(xAxis)
-
+        .attr('id', 'x-axis')
+        .attr('transform', `translate(${0}, ${this.svgHeight - 25})`)
+        .call(this.xAxis)
+        
         let axisGroup = svg.append('g').attr("id", "x label");
         axisGroup.append("text")
-                .attr("text-anchor", "end")
-                .attr("x", 0)
-                .attr("y", 0)
-                .attr('transform', `translate(${(this.svgWidth/2) + 25}, ${this.svgHeight})`)
-                .text("Year")
-                .attr("font-size", 15)
-
-        // Draw yAxis
+        .attr("text-anchor", "end")
+        .attr("x", 0)
+        .attr("y", 0)
+        .attr('transform', `translate(${(this.svgWidth/2) + 25}, ${this.svgHeight})`)
+        .text("Year")
+        .attr("font-size", 15)
+        
         this.yAxis = d3.axisLeft()
-                      .scale(this.yScale)
-                      .tickValues([0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000]);
-
-        svg.append('g')
+            .scale(this.yScale)
+            .tickFormat(d => `${d}`)
+            .tickValues([1949, 1960, 1970, 1980, 1990, 2000, 2010, 2022])
+        
+            svg.append('g')
            .attr('id', 'y-axis')
            .attr('transform', `translate(${60}, ${0})`)
            .call(this.yAxis)
@@ -94,8 +96,13 @@ class PiecesLineChart {
            .data(this.data)
            .enter()
            .append('circle')
-           .attr('cx', d => this.xScale(d.year))
-           .attr('cy', d => this.yScale(d.num_parts))
+           .attr('cy', d => {
+                if(d.year === '1949')
+                    return this.yScale(d.year) + Math.abs(Math.random())
+                
+                return this.yScale(d.year) + Math.random()*13
+           })
+           .attr('cx', d => this.xScale(d.num_parts))
            .attr('r', '2px')
            .style('fill', '#FFCF04')
            .style('stroke', 'black')
@@ -118,16 +125,16 @@ class PiecesLineChart {
             if (e.target.checked) {
 
                 // Change yScale
-                this.yScale = d3.scaleLog()
+                this.xScale = d3.scaleLog()
                                 .domain([this.num_partsMin, Math.ceil(this.num_partsMax * 0.001) * 1000])
-                                .range([this.svgHeight - 25, 20])
+                                .range([this.svgWidth - 25, 20])
                                 .nice();
             } else {
 
                 // Y-Scale
-                this.yScale = d3.scaleLinear()
+                this.xScale = d3.scaleLinear()
                                 .domain([this.num_partsMin, Math.ceil(this.num_partsMax * 0.001) * 1000])
-                                .range([this.svgHeight - 25, 20])
+                                .range([this.svgWidth - 25, 20])
                                 .nice();
             }
 
@@ -135,13 +142,13 @@ class PiecesLineChart {
                 .selectAll('circle')
                 .transition()
                 .duration(800)
-                .attr('cx', d => this.xScale(d.year))
-                .attr('cy', d => this.yScale(d.num_parts))
+                .attr('cy', d => this.yScale(d.year) + Math.random() * 2)
+                .attr('cx', d => this.xScale(d.num_parts))
 
             d3.selectAll('#y-axis')
                 .transition()
                 .duration(800)
-                .call(d3.axisLeft(this.yScale))
+                .call(d3.axisBottom(this.xScale))
         })
     }
 
