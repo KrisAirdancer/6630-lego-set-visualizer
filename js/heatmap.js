@@ -35,7 +35,7 @@ class Heatmap {
         setName = setName.sort((a,b) => (a>b)?-1:1);
 
         this.createXAxis(yearData, this.width, this.height);
-        this.createYAxis(setName, this.height - 5);
+        this.createYAxis(setName, this.height);
         this.createColorScale(data);  
 
         this.drawRect(data, this.xScale, this.yScale, this.colorScale, "Avg. Unique Colors");
@@ -43,11 +43,22 @@ class Heatmap {
         let yLabel = d3.select("#svg_heatmap").append("g").attr("id", "heatmap_ylabel");
         yLabel.append("text")
             .attr("text-anchor", "end")
-            .attr("x", -(this.height / 2))
+            .attr("x", -this.height/2)
             .attr("y", this.width+ 30)
             .attr("transform", "rotate(-90)")
             .text("Pieces Per Set")
             .attr("font-size", 15)
+
+        let item = d3.select("#svg_heatmap").append("g").attr("id", "text_box");
+
+        let value = 0;
+        for(let i = 0; i < 17000; i += 340) {
+            item.append("text")
+                .attr("x", this.width-this.padding.right)
+                .attr("y", this.yScale(value++)+13)
+                .text(i + "-" + (i + 340))
+                .attr("font-size", 10)
+        }
     }
 
     //#region Setup
@@ -89,7 +100,7 @@ class Heatmap {
     createXAxis(yearData, width, height) {
         this.xScale = d3.scaleBand()
             .domain(yearData)
-            .range([this.padding.left, width])
+            .range([this.padding.left, width-this.padding.right-10])
             .padding(.01);
 
         let xaxis = d3.axisBottom(this.xScale).tickFormat(d => {
@@ -97,7 +108,7 @@ class Heatmap {
         }).tickValues(this.xScale.domain().filter(function(d,i){ return !(i%5)}))
         
         d3.select("#svg_heatmap").append("g").attr("id", "x-axis")
-            .attr("transform", "translate(0," + (height - 5) + ")")
+            .attr("transform", "translate(0," + height + ")")
             .call(xaxis);
 
         let xLabel = d3.select("#svg_heatmap").append("g").attr("id", "heatmap_xlabel");
@@ -105,8 +116,8 @@ class Heatmap {
         xLabel.append("text")
             .attr("text-anchor", "end")
             .attr("x", 0)
-            .attr("y", 10)
-            .attr('transform', `translate(${this.width / 2}, ${this.height + 20})`)
+            .attr("y", 0)
+            .attr('transform', `translate(${this.width/2}, ${this.height+20})`)
             .text("Year")
             .attr("font-size", 15)
     }
@@ -236,6 +247,7 @@ class Heatmap {
                 .attr('x', x + 34)
                 .attr('y', y + 90) 
         }
+        
     }
 
     /**
@@ -252,6 +264,7 @@ class Heatmap {
             .attr("ry", 20);
         
         d3.select("#heat_tool_tip").selectAll("text").style("opacity", 1);
+
     }
 
     /**
@@ -289,10 +302,44 @@ class Heatmap {
         let setName = [...d3.group(data, d=> d.yValue).keys()];
         setName = setName.sort((a,b) => (a>b)?-1:1);
         
-        this.createYAxis(setName, this.height - 5);
+        this.createYAxis(setName, this.height);
         this.createColorScale(data);  
         let name = (e.target.value === "num_set")? "Avg. Unique Colors" : "Frequency";
         this.drawRect(data, this.xScale, this.yScale, this.colorScale, name);
+        this.addheatLabels(data);
+    }
+
+    /**
+     * A helper function that will create a group labels 
+     * for the heatmap
+     */
+    addheatLabels(data) {
+        if (this.firstOption === "num_set") {
+            d3.select("#svg_heatmap").select("#color_box").remove();
+            let item = d3.select("#svg_heatmap").append("g").attr("id", "text_box");
+
+            let value = 0;
+            for(let i = 0; i < 17000; i += 340) {
+                item.append("text")
+                    .attr("x", this.width-this.padding.right)
+                    .attr("y", this.yScale(value++)+13)
+                    .text(i + "-" + (i + 340))
+                    .attr("font-size", 10)
+            }
+
+        } else {
+            d3.select("#svg_heatmap").select("#text_box").remove();
+            let item = d3.select("#svg_heatmap").append("g").attr("id", "color_box");
+            item.selectAll("rect")
+                .data(data)
+                .enter()
+                .append("rect")
+                .attr("x", this.width -this.padding.right)
+                .attr("y", d => this.yScale(d.yValue))
+                .attr("height", this.yScale.bandwidth)
+                .attr("width", this.padding.right)
+                .attr("fill", d => "#"+d.yValue)
+        }
     }
 
     //#endregion
@@ -312,8 +359,8 @@ class Heatmap {
         if (this.firstOption === "num_set") {
             yLabel.append("text")
                 .attr("text-anchor", "end")
-                .attr("x", -(this.height / 2))
-                .attr("y", this.width + 30)
+                .attr("x", -this.height/2)
+                .attr("y", this.width+ 30)
                 .attr("transform", "rotate(-90)")
                 .text("Pieces Per Set")
                 .attr("font-size", 15)
@@ -322,8 +369,8 @@ class Heatmap {
         else {
             yLabel.append("text")
                 .attr("text-anchor", "end")
-                .attr("x", -(this.height / 2))
-                .attr("y", this.width + 30)
+                .attr("x", -this.height/2)
+                .attr("y", this.width+ 30)
                 .attr("transform", "rotate(-90)")
                 .text("Color Name")
                 .attr("font-size", 15)
@@ -393,10 +440,10 @@ class Heatmap {
                 if(keys[j] !== undefined) {                     
                     newData[index++] = {
                         year: year[0],
-                        yValue: color_group.get(keys[j])[0].name,
+                        yValue: color_group.get(keys[j])[0].rgb,
                         scaleValue: color_group.get(keys[j]).length,
                         textValue: `Unqiue Color name: ${color_group.get(keys[j])[0].name}.`,
-                        textValue2: "Usage of Color: "
+                        textValue2: "Usage of Color: ",
                     }
                 }
         }})

@@ -45,7 +45,6 @@ class TheSquiggler {
                     .domain([0, d3.max(tempData, d => d.x)])
                     .range([this.padding.left, this.width - this.padding.right]);
         
-                    
         let svg = d3.select("#svg_theSquiggler")
             .append("g")
             .attr("id", "squiggler-x-axis");
