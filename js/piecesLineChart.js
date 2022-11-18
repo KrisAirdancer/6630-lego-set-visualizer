@@ -366,7 +366,6 @@ class PiecesLineChart {
                 .attr('x', x + 34)
                 .attr('y', y + 75) 
         }
-        
     }
 
     mouseMoveEvent(e,d) {
