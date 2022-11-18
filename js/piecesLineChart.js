@@ -30,12 +30,12 @@ class PiecesLineChart {
             .attr("x", "200")
             .attr("y", "180")
             .attr("id", "explainBox")
-            .text("The maximum number of pieces has increased significally.")
+            .text("The maximum number of pieces has increased significally,")
         textBox.append("text")
             .attr("x", "200")
             .attr("y", "200")
             .attr("id", "explainBox")
-            .text("The average number of pieces hasn't increased as much");
+            .text("while the average number of pieces hasn't increased as much");
         textBox.append("text")
             .attr("x", "200")
             .attr("y", "220")
@@ -253,7 +253,7 @@ class PiecesLineChart {
                     .attr("y", "180")
                     .attr("id", "explainBox")
                     .style("opacity", "0")
-                    .text("The maximum number of pieces has increased significally.")
+                    .text("The maximum number of pieces has increased significally,")
                     .transition()
                     .duration(3000)
                     .style("opacity", 1)
@@ -262,7 +262,7 @@ class PiecesLineChart {
                     .attr("y", "200")
                     .attr("id", "explainBox")
                     .style("opacity", "0")
-                    .text("The average number of pieces hasn't increased as much")
+                    .text("while the average number of pieces hasn't increased as much")
                     .transition()
                     .duration(3000)
                     .style("opacity", 1);
