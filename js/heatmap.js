@@ -53,8 +53,6 @@ class Heatmap {
         
         let value = 0;
         for(let i = 340; i < 17000; i += 340) {
-            // console.log('HERE')
-
             item.append("text")
                 .attr("x", this.width - this.padding.right)
                 .attr("y", () => {
@@ -94,7 +92,7 @@ class Heatmap {
     createYAxis(setName, height) {
         this.yScale = d3.scaleBand()
             .domain(setName)
-            .range([this.padding.top, height])
+            .range([this.padding.bottom, height-this.padding.bottom])
             .padding(.01);
     }
 
@@ -116,7 +114,7 @@ class Heatmap {
         }).tickValues(this.xScale.domain().filter(function(d,i){ return !(i%5)}))
         
         d3.select("#svg_heatmap").append("g").attr("id", "x-axis")
-            .attr("transform", "translate(0," + height + ")")
+            .attr("transform", "translate(0," + (height-this.padding.bottom) + ")")
             .call(xaxis);
 
         let xLabel = d3.select("#svg_heatmap").append("g").attr("id", "heatmap_xlabel");
@@ -125,7 +123,7 @@ class Heatmap {
             .attr("text-anchor", "end")
             .attr("x", 0)
             .attr("y", 0)
-            .attr('transform', `translate(${this.width/2}, ${this.height+20})`)
+            .attr('transform', `translate(${this.width/2}, ${this.height+10})`)
             .text("Year")
             .attr("font-size", 15)
     }
