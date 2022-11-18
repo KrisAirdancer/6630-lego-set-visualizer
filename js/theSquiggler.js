@@ -58,7 +58,7 @@ class TheSquiggler {
                 .attr("text-anchor", "end")
                 .attr("x", 0)
                 .attr("y", 0)
-                .attr('transform', `translate(${(this.width / 2) + 60}, ${this.height - 10})`)
+                .attr('transform', `translate(${(this.width / 2) + 70}, ${this.height - 5})`)
                 .text("Number of Unqiue Colors")
                 .attr("font-size", 15)
 
@@ -297,7 +297,7 @@ class TheSquiggler {
                     .attr("text-anchor", "end")
                     .attr("x", 0)
                     .attr("y", 0)
-                    .attr('transform', `translate(${this.width/2}, ${this.height - 10})`)
+                    .attr('transform', `translate(${this.width/2}, ${this.height - 5})`)
                     .text("Number of Themes")
                     .attr("font-size", 15)
 
@@ -316,7 +316,7 @@ class TheSquiggler {
                     .attr("text-anchor", "end")
                     .attr("x", 0)
                     .attr("y", 0)
-                    .attr('transform', `translate(${(this.width / 2) + 60}, ${this.height - 10})`)
+                    .attr('transform', `translate(${(this.width / 2) + 60}, ${this.height - 5})`)
                     .text("Number of Themes")
                     .attr("font-size", 15);
 
@@ -333,7 +333,7 @@ class TheSquiggler {
                     .attr("text-anchor", "end")
                     .attr("x", 0)
                     .attr("y", 0)
-                    .attr('transform', `translate(${(this.width / 2) + 60}, ${this.height - 10})`)
+                    .attr('transform', `translate(${(this.width / 2) + 60}, ${this.height - 5})`)
                     .text("Average Number of Pieces")
                     .attr("font-size", 15);
 
@@ -352,7 +352,7 @@ class TheSquiggler {
                     .attr("text-anchor", "end")
                     .attr("x", 0)
                     .attr("y", 0)
-                    .attr('transform', `translate(${(this.width / 2) + 120}, ${this.height - 10})`)
+                    .attr('transform', `translate(${(this.width / 2) + 120}, ${this.height - 5})`)
                     .text("Average Number of Unique Colors")
                     .attr("font-size", 15);
 
@@ -369,7 +369,7 @@ class TheSquiggler {
                     .attr("text-anchor", "end")
                     .attr("x", 0)
                     .attr("y", 0)
-                    .attr('transform', `translate(${(this.width / 2) + 100}, ${this.height - 10})`)
+                    .attr('transform', `translate(${(this.width / 2) + 100}, ${this.height - 5})`)
                     .text("Average Number of Pieces")
                     .attr("font-size", 15);
 
@@ -386,7 +386,7 @@ class TheSquiggler {
                     .attr("text-anchor", "end")
                     .attr("x", 0)
                     .attr("y", 0)
-                    .attr('transform', `translate(${(this.width / 2) + 60}, ${this.height - 10})`)
+                    .attr('transform', `translate(${(this.width / 2) + 60}, ${this.height - 5})`)
                     .text("Number of Themes")
                     .attr("font-size", 15);
 
@@ -404,7 +404,7 @@ class TheSquiggler {
                     .attr("text-anchor", "end")
                     .attr("x", 0)
                     .attr("y", 0)
-                    .attr('transform', `translate(${(this.width / 2) + 60}, ${this.height - 10})`)
+                    .attr('transform', `translate(${(this.width / 2) + 60}, ${this.height - 5})`)
                     .text("Number of Themes")
                     .attr("font-size", 15);
 
