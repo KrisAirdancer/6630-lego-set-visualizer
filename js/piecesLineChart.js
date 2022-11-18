@@ -74,6 +74,7 @@ class PiecesLineChart {
                        .range([this.svgHeight - 25, 20])
 
         this.yAxis = undefined;
+        
     }
 
     //#region ANIMATE MEAN VALUE
@@ -158,7 +159,7 @@ class PiecesLineChart {
            .attr("font-size", 15)
 
         this.draw_average()
-        
+        d3.select("#piece_story").on("click", e => this.switchStory(e));
     }
 
     drawDots() {
@@ -275,7 +276,14 @@ class PiecesLineChart {
     //#endregion
 
     //#region TRANSFER TO HISTORGRAMS
+    /**
+     * A helper function that will switch between the history gram
+     * and the scatter plot, with transitions. 
+     * @param {Event} e 
+     */
+    switchStory(e) {
 
+    }
     //#endregion
 
 }
