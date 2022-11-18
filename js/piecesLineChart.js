@@ -11,14 +11,14 @@ class PiecesLineChart {
         yearData.forEach(year => {
             // let avg = d3.quantile(year[1], .95, d => d.num_parts);
             let avg = d3.mean(year[1], d => d.num_parts);
+            let max_value = d3.max(year[1], d => d.num_parts);
             this.average[index++] = {
                 year: year[0],
                 piece: avg,
+                max_piece: max_value,
             };
         })
 
-
-        
         // Get SVG Data
         d3.select('#svg_piecesLineChart').append("g").attr("id", "average_path");
         let textBox = d3.select('#svg_piecesLineChart').append("g").attr("id", "text_box");
@@ -27,20 +27,20 @@ class PiecesLineChart {
         this.svgWidth = parseInt(d3.select('#svg_piecesLineChart').style('width'))
         
         textBox.append("text")
-                .attr("x", "200")
-                .attr("y", "200")
-                .attr("id", "explainBox")
-                .text("The mean line might not look like there is");
+            .attr("x", "200")
+            .attr("y", "180")
+            .attr("id", "explainBox")
+            .text("The maximum number of pieces has increased significally.")
         textBox.append("text")
-                .attr("x", "200")
-                .attr("y", "220")
-                .attr("id", "explainBox")
-                .text("a large difference between each year.")
+            .attr("x", "200")
+            .attr("y", "200")
+            .attr("id", "explainBox")
+            .text("The average number of pieces hasn't increased as much");
         textBox.append("text")
-                .attr("x", "200")
-                .attr("y", "240")
-                .attr("id", "explainBox")
-                .text("Click the log button to get a better view.")
+            .attr("x", "200")
+            .attr("y", "220")
+            .attr("id", "explainBox")
+            .text("Click the log button to get a better view.")
 
         // Get Data Metadata
         
@@ -79,12 +79,12 @@ class PiecesLineChart {
 
     //#region ANIMATE MEAN VALUE
     draw_average() {
-        console.log(this.average);
+        // console.log(this.average);
         let svg = d3.select('#svg_piecesLineChart').select("#average_path");
 
         svg.selectAll("path").remove();
         
-        var path = svg.append("path")
+        let path = svg.append("path")
             .datum(this.average)
             .attr("d", d3.line()
                 .curve(d3.curveCardinal.tension(0.5))
@@ -93,8 +93,9 @@ class PiecesLineChart {
             .attr("stroke", "black")
             .attr("stroke-width", "2")
             .attr("fill", "none");
+        
 
-        var totalLength = path.node().getTotalLength();
+        let totalLength = path.node().getTotalLength();
 
         path.attr("stroke-dasharray", totalLength + " " + totalLength)
             .attr("stroke-dashoffset", totalLength)
@@ -103,6 +104,28 @@ class PiecesLineChart {
             .ease(d3.easeLinear)
             .attr("stroke-dashoffset", 0)
             .on("end", d => d.year == "2022");
+
+        let path_2 = svg.append("path")
+            .datum(this.average)
+            .attr("d", d3.line()
+                .curve(d3.curveCardinal.tension(0.5))
+                .x(d => this.xScale(d.year))
+                .y(d => this.yScale(d.max_piece)))
+            .attr("stroke", "red")
+            .attr("stroke-width", "2")
+            .attr("fill", "none");
+        
+
+        let totalLength_2 = path_2.node().getTotalLength();
+
+        path_2.attr("stroke-dasharray", totalLength_2 + " " + totalLength_2)
+            .attr("stroke-dashoffset", totalLength_2)
+            .transition()
+            .duration(4000)
+            .ease(d3.easeLinear)
+            .attr("stroke-dashoffset", 0)
+            .on("end", d => d.year == "2022");
+        
     }
     //#endregion
 
@@ -111,6 +134,7 @@ class PiecesLineChart {
     drawLineChart() {
 
         this.drawAxes(false);
+        this.draw_average();
         this.drawDots();
         this.toggleLogScale();
     }
@@ -158,8 +182,6 @@ class PiecesLineChart {
            .text("Number of Pieces")
            .attr("font-size", 15)
 
-        this.draw_average()
-        d3.select("#piece_story").on("click", e => this.switchStory(e));
     }
 
     drawDots() {
@@ -177,7 +199,12 @@ class PiecesLineChart {
            .attr('r', '2px')
            .style('fill', '#FFCF04')
            .style('stroke', 'black')
-           .style('stroke-width', '0.75px');  
+           .style('stroke-width', '0.75px')
+           .on("mouseover", (e,d) => this.mouseOverEvent(e,d))
+           .on("mousemove", (e,d) => this.mouseMoveEvent(e,d))
+           .on("mouseleave", (e,d) => this.mouseLeaveEvent(e,d));  
+
+        this.applyToolTip();
     }
 
     //#endregion
@@ -198,7 +225,7 @@ class PiecesLineChart {
                     .attr("y", "50")
                     .attr("id", "explainBox")
                     .style("opacity", "0")
-                    .text("There is a slight increase in the number")
+                    .text("Since 1970, the average number of pieces has")
                     .transition()
                     .duration(3000)
                     .style("opacity", 1);
@@ -207,7 +234,7 @@ class PiecesLineChart {
                     .attr("y", "70")
                     .attr("id", "explainBox")
                     .style("opacity", "0")
-                    .text("of pieces with each year")
+                    .text("only sighly increased through the years.")
                     .transition()
                     .duration(3000)
                     .style("opacity", 1);
@@ -222,32 +249,32 @@ class PiecesLineChart {
                 let textBox = d3.select('#svg_piecesLineChart').append("g").attr("id", "text_box")
 
                 textBox.append("text")
-                    .attr("x", "100")
+                    .attr("x", "200")
+                    .attr("y", "180")
+                    .attr("id", "explainBox")
+                    .style("opacity", "0")
+                    .text("The maximum number of pieces has increased significally.")
+                    .transition()
+                    .duration(3000)
+                    .style("opacity", 1)
+                textBox.append("text")
+                    .attr("x", "200")
                     .attr("y", "200")
                     .attr("id", "explainBox")
                     .style("opacity", "0")
-                    .text("The mean line might not look like there is")
+                    .text("The average number of pieces hasn't increased as much")
                     .transition()
                     .duration(3000)
                     .style("opacity", 1);
                 textBox.append("text")
-                    .attr("x", "100")
+                    .attr("x", "200")
                     .attr("y", "220")
-                    .attr("id", "explainBox")
-                    .style("opacity", "0")
-                    .text("a large difference between each year.")
-                    .transition()
-                    .duration(3000)
-                    .style("opacity", 1);
-                textBox.append("text")
-                    .attr("x", "100")
-                    .attr("y", "240")
                     .attr("id", "explainBox")
                     .style("opacity", "0")
                     .text("Click the log button to get a better view.")
                     .transition()
                     .duration(3000)
-                    .style("opacity", 1);
+                    .style("opacity", 1)
                 // Change text and position 
 
                 // Y-Scale
@@ -274,16 +301,90 @@ class PiecesLineChart {
 
     }
     //#endregion
+    //#region Tooltip Logic
 
-    //#region TRANSFER TO HISTORGRAMS
+    applyToolTip() {
+        this.createToolkit();
+    }
+
     /**
-     * A helper function that will switch between the history gram
-     * and the scatter plot, with transitions. 
-     * @param {Event} e 
+     * A helper method that creates the rectangle for the
+     * tooltip
      */
-    switchStory(e) {
+    createToolkit() {
+        let toolKit = d3.select("#svg_piecesLineChart")
+            .append("g")
+            .attr("id", "piecesLCTooltip")
+
+        toolKit.append("rect")
+            .attr("id", "tooltip")
+            .attr("ry", 20)
+            .attr("rx", 20)
+            .style("opacity", 0)
+    }
+
+    mouseOverEvent(e,d) {
+        if(d.year != undefined && d.set_name != undefined) {
+            let name = d.set_name;
+            if(d.set_name.length >= 40)
+                name = name.substring(1, 35) + "..."
+
+            let x = (this.xScale(d.year) < this.svgWidth - 350)? 
+                this.xScale(d.year) : this.xScale(d.year) - 350;
+            
+            let y = (this.yScale(d.num_parts) > this.svgHeight - 100)? 
+                this.yScale(d.num_parts) - 100 : this.yScale(d.num_parts);
+
+            d3.select("#tooltip")
+                .style("opacity", "90%")
+                .attr("x", x + 30)
+                .attr("y", y + 10)
+                .attr("rx", 20)
+                .attr("ry", 20)
+                
+            d3.select("#piecesLCTooltip")
+                .raise()
+                .append("text")
+                .attr("id", "toolText")
+                .text("Set Name: " + name)
+                .attr('x', x + 34)
+                .attr('y', y + 35) 
+
+            d3.select("#piecesLCTooltip")
+                .raise()
+                .append("text")
+                .attr("id", "toolText")
+                .text("Number of Pieces: " + d.num_parts)
+                .attr('x', x + 34)
+                .attr('y', y + 55) 
+
+            d3.select("#piecesLCTooltip")
+                .raise()
+                .append("text")
+                .attr("id", "toolText")
+                .text("Year Published: " + d.year)
+                .attr('x', x + 34)
+                .attr('y', y + 75) 
+        }
+        
+    }
+
+    mouseMoveEvent(e,d) {
+        d3.select("#tooltip")
+            .style("opacity", "90%")
+            .attr("rx", 20)
+            .attr("ry", 20);
+        
+        d3.select("#piecesLCTooltip").selectAll("text").style("opacity", 1);
 
     }
-    //#endregion
 
+    mouseLeaveEvent(e,d) {
+        d3.select("#tooltip")
+                    .style("opacity", 0)
+                    .attr("x", 0)
+                    .attr("y", 0);
+        
+        d3.select("#piecesLCTooltip").selectAll("text").remove()
+    }
 }

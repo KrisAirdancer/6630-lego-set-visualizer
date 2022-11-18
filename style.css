@@ -161,11 +161,12 @@ h2 {
 
 #toolText {
     align-items: center;
+    text-overflow: clip;
     font-size: 12px;
     stroke: black;
     fill: black;
     height: 10px;
-    width: 90px;
+    width: 50px;
     z-index: auto;
 }
 
