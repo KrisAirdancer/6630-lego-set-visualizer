@@ -50,14 +50,22 @@ class Heatmap {
             .attr("font-size", 15)
 
         let item = d3.select("#svg_heatmap").append("g").attr("id", "text_box");
-
+        
         let value = 0;
-        for(let i = 0; i < 17000; i += 340) {
+        for(let i = 340; i < 17000; i += 340) {
+            // console.log('HERE')
+
             item.append("text")
-                .attr("x", this.width-this.padding.right)
-                .attr("y", this.yScale(value++)+13)
-                .text(i + "-" + (i + 340))
+                .attr("x", this.width - this.padding.right)
+                .attr("y", () => {
+                    let _yValue = this.yScale(value) + 13;
+                    if (!isNaN(_yValue)) {
+                        return _yValue
+                    }
+                })
+                .text((i - 340) + "-" + i)
                 .attr("font-size", 10)
+            value++;
         }
     }
 
@@ -319,12 +327,18 @@ class Heatmap {
             let item = d3.select("#svg_heatmap").append("g").attr("id", "text_box");
 
             let value = 0;
-            for(let i = 0; i < 17000; i += 340) {
+            for(let i = 340; i < 17000; i += 340) {
                 item.append("text")
                     .attr("x", this.width-this.padding.right)
-                    .attr("y", this.yScale(value++)+13)
-                    .text(i + "-" + (i + 340))
+                    .attr("y", () => {
+                        let _yValue = this.yScale(value) + 13;
+                        if (!isNaN(_yValue)) {
+                            return _yValue
+                        }
+                    })
+                    .text((i-340) + "-" + i)
                     .attr("font-size", 10)
+                value++;
             }
 
         } else {
