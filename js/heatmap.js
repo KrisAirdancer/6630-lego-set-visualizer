@@ -35,7 +35,7 @@ class Heatmap {
         setName = setName.sort((a,b) => (a>b)?-1:1);
 
         this.createXAxis(yearData, this.width, this.height);
-        this.createYAxis(setName, this.height);
+        this.createYAxis(setName, this.height - 5);
         this.createColorScale(data);  
 
         this.drawRect(data, this.xScale, this.yScale, this.colorScale, "Avg. Unique Colors");
@@ -43,7 +43,7 @@ class Heatmap {
         let yLabel = d3.select("#svg_heatmap").append("g").attr("id", "heatmap_ylabel");
         yLabel.append("text")
             .attr("text-anchor", "end")
-            .attr("x", -this.height/2)
+            .attr("x", -(this.height / 2))
             .attr("y", this.width+ 30)
             .attr("transform", "rotate(-90)")
             .text("Pieces Per Set")
@@ -97,7 +97,7 @@ class Heatmap {
         }).tickValues(this.xScale.domain().filter(function(d,i){ return !(i%5)}))
         
         d3.select("#svg_heatmap").append("g").attr("id", "x-axis")
-            .attr("transform", "translate(0," + height + ")")
+            .attr("transform", "translate(0," + (height - 5) + ")")
             .call(xaxis);
 
         let xLabel = d3.select("#svg_heatmap").append("g").attr("id", "heatmap_xlabel");
@@ -105,8 +105,8 @@ class Heatmap {
         xLabel.append("text")
             .attr("text-anchor", "end")
             .attr("x", 0)
-            .attr("y", 0)
-            .attr('transform', `translate(${this.width/2}, ${this.height+20})`)
+            .attr("y", 10)
+            .attr('transform', `translate(${this.width / 2}, ${this.height + 20})`)
             .text("Year")
             .attr("font-size", 15)
     }
@@ -236,7 +236,6 @@ class Heatmap {
                 .attr('x', x + 34)
                 .attr('y', y + 90) 
         }
-        
     }
 
     /**
@@ -253,7 +252,6 @@ class Heatmap {
             .attr("ry", 20);
         
         d3.select("#heat_tool_tip").selectAll("text").style("opacity", 1);
-
     }
 
     /**
@@ -291,7 +289,7 @@ class Heatmap {
         let setName = [...d3.group(data, d=> d.yValue).keys()];
         setName = setName.sort((a,b) => (a>b)?-1:1);
         
-        this.createYAxis(setName, this.height);
+        this.createYAxis(setName, this.height - 5);
         this.createColorScale(data);  
         let name = (e.target.value === "num_set")? "Avg. Unique Colors" : "Frequency";
         this.drawRect(data, this.xScale, this.yScale, this.colorScale, name);
@@ -314,8 +312,8 @@ class Heatmap {
         if (this.firstOption === "num_set") {
             yLabel.append("text")
                 .attr("text-anchor", "end")
-                .attr("x", -this.height/2)
-                .attr("y", this.width+ 30)
+                .attr("x", -(this.height / 2))
+                .attr("y", this.width + 30)
                 .attr("transform", "rotate(-90)")
                 .text("Pieces Per Set")
                 .attr("font-size", 15)
@@ -324,8 +322,8 @@ class Heatmap {
         else {
             yLabel.append("text")
                 .attr("text-anchor", "end")
-                .attr("x", -this.height/2)
-                .attr("y", this.width+ 30)
+                .attr("x", -(this.height / 2))
+                .attr("y", this.width + 30)
                 .attr("transform", "rotate(-90)")
                 .text("Color Name")
                 .attr("font-size", 15)

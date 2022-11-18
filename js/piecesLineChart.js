@@ -71,10 +71,9 @@ class PiecesLineChart {
         // Y-Scale
         this.yScale = d3.scaleLinear()
                        .domain([this.num_partsMin, Math.ceil(this.num_partsMax * 0.001) * 1000])
-                       .range([this.svgHeight - 25, 20])
+                       .range([this.svgHeight - 35, 20])
 
         this.yAxis = undefined;
-        
     }
 
     //#region ANIMATE MEAN VALUE
@@ -151,7 +150,7 @@ class PiecesLineChart {
 
         svg.append('g')
            .attr('id', 'x-axis')
-           .attr('transform', `translate(${0}, ${this.svgHeight - 25})`)
+           .attr('transform', `translate(${0}, ${this.svgHeight - 35})`)
            .call(xAxis)
 
         let axisGroup = svg.append('g').attr("id", "x label");
@@ -159,7 +158,7 @@ class PiecesLineChart {
                 .attr("text-anchor", "end")
                 .attr("x", 0)
                 .attr("y", 0)
-                .attr('transform', `translate(${(this.svgWidth/2) + 25}, ${this.svgHeight})`)
+                .attr('transform', `translate(${(this.svgWidth / 2) + 25}, ${this.svgHeight})`)
                 .text("Year")
                 .attr("font-size", 15)
 
@@ -170,18 +169,17 @@ class PiecesLineChart {
 
         svg.append('g')
            .attr('id', 'y-axis')
-           .attr('transform', `translate(${60}, ${0})`)
+           .attr('transform', `translate(${60}, ${-10})`)
            .call(this.yAxis)
 
         let yGroup = svg.append('g').attr("id", "y label");
         yGroup.append("text")
            .attr("text-anchor", "end")
-           .attr("x", -150)
+           .attr("x", -(this.svgHeight / 2) + 70)
            .attr("y", 13)
            .attr("transform", "rotate(-90)")
            .text("Number of Pieces")
-           .attr("font-size", 15)
-
+           .attr("font-size", 15)        
     }
 
     drawDots() {
@@ -242,7 +240,7 @@ class PiecesLineChart {
                 // Change yScale
                 this.yScale = d3.scaleLog()
                                 .domain([this.num_partsMin, Math.ceil(this.num_partsMax * 0.001) * 1000])
-                                .range([this.svgHeight - 25, 20])
+                                .range([this.svgHeight - 35, 20])
                                 .nice();
             } else {
                 d3.select('#svg_piecesLineChart').select("#text_box").remove();
@@ -280,7 +278,7 @@ class PiecesLineChart {
                 // Y-Scale
                 this.yScale = d3.scaleLinear()
                                 .domain([this.num_partsMin, Math.ceil(this.num_partsMax * 0.001) * 1000])
-                                .range([this.svgHeight - 25, 20])
+                                .range([this.svgHeight - 35, 20])
                                 .nice();
             }
 

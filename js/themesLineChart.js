@@ -51,7 +51,7 @@ class ThemesLineChart {
         // Y-Scale
         this.yScale = d3.scaleLinear()
                         .domain([this.displayedMin, this.displayedMax])
-                        .range([this.svgHeight - 25, 20])
+                        .range([this.svgHeight - 35, 20])
 
         this.yAxis = d3.axisLeft();
 
@@ -116,7 +116,7 @@ class ThemesLineChart {
 
         svg.append('g')
            .attr('id', 'themes_x-axis')
-           .attr('transform', `translate(${0}, ${this.svgHeight - 25})`)
+           .attr('transform', `translate(${0}, ${this.svgHeight - 35})`)
            .call(xAxis)
 
         let yGroup = svg.append('g').attr("id", "theme_ylabel");
@@ -516,7 +516,7 @@ class ThemesLineChart {
 
         this.yScale = d3.scaleLinear()
                         .domain([this.displayedMin, this.displayedMax])
-                        .range([this.svgHeight - 25, 20])
+                        .range([this.svgHeight - 35, 20])
 
         this.yAxis.scale(this.yScale);
 
