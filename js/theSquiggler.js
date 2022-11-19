@@ -10,14 +10,14 @@ class TheSquiggler {
      * @param {Object} globalData 
      */
     constructor(globalData) {
-        this.clicked = 0;
+        this.selected = "theme_color";
         let data = [...d3.group(globalData, d => d.year)];
 
         this.padding ={
             top: 10,
             right: 40, 
             bottom: 40, 
-            left: 40
+            left: 60
         };
 
         let tempData = this.createData(data);
@@ -25,11 +25,9 @@ class TheSquiggler {
         this.width = parseInt(d3.select("#svg_theSquiggler").style("width"));
 
         this.createAxis(tempData);
-        this.createConnectedGraph(tempData);
-        
-        d3.select("#squiggler_prev").on('click', e => this.movePrevious(e));
-        d3.select("#squiggler_next").on('click', e => this.moveNext(e));
-
+        this.createDots(tempData);
+        this.updateGraph(tempData);
+        d3.select("#squiggler-select").on('change', e => this.changeDisplay(e));
         this.createToolkit();
     }
 
@@ -57,7 +55,7 @@ class TheSquiggler {
                 .attr("text-anchor", "end")
                 .attr("x", 0)
                 .attr("y", 0)
-                .attr('transform', `translate(${this.width/2}, ${this.height - 10})`)
+                .attr('transform', `translate(${(this.width / 2) + 70}, ${this.height - 5})`)
                 .text("Number of Unqiue Colors")
                 .attr("font-size", 15)
 
@@ -75,37 +73,23 @@ class TheSquiggler {
         let yGroup = d3.select("#svg_theSquiggler").append('g').attr("id", "squiggler_ylabel");
         yGroup.append("text")
                 .attr("text-anchor", "end")
-                .attr("x", -150)
-                .attr("y", 13)
+                .attr("x", -190)
+                .attr("y", 20)
                 .attr("transform", "rotate(-90)")
                 .text("Number of Themes")
                 .attr("font-size", 15)
     }
 
     /**
-     * A helper function that will draw the connected 
-     * scatter plot in the initial graph
-     * @param {Object} tempData 
+     * Create initial circles for the data. 
+     * @param {Data} tempData 
      */
-    createConnectedGraph(tempData) {
+    createDots(tempData) {
         let svg = d3.select("#svg_theSquiggler")
             .append("g")
-            .attr("id", "vis_path")
+            .attr("id", "vis_dots");
 
-        svg.append("path")
-            .datum(tempData)
-            .attr("fill", "none")
-            .attr("stroke", "black")
-            .attr("d", d3.line()
-                .curve(d3.curveCardinal.tension(0.5))
-                .x(d => this.xScale(d.x))
-                .y(d => this.yScale(d.y)))
-
-        svg = d3.select("#svg_theSquiggler")
-            .append("g")
-            .attr("id", "vis_dots")
-        
-        svg.selectAll("circle")
+            svg.selectAll("circle")
             .data(tempData)
             .enter()
             .append("circle")
@@ -198,6 +182,11 @@ class TheSquiggler {
             .style("opacity", 0)
     }
 
+    /**
+     * An event listener to help with the tool tip
+     * @param {Event} e 
+     * @param {data} d 
+     */
     mouseOverEvent(e,d) {
         let y = (this.yScale(d.y) > this.height - 100)? 
             this.yScale(d.y) - 100 : this.yScale(d.y);
@@ -238,6 +227,11 @@ class TheSquiggler {
             .attr('y', y + 70)
     }
 
+    /**
+     * An event listener to help with the tool tip
+     * @param {Event} e 
+     * @param {data} d 
+     */
     mouseMoveEvent(e,d) {
         d3.select("#squigglerTooltip").select("#tooltip")
             .style("opacity", "90%")
@@ -248,6 +242,11 @@ class TheSquiggler {
 
     }
 
+    /**
+     * An event listener to help with the tool tip
+     * @param {Event} e 
+     * @param {data} d 
+     */
     mouseLeaveEvent(e,d) {
         d3.select("#squigglerTooltip").select("#tooltip")
                     .style("opacity", 0)
@@ -260,160 +259,101 @@ class TheSquiggler {
     //#endregion
 
     //#region EVENT HANDLERS
-    
-    /**
-     * An event handler that will move the chart to the next
-     * graph structure.
-     * @param {Event} e 
-     */
-    moveNext(e) {
-        this.clicked = (this.clicked+1)%4;
-        this.switchPlot();
-        this.updateAxisLabels();
-    }
-
     /**
      * An event handler that will move the chart to the 
      * previous position
      * @param {Event} e 
      */
-    movePrevious(e) {
-        this.clicked = d3.min([(this.clicked-1) % 4, this.clicked-1]);
-        this.clicked = (this.clicked < -3)? 0 : this.clicked;
+    changeDisplay(e) {
+        this.selected = e.target.value;
         this.switchPlot();
         this.updateAxisLabels();
     }
 
+    //#endregion
+
+    //#region UPDATE METHODS
+    /**
+     * A helper function that will update the labels on the axis based
+     * on the selection that is made.
+     */
     updateAxisLabels() {
         d3.select("#svg_theSquiggler").select("#squiggler_xlabel").remove();
         d3.select("#svg_theSquiggler").select("#squiggler_ylabel").remove();
         let yLabel = d3.select("#svg_theSquiggler").append('g').attr("id", "squiggler_ylabel");
         let xLabel = d3.select("#svg_theSquiggler").append('g').attr("id", "squiggler_xlabel");
 
-
-        switch(this.clicked) {
-            case -3: // Unique Color vs theme
+        switch(this.selected) {
+            case "theme_color": // Unique Color vs theme
                 xLabel.append("text")
                     .attr("text-anchor", "end")
                     .attr("x", 0)
                     .attr("y", 0)
-                    .attr('transform', `translate(${this.width/2}, ${this.height - 10})`)
+                    .attr('transform', `translate(${(this.width / 2) + 70}, ${this.height - 5})`)
+                    .text("Average Number of Unique Colors")
+                    .attr("font-size", 15)
+                    
+                yLabel.append("text")
+                    .attr("text-anchor", "end")
+                    .attr("x", -190)
+                    .attr("y", 20)
+                    .attr("transform", "rotate(-90)")
                     .text("Number of Themes")
                     .attr("font-size", 15)
 
-                yLabel.append("text")
-                .attr("text-anchor", "end")
-                .attr("x", -150)
-                .attr("y", 13)
-                .attr("transform", "rotate(-90)")
-                .text("Average Number of Unique Colors")
-                .attr("font-size", 15)
-
                 break;
 
-            case -2: // pieces vs themes
+            case "theme_piece": // pieces vs themes
                 xLabel.append("text")
                     .attr("text-anchor", "end")
                     .attr("x", 0)
                     .attr("y", 0)
-                    .attr('transform', `translate(${this.width/2}, ${this.height - 10})`)
-                    .text("Number of Themes")
+                    .attr('transform', `translate(${(this.width / 2) + 60}, ${this.height - 5})`)
+                    .text("Average Number of Pieces")
                     .attr("font-size", 15);
-
+                    
                 yLabel.append("text")
                     .attr("text-anchor", "end")
-                    .attr("x", -150)
-                    .attr("y", 13)
+                    .attr("x", -190)
+                    .attr("y", 20)
+                    .text("Number of Themes")
                     .attr("transform", "rotate(-90)")
-                    .text("Average Number of Pieces")
                     .attr("font-size", 15);
                 break;
             
-            case -1: // Theme vs pieces
+            case "piece_theme": // Theme vs pieces
                 xLabel.append("text")
                     .attr("text-anchor", "end")
                     .attr("x", 0)
                     .attr("y", 0)
-                    .attr('transform', `translate(${this.width/2}, ${this.height - 10})`)
-                    .text("Average Number of Pieces")
+                    .attr('transform', `translate(${(this.width / 2) + 60}, ${this.height - 5})`)
+                    .text("Number of Themes")
                     .attr("font-size", 15);
-
+                    
                 yLabel.append("text")
                     .attr("text-anchor", "end")
-                    .attr("x", -150)
-                    .attr("y", 13)
+                    .attr("x", -190)
+                    .attr("y", 20)
                     .attr("transform", "rotate(-90)")
-                    .text("Number of Themes")
+                    .text("Average Number of Pieces")
                     .attr("font-size", 15)
                 break;
 
-            case 0: // Theme vs color
+            case "color_themes": // Theme vs color
                 xLabel.append("text")
                     .attr("text-anchor", "end")
                     .attr("x", 0)
                     .attr("y", 0)
-                    .attr('transform', `translate(${this.width/2}, ${this.height - 10})`)
+                    .attr('transform', `translate(${(this.width / 2) + 60}, ${this.height - 5})`)
+                    .text("Number of Themes")
+                    .attr("font-size", 15);
+                    
+                yLabel.append("text")
+                    .attr("text-anchor", "end")
+                    .attr("x", -150)
+                    .attr("y", 20)
                     .text("Average Number of Unique Colors")
-                    .attr("font-size", 15);
-
-                yLabel.append("text")
-                    .attr("text-anchor", "end")
-                    .attr("x", -150)
-                    .attr("y", 13)
                     .attr("transform", "rotate(-90)")
-                    .text("Number of Themes")
-                    .attr("font-size", 15)
-                break;
-            case 1: // Theme vs pieces
-                xLabel.append("text")
-                    .attr("text-anchor", "end")
-                    .attr("x", 0)
-                    .attr("y", 0)
-                    .attr('transform', `translate(${this.width/2}, ${this.height - 10})`)
-                    .text("Average Number of Pieces")
-                    .attr("font-size", 15);
-
-                yLabel.append("text")
-                    .attr("text-anchor", "end")
-                    .attr("x", -150)
-                    .attr("y", 13)
-                    .attr("transform", "rotate(-90)")
-                    .text("Number of Themes")
-                    .attr("font-size", 15)
-                break;
-            case 2: // pieces vs themes
-                xLabel.append("text")
-                    .attr("text-anchor", "end")
-                    .attr("x", 0)
-                    .attr("y", 0)
-                    .attr('transform', `translate(${this.width/2}, ${this.height - 10})`)
-                    .text("Number of Themes")
-                    .attr("font-size", 15);
-
-                yLabel.append("text")
-                    .attr("text-anchor", "end")
-                    .attr("x", -150)
-                    .attr("y", 13)
-                    .attr("transform", "rotate(-90)")
-                    .text("Average Number of Pieces")
-                    .attr("font-size", 15)
-                break;
-
-            case 3: // Unique Color vs theme
-                xLabel.append("text")
-                    .attr("text-anchor", "end")
-                    .attr("x", 0)
-                    .attr("y", 0)
-                    .attr('transform', `translate(${this.width/2}, ${this.height - 10})`)
-                    .text("Number of Themes")
-                    .attr("font-size", 15);
-
-                yLabel.append("text")
-                    .attr("text-anchor", "end")
-                    .attr("x", -150)
-                    .attr("y", 13)
-                    .attr("transform", "rotate(-90)")
-                    .text("Average Number of Unique Colors")
                     .attr("font-size", 15)
                 break;
         }
@@ -431,52 +371,30 @@ class TheSquiggler {
             let x, y = 0;
             let text_x = undefined;
             let text_y = undefined;
-            switch(this.clicked) {
-                case -3: // Unique Color vs theme
-                    x = this.data[i].num_theme;
-                    text_x = "Number of Themes";
-                    y = this.data[i].avg_color;
-                    text_y = "Average Unqiue Colors Used";
-                    break;
-
-                case -2: // pieces vs themes
-                    x = this.data[i].num_theme;
-                    text_x = "Number of Themes";
-                    y = this.data[i].avg_piece;
-                    text_y = "Average Number of Pieces";
-                    break;
-                
-                case -1: // Theme vs pieces
-                    x = this.data[i].avg_piece;
-                    text_x = "Average Number of Pieces";
+            switch(this.selected) {
+                case "theme_color": // Unique Color vs theme
                     y = this.data[i].num_theme;
                     text_y = "Number of Themes";
-                    break;
-
-                case 0: // Theme vs color
                     x = this.data[i].avg_color;
                     text_x = "Average Unqiue Colors Used";
+                    break;
+                case "theme_piece": // pieces vs themes
                     y = this.data[i].num_theme;
                     text_y = "Number of Themes";
-                    break;
-                case 1: // Theme vs pieces
                     x = this.data[i].avg_piece;
                     text_x = "Average Number of Pieces";
-                    y = this.data[i].num_theme;
-                    text_y = "Number of Themes";
                     break;
-                case 2: // pieces vs themes
-                    x = this.data[i].num_theme;
-                    text_x = "Number of Themes";
+                case "piece_theme": // Theme vs pieces
                     y = this.data[i].avg_piece;
                     text_y = "Average Number of Pieces";
-                    break;
-
-                case 3: // Unique Color vs theme
                     x = this.data[i].num_theme;
                     text_x = "Number of Themes";
+                    break;
+                case "color_themes": // Theme vs color
                     y = this.data[i].avg_color;
-                    text_y = "Average Unique Colors Used";
+                    text_y = "Average Unqiue Colors Used";
+                    x = this.data[i].num_theme;
+                    text_x = "Number of Themes";
                     break;
             }
 
@@ -490,75 +408,88 @@ class TheSquiggler {
         }
 
         this.updateGraph(data);
-
     }
 
     /**
-     * A helper function that will transition the 
-     * data using different scaling funcitons
-     * @param {Object} data 
+     * A helper function that will draw the connected 
+     * scatter plot in the initial graph
+     * @param {Object} tempData 
      */
-    updateGraph(data){
-        // Theme Y-Axis
+    updateGraph(tempData) {
         this.yScale = d3.scaleLinear()
-            .domain([d3.max(data, d => d.y), 0])
+            .domain([d3.max(tempData, d => d.y), 0])
             .range([this.padding.top, this.height - this.padding.bottom]);
         
-        // Color X-Axis
+            // Color X-Axis
         this.xScale = d3.scaleLinear()
-            .domain([0, d3.max(data, d => d.x)])
+            .domain([0, d3.max(tempData, d => d.x)])
             .range([this.padding.left, this.width - this.padding.right]);
+            
+        let xAxis = d3.select("#svg_theSquiggler")
+            .select("#squiggler-x-axis");
         
-        // Change the Y-Axis
-        d3.selectAll('#squiggler-y-axis')
-            .transition()
-            .duration(1000)
-            .call(d3.axisLeft(this.yScale));
-
-        // Change the X-Axis
-        d3.selectAll('#squiggler-x-axis')
-            .transition()
-            .duration(1000)
+        xAxis.attr("transform", "translate("+ 0 + "," + (this.height - this.padding.bottom)  + ")")
             .call(d3.axisBottom(this.xScale));
         
-        // Update the individual dots
-        let svg = d3.select("#svg_theSquiggler")
-                .data(data);
+        let yAxis = d3.select("#svg_theSquiggler")
+            .select("#squiggler-y-axis");
         
+        yAxis.attr("transform", "translate("+ this.padding.left + ", 0)")
+            .call(d3.axisLeft(this.yScale));
+
+        let svg = d3.select("#svg_theSquiggler")
+            .data(tempData);
+    
         let g = svg.selectAll('g')
-                    .data(data)
+                    .data(tempData)
         
         let circles = g.selectAll("circle")
-                        .data(data);
+                        .data(tempData);
+
+        d3.select("#svg_theSquiggler")
+            .select("#vis_path").remove();
+        
+        svg = svg.append("g")
+            .attr("id", "vis_path");
+
+        let path = svg.append("path")
+            .datum(tempData)
+            .attr("fill", "none")
+            .attr("stroke", "black")
+            .attr("d", d3.line()
+                .curve(d3.curveCardinal.tension(0.5))
+                .x(d => this.xScale(d.x))
+                .y(d => this.yScale(d.y)))
+
+        let totalLength = path.node().getTotalLength();
+
+        path.attr("stroke-dasharray", totalLength + " " + totalLength)
+            .attr("stroke-dashoffset", totalLength)
+            .transition()
+            .duration(6000)
+            .ease(d3.easeLinear)
+            .attr("stroke-dashoffset", 0)
+            .on("end", d => d.year == "2022")
 
         circles
             .transition()
             .duration(1000)
             .attr("cy", d => this.yScale(d.y))
             .attr("cx", d => this.xScale(d.x));
-        
+
         // Move the Year Labels
-        let text_var = svg.select("#vis_text").selectAll("text")
-                        .data(data);
+        let text_var = d3.select("#vis_text")
+                    .selectAll("text")
+                    .data(tempData);
 
         text_var
             .transition()
             .duration(1000)
             .attr("x", d => this.xScale(d.x))
             .attr("y", d => this.yScale(d.y));
-
-        let path = svg.select("#vis_path").select("path")
-                .datum(data);
-
-        // Move the path line
-        path
-            .transition()
-            .duration(1000)
-            .attr("d", d3.line()
-                .curve(d3.curveCardinal.tension(0.5))
-                .x(d => this.xScale(d.x))
-                .y(d => this.yScale(d.y)));
     }
-
+    
     //#endregion
+
+
 }

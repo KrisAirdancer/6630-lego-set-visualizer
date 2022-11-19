@@ -116,23 +116,19 @@
                 </p>
                 <br>
                 <p>
-                    Use the buttons to the right to scroll through the different relationships.
+                    Use the dropdown to explore the different relationships.
                 </p>
 
             </div>
 
             <div id="squiggler-svg-group" class="flex-container-column rightVisElement">
-
-                <div id="squiggler-select-group" class="flex-container-row">
-
-                    <div class="squiggler-selector">
-                        <button type="button" id="squiggler_prev">Previous</button>
-                    </div>
-                    <div class="squiggler-selector">
-                        <button type="button" id="squiggler_next">Next</button> 
-                    </div>
-
-                </div>
+                                    
+                <select name="" id="squiggler-select">
+                    <option value="theme_color" >Number of Themes vs Number of Unique Colors</option>
+                    <option value="theme_piece" >Number of Themes vs Average Number of Pieces</option>
+                    <option value="piece_theme" >Average Number of Pieces vs Number of Themes</option>
+                    <option value="color_themes" >Average Number of Unique Colors vs Number of Themes</option>
+                </select>
 
                 <svg id="svg_theSquiggler"></svg>
             </div>
