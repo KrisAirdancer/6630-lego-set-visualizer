@@ -17,7 +17,7 @@ class TheSquiggler {
             top: 10,
             right: 40, 
             bottom: 40, 
-            left: 40
+            left: 60
         };
 
         let tempData = this.createData(data);
@@ -75,7 +75,7 @@ class TheSquiggler {
         yGroup.append("text")
                 .attr("text-anchor", "end")
                 .attr("x", -190)
-                .attr("y", 13)
+                .attr("y", 20)
                 .attr("transform", "rotate(-90)")
                 .text("Number of Themes")
                 .attr("font-size", 15)
@@ -270,7 +270,7 @@ class TheSquiggler {
         this.switchPlot();
         this.updateAxisLabels();
     }
-    
+
     //#endregion
 
     //#region UPDATE METHODS
@@ -297,7 +297,7 @@ class TheSquiggler {
                 yLabel.append("text")
                     .attr("text-anchor", "end")
                     .attr("x", -190)
-                    .attr("y", 13)
+                    .attr("y", 20)
                     .attr("transform", "rotate(-90)")
                     .text("Number of Themes")
                     .attr("font-size", 15)
@@ -316,7 +316,7 @@ class TheSquiggler {
                 yLabel.append("text")
                     .attr("text-anchor", "end")
                     .attr("x", -190)
-                    .attr("y", 13)
+                    .attr("y", 20)
                     .text("Number of Themes")
                     .attr("transform", "rotate(-90)")
                     .attr("font-size", 15);
@@ -333,8 +333,8 @@ class TheSquiggler {
                     
                 yLabel.append("text")
                     .attr("text-anchor", "end")
-                    .attr("x", -150)
-                    .attr("y", 13)
+                    .attr("x", -190)
+                    .attr("y", 20)
                     .attr("transform", "rotate(-90)")
                     .text("Average Number of Pieces")
                     .attr("font-size", 15)
@@ -345,14 +345,14 @@ class TheSquiggler {
                     .attr("text-anchor", "end")
                     .attr("x", 0)
                     .attr("y", 0)
-                    .attr('transform', `translate(${(this.width / 2) + 120}, ${this.height - 5})`)
+                    .attr('transform', `translate(${(this.width / 2) + 60}, ${this.height - 5})`)
                     .text("Number of Themes")
                     .attr("font-size", 15);
                     
                 yLabel.append("text")
                     .attr("text-anchor", "end")
                     .attr("x", -150)
-                    .attr("y", 13)
+                    .attr("y", 20)
                     .text("Average Number of Unique Colors")
                     .attr("transform", "rotate(-90)")
                     .attr("font-size", 15)
@@ -421,10 +421,22 @@ class TheSquiggler {
             .domain([d3.max(tempData, d => d.y), 0])
             .range([this.padding.top, this.height - this.padding.bottom]);
         
-        // Color X-Axis
+            // Color X-Axis
         this.xScale = d3.scaleLinear()
             .domain([0, d3.max(tempData, d => d.x)])
             .range([this.padding.left, this.width - this.padding.right]);
+            
+        let xAxis = d3.select("#svg_theSquiggler")
+            .select("#squiggler-x-axis");
+        
+        xAxis.attr("transform", "translate("+ 0 + "," + (this.height - this.padding.bottom)  + ")")
+            .call(d3.axisBottom(this.xScale));
+        
+        let yAxis = d3.select("#svg_theSquiggler")
+            .select("#squiggler-y-axis");
+        
+        yAxis.attr("transform", "translate("+ this.padding.left + ", 0)")
+            .call(d3.axisLeft(this.yScale));
 
         let svg = d3.select("#svg_theSquiggler")
             .data(tempData);
