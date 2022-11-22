@@ -46,7 +46,7 @@ class Heatmap {
             .attr("x", -this.height/2)
             .attr("y", this.width+ 30)
             .attr("transform", "rotate(-90)")
-            .text("Pieces Per Set")
+            .text("Set Piece Count")
             .attr("font-size", 15)
 
         let item = d3.select("#svg_heatmap").append("g").attr("id", "text_box");

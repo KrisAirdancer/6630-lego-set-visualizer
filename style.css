@@ -178,6 +178,7 @@ h2 {
     background-color: var(--lego-yellow);
     border-radius: 5px;
     border-color: var(--border-color);
+    width: 25%;
 }
 
 #squiggler-select {

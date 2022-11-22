@@ -78,7 +78,7 @@ class PiecesLineChart {
 
     //#region ANIMATE MEAN VALUE
     draw_average() {
-        // console.log(this.average);
+        
         let svg = d3.select('#svg_piecesLineChart').select("#average_path");
 
         svg.selectAll("path").remove();
