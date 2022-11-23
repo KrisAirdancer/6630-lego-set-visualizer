@@ -10,7 +10,7 @@ A narrated demo of the project can be found [here](https://youtu.be/3ny4F6x01Zs)
 
 Our Process Book, which contains information on the design process of this project, can be found in the "documentation" directory of this project.
 
-The data for this project was retrieved from the [Rebrickable Lego Database](https://rebrickable.com/) which makes their database of Lego pieces and sets available to the public [here](https://rebrickable.com/downloads/).
+The data for this project was retrieved from the [Rebrickable.com](https://rebrickable.com/) where a public database of Lego pieces and sets is publicly hosted on their downloads page [here](https://rebrickable.com/downloads/).
 
 The website and visualizations were built using plain JavaScript and [D3.js](https://d3js.org/). No other libraries were used.
 
