@@ -6,7 +6,7 @@ This project is a website built using D3 that explores the history of The Lego G
 
 ## Docs
 
-A narrated demo of the project can be found [here](TODO) and a live version of the project can be found [here](https://krisairdancer.github.io/6630-lego-set-visualizer/index.html).
+A narrated demo of the project can be found [here](https://youtu.be/3ny4F6x01Zs) and a live version of the project can be found [here](https://krisairdancer.github.io/6630-lego-set-visualizer/index.html).
 
 Our Process Book, which contains information on the design process of this project, can be found in the "documentation" directory of this project.
 
